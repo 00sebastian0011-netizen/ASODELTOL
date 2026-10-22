@@ -50,7 +50,13 @@ try {
     for ($number = 1; $number <= 7; $number++) {
         $expectedcodes[] = sprintf('AF8-G%02d', $number);
     }
-    $actualcohortcodes = array_values(array_map(static fn(stdClass $cohort): string => $cohort->idnumber, $cohorts));
+    $actualcohortcodes = array_values(array_map(
+        static fn(stdClass $cohort): string => $cohort->idnumber,
+        array_filter(
+            $cohorts,
+            static fn(stdClass $cohort): bool => preg_match('/^AF8-G0[1-7]$/D', $cohort->idnumber) === 1
+        )
+    ));
     assert_evidence($actualcohortcodes === $expectedcodes, 'Las siete cohortes importadas no coinciden exactamente.');
 
     $instances = $DB->get_records('enrol', ['courseid' => $course->id, 'enrol' => 'cohort'], 'id ASC');

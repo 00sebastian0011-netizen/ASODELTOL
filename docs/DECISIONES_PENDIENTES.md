@@ -2,7 +2,7 @@
 
 No se debe convertir una suposición de esta tabla en código o contenido definitivo. Una decisión cerrada se traslada a una ADR con fecha, responsables, alternativas y consecuencias.
 
-| ID | Prioridad | Decisión necesaria | Evidencia/autoridad requerida | Bloquea | Estado tras Misión 04 |
+| ID | Prioridad | Decisión necesaria | Evidencia/autoridad requerida | Bloquea | Estado vigente |
 |---|---|---|---|---|---|
 | DP-001 | Crítica | Resolver cinco unidades × diez ítems = 50 frente al total reportado de 80 ítems. | Inventario académico canónico aprobado. | Carga de contenido, progreso detallado y aceptación. | **Pendiente académica; el catálogo modela sólo los 50 enumerados** |
 | DP-002 | Crítica | Resolver cuatro recursos generales enumerados frente a nueve mencionados. | Lista canónica de recursos con identificadores. | Carga de recursos y aceptación. | **Pendiente académica; el catálogo modela sólo los 4 enumerados** |
@@ -10,12 +10,12 @@ No se debe convertir una suposición de esta tabla en código o contenido defini
 | DP-004 | Crítica | Definir qué inicia los ocho días hábiles: fecha fija por grupo o finalización de unidad previa. | Responsable académico/contractual. | Plugin temporal. | Contrato técnico preparado para ambos modos |
 | DP-005 | Crítica | Definir calendario laboral, festivos, zona horaria, hora límite y pausas. | Política aprobada y calendario versionado. | Cálculo y pruebas de vencimiento. | **Reglas técnicas definidas:** Ley 51/1983 (Emiliani), L-V, America/Bogota (UTC-5) |
 | DP-006 | Crítica | Definir quién solicita/aprueba/revoca excepciones, motivos permitidos y efecto retroactivo. | Matriz de autoridad. | Auditoría y permisos del plugin temporal. | Contrato de excepciones inmutables preparado |
-| DP-007 | Alta | Elegir un curso con siete grupos o siete cursos; definir aislamiento y asignación de capacitadores. | Operación académica y piloto en staging. | Plantilla, reportes y matriculación. | **Resuelta provisionalmente ([ADR-0005](adr/0005-provisionalidad-grupos-separados-y-piloto.md)):** 1 curso con 7 grupos, sujeta a piloto |
+| DP-007 | Alta | Elegir un curso con siete grupos o siete cursos; definir aislamiento y asignación de capacitadores. | Operación académica y piloto en staging. | Plantilla, reportes y matriculación. | **Resuelta provisionalmente ([ADR-0005](adr/0005-provisionalidad-grupos-separados-y-piloto.md)):** piloto sintético local superado para G01/G02; la aceptación institucional sigue pendiente |
 | DP-008 | Crítica | Definir calificación aprobatoria, intentos, recuperación y reapertura por unidad. | Reglamento académico. | Secuencia nativa y aceptación. | Pendiente académica |
-| DP-009 | Crítica | Definir método válido de asistencia, estados, correcciones y autoridad. | Reglamento/contrato y prueba de BBB/`mod_attendance`. | Seguimiento de asistencia. | Pendiente de prueba en 5.3 LTS |
+| DP-009 | Crítica | Definir método válido de asistencia, estados, correcciones y autoridad. | Reglamento/contrato y prueba de BBB/`mod_attendance`. | Seguimiento de asistencia. | Pendiente; `mod_attendance` no está instalado y los logs no bastan |
 | DP-010 | Crítica | Definir “disponibilidad sincrónica”, unidad de tiempo, pausas, redondeo, evidencia y validación. | Contrato/operación. | `local_asodeltolstaff` y reportes. | Modelo de 3 niveles definido en contrato |
 | DP-011 | Alta | Elegir proveedor de videoconferencia, capacidad, integración, residencia y retención de grabaciones. | Evaluación técnica, jurídica y económica. | Integración sincrónica. | Pendiente de selección de proveedor |
-| DP-012 | Alta | Definir catálogo de reportes: columnas, filtros, corte, audiencia, firma y retención. | Plantillas contractuales aprobadas. | `report_asodeltol`. | **Congelado provisionalmente:** prioridad a Custom Reports de Moodle 5.3 |
+| DP-012 | Alta | Definir catálogo de reportes: columnas, filtros, corte, audiencia, firma y retención. | Plantillas contractuales aprobadas. | `report_asodeltol`. | **Congelado provisionalmente:** XLSX nativo validado para participantes, progreso y calificaciones; falta especificación contractual |
 | DP-013 | Crítica | Designar responsable/encargado, finalidades, base de tratamiento, política y tiempos de retención. | Responsable institucional y asesoría jurídica. | Salida con datos reales. | Pendiente jurídica |
 | DP-014 | Alta | Definir RPO, RTO, disponibilidad objetivo y ventanas de mantenimiento. | Dueño del servicio. | Plan operativo y aceptación. | Pendiente de acuerdo de nivel de servicio |
 | DP-015 | Crítica | Planificar actualización desde Moodle 5.0, rama fuera de soporte, a Moodle 5.3 LTS. | Inventario de plugins, política de soporte y pruebas en staging. | Mitigación de riesgo de seguridad. | **Cerrada ([ADR-0004](adr/0004-objetivo-moodle-53-lts-y-documentroot-public.md)):** Objetivo formal Moodle 5.3 LTS y `/public` |
@@ -24,7 +24,7 @@ No se debe convertir una suposición de esta tabla en código o contenido defini
 | DP-018 | Alta | Determinar si la auditoría exige inmutabilidad externa o firma, más allá de historial aplicativo. | Contrato/interventoría. | Diseño final de auditoría. | Historial *append-only* en base de datos modelado |
 | DP-019 | Alta | Definir fuente maestra de identidad/matrícula y campos únicos permitidos. | Gobierno de datos. | Importación, deduplicación y bajas. | Pendiente institucional |
 | DP-020 | Media | Confirmar licencias, propietario y proceso de aprobación para plugins terceros. | Gobierno TI/compras. | Instalación de `mod_attendance` u otros. | Pendiente TI |
-| DP-021 | Alta | Aprobar la categoría Moodle y su `idnumber` para AF8 en staging y, por separado, en producción. | Administración Moodle y gobierno del servicio. | Generación/importación del CSV de curso. | El generador exige el valor y no define uno por defecto |
+| DP-021 | Alta | Aprobar la categoría Moodle y su `idnumber` para AF8 en staging y, por separado, en producción. | Administración Moodle y gobierno del servicio. | Generación/importación del CSV de curso. | Categoría sintética usada sólo en staging local; producción sigue pendiente y el generador exige valor explícito |
 
 ## Formato para cerrar una decisión
 

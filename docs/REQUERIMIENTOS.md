@@ -107,7 +107,7 @@ No se crean 30 ítems ni cinco recursos ficticios para cuadrar los totales.
 - Proveedor de videoconferencia y política de grabación.
 - Catálogo de reportes, columnas, filtros, audiencia y retención.
 
-## 9. Cobertura funcional de la Misión 04
+## 9. Cobertura funcional acumulada hasta la Misión 09
 
 La estructura aprobada para preparación local se materializa en `catalog/af8/catalog.json`: cinco unidades, 50 componentes enumerados, cuatro recursos generales y siete grupos/cohortes. Esto no resuelve los totales contradictorios ni autoriza contenido adicional.
 
@@ -121,4 +121,8 @@ La aceptación automatizada se ejecuta con `npm run quality` y cubre:
 - presencia de cuatro roles y pruebas negativas de acceso;
 - generación local que valida antes de escribir y nunca sobrescribe salidas.
 
-La carga real, los criterios de finalización, la nota aprobatoria, las fechas/calendario, el contenido y el piloto de aislamiento siguen pendientes de Moodle 5.3 en staging.
+El Moodle 5.3 local aislado ya contiene el curso AF8 oculto, siete grupos y cuentas sintéticas. El piloto funcional validó entrega, calificación, libro de calificaciones y aislamiento inicial entre G01 y G02. La plantilla de Misión 09 conserva las cinco secciones oficiales y la configuración general, pero excluye actividades, participantes, entregas, calificaciones, finalizaciones, grupos y matrículas del curso fuente antes de asignar objetos sintéticos nuevos e independientes.
+
+También se validaron exportaciones nativas XLSX de participantes, progreso por actividad y calificaciones filtradas para G01 y G02. El reporte global de finalización no está disponible todavía porque no existen criterios globales aprobados. Moodle no tiene `mod_attendance` instalado en este staging y sus logs no se aceptan como evidencia exclusiva de asistencia o tiempo trabajado.
+
+Permanecen pendientes los contenidos definitivos, la nota aprobatoria, fechas/calendario, asistencia válida, disponibilidad sincrónica y aceptación institucional. Ninguna prueba local autoriza publicación ni operación en producción.

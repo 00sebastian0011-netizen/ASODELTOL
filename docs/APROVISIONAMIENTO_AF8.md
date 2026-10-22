@@ -4,7 +4,7 @@
 
 Este procedimiento transforma el catálogo versionado en insumos aceptados por mecanismos oficiales de Moodle 5.3. El generador es local, no abre conexiones de red y no modifica Moodle.
 
-El estado actual es **preparado, no aprovisionado**. No existe un curso AF8 creado por estos archivos, no se generó un MBZ y producción no está autorizada. La primera ejecución deberá ocurrir únicamente en un staging aislado, después de validar una restauración y la actualización a Moodle 5.3.
+El aprovisionamiento ya fue demostrado en el **Moodle 5.3 local aislado** con datos sintéticos: existe el curso AF8 piloto oculto y una edición sintética independiente creada desde una plantilla estructural MBZ. El MBZ y las exportaciones permanecen en `build/`, fuera de Git. Esta evidencia local no autoriza ni implica aprovisionamiento en producción.
 
 ## 2. Artefactos fuente
 
@@ -100,6 +100,8 @@ Ese comando es referencia para un operador del staging. La interfaz web se prior
 1. configurar el curso oculto mediante la edición estándar de Moodle y auditarlo contra el plano;
 2. crear y validar en staging un curso plantilla, y después usar la carga de cursos con `templatecourse` o los mecanismos oficiales de backup/restauración;
 3. sólo si la repetición y el riesgo lo justifican, implementar posteriormente un componente administrativo Moodle que consuma el catálogo mediante APIs internas soportadas.
+
+La segunda alternativa quedó validada en el staging local durante la Misión 09. La copia reutilizable excluye usuarios, asignaciones de rol, grupos, actividades, archivos, comentarios, finalizaciones, logs e historiales de calificación. Conserva las cinco secciones oficiales y la configuración general del curso. Cada edición debe recibir nuevos `shortname`, `idnumber`, categoría, fechas, cohortes, grupos, métodos de matrícula y capacitadores. El procedimiento administrativo reproducible y las comprobaciones posteriores están en `OPERACION.md`.
 
 No se automatizan aún las actividades porque los componentes Carpeta/PDF, URL/H5P y Video URL/Archivo no tienen tipo aprobado, falta el contenido y no existe una API externa uniforme que configure todos esos módulos. `core_courseformat_new_module` es una operación de creación rápida limitada a módulos que ofrecen `FEATURE_QUICKCREATE`; no reemplaza los formularios completos, archivos, bancos de preguntas ni criterios de finalización.
 
