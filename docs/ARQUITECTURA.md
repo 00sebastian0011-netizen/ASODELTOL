@@ -94,7 +94,7 @@ La navegación usa el formato por temas de Moodle: portada/sección general, ín
 
 ## 5. Diseño de plugins propios
 
-Los directorios actuales contienen únicamente contratos de diseño y no deben copiarse a Moodle como plugins instalables.
+`local_asodeltolstaff` contiene desde la Misión 11 un prototipo instalable validado únicamente en el staging local. Los demás directorios continúan siendo contratos de diseño y no deben copiarse a Moodle como plugins instalables.
 
 ### 5.1 `availability_asodeltolwindow`
 

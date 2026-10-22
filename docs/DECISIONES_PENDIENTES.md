@@ -34,6 +34,14 @@ No se debe convertir una suposición de esta tabla en código o contenido defini
 - Las restricciones nativas de fecha y grupo sirven para ventanas absolutas ya calculadas, pero no calculan días hábiles colombianos, no versionan una fuente de festivos y no ofrecen por sí solas excepciones auditables por grupo.
 - `availability_asodeltolwindow` continúa siendo la propuesta mínima para calcular y evaluar la ventana por estudiante/grupo. Debe recibir una política aprobada —disparador, inclusión del día inicial, calendario versionado, hora límite y zona— y registrar las excepciones sin sobrescribir el historial.
 
+## Evidencia técnica de Misión 11 que no cierra decisiones
+
+- `local_asodeltolstaff` demostró en staging sesiones por unidad/grupo/capacitador, asistencia provisional, correcciones anexables y validación administrativa separada.
+- Los reportes CSV/XLSX usan los formatos nativos de Moodle y respetan grupos y capacidades; no tienen valor contractual aprobado.
+- La regla sintética sólo acepta minutos positivos que no superen el intervalo reportado. No define redondeos, pausas, asistencia válida, remuneración ni obligación contractual.
+- `mod_attendance` no fue instalado: el directorio oficial consultado no declaraba compatibilidad con Moodle 5.3 al 22 de octubre de 2026.
+- Siguen pendientes DP-009, DP-010, DP-011, DP-012, DP-013, DP-018 y DP-020 antes de usar datos o evidencias reales.
+
 ## Formato para cerrar una decisión
 
 ```text

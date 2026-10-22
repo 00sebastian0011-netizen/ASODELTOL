@@ -59,6 +59,10 @@ services:
         source: ${STAGING_SCRIPTS:?STAGING_SCRIPTS is required}
         target: /opt/asodeltol/scripts
         read_only: true
+      - type: bind
+        source: ${ASODELTOL_STAFF_PLUGIN:?ASODELTOL_STAFF_PLUGIN is required}
+        target: /var/www/html/public/local/asodeltolstaff
+        read_only: true
       - moodle_data:/var/www/moodledata
     networks:
       - frontend

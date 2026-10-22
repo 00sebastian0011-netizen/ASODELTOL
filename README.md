@@ -4,7 +4,7 @@ Repositorio de ingeniería para extender y operar de forma controlada la instala
 
 ## Estado
 
-Las Misiones 01–09 dejaron un Moodle 5.3 local aislado con el curso AF8 piloto, siete grupos, datos exclusivamente sintéticos, recorrido funcional y una plantilla estructural reutilizable. La Misión 09 creó un segundo curso sintético oculto mediante backup/restore nativo, sin copiar estudiantes, entregas, calificaciones ni finalizaciones, y validó exportaciones nativas de participantes, progreso y calificaciones por grupo. No hay plugins instalables ni cambios aplicados a producción. Los directorios de `plugins/` son contratos de diseño para **Moodle 5.3 LTS**.
+Las Misiones 01–10 dejaron un Moodle 5.3 local aislado con el curso AF8 piloto, siete grupos, datos exclusivamente sintéticos, plantilla reutilizable y progresión secuencial validada. La Misión 11 incorpora el primer plugin instalable, `local_asodeltolstaff`, para demostrar sesiones, asistencia provisional, tiempos programado/reportado/validado, historial y reportes por grupo. El plugin y sus datos continúan limitados al staging local; no se aplicaron cambios a producción.
 
 Objetivo formal de compatibilidad ([ADR-0004](docs/adr/0004-objetivo-moodle-53-lts-y-documentroot-public.md)): **Moodle 5.3 LTS y PHP 8.4**. La rama previa Moodle 5.0.10+ finalizó su soporte de seguridad el 5 de octubre de 2026. Moodle 5.3 LTS garantiza soporte extendido de parches hasta octubre de 2029. La actualización requiere la reconfiguración del servidor web (NGINX/CloudPanel) para apuntar el DocumentRoot exclusivamente a `/public` (cambio arquitectónico de Moodle 5.1+) y validar la base de datos (MariaDB $\ge$ 11.4 o MySQL $\ge$ 8.4) antes de desplegar código.
 
@@ -63,7 +63,7 @@ Los plugins se desarrollan aquí y se prueban montándolos o copiándolos a una 
 
    El MBZ, los XLSX y la evidencia JSON quedan bajo `build/` y nunca se versionan.
 
-7. Cuando existan plugins instalables, generar artefactos locales con:
+7. Para generar artefactos locales de los plugins instalables:
 
    ```powershell
    powershell -NoProfile -File scripts/release/package-plugins.ps1
