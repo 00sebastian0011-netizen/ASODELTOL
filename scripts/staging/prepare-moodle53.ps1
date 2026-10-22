@@ -115,6 +115,11 @@ if (-not (Test-Path -LiteralPath (Join-Path $moodleSource 'public\version.php') 
     throw 'El clon de Moodle no contiene la raíz web public requerida por Moodle 5.3.'
 }
 
+# Docker needs this nested bind-mount target before the parent Moodle source is mounted read-only.
+# The empty directory exists only inside the ignored local runtime clone.
+$staffPluginMountPoint = Join-Path $moodleSource 'public\local\asodeltolstaff'
+New-Item -ItemType Directory -Path $staffPluginMountPoint -Force | Out-Null
+
 $secretPaths = [ordered]@{
     DB_PASSWORD_FILE = Join-Path $secretsDirectory 'database-password.txt'
     DB_ROOT_PASSWORD_FILE = Join-Path $secretsDirectory 'database-root-password.txt'
@@ -183,6 +188,7 @@ $environmentLines.Add('MOODLE_PORT=8053')
 $environmentLines.Add('MOODLE_SOURCE=' + (Convert-ToComposePath $moodleSource))
 $environmentLines.Add('STAGING_ARTIFACTS=' + (Convert-ToComposePath $artifactsDirectory))
 $environmentLines.Add('STAGING_SCRIPTS=' + (Convert-ToComposePath $PSScriptRoot))
+$environmentLines.Add('ASODELTOL_STAFF_PLUGIN=' + (Convert-ToComposePath (Join-Path $repoRoot 'plugins\local\asodeltolstaff')))
 foreach ($entry in $secretPaths.GetEnumerator()) {
     $environmentLines.Add($entry.Key + '=' + (Convert-ToComposePath $entry.Value))
 }

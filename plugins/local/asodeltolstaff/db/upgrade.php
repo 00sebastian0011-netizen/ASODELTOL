@@ -1,0 +1,66 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+/**
+ * Upgrade steps for local_asodeltolstaff.
+ *
+ * @package    local_asodeltolstaff
+ * @copyright  2026 ASODELTOL
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Upgrade local_asodeltolstaff.
+ *
+ * @param int $oldversion Installed plugin version.
+ * @return bool
+ */
+function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2026102201) {
+        $table = new xmldb_table('local_asstaff_history');
+        $field = new xmldb_field('subjectuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'actorid');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $records = $DB->get_recordset('local_asstaff_history', ['subjectuserid' => null], 'id',
+            'id, sessionid, entitytype, entityid');
+        foreach ($records as $record) {
+            $subjectuserid = null;
+            if ($record->entitytype === 'attendance') {
+                $subjectuserid = $DB->get_field('local_asstaff_attendance', 'studentid', ['id' => $record->entityid]);
+            }
+            if ($subjectuserid === false || $subjectuserid === null) {
+                $subjectuserid = $DB->get_field('local_asstaff_session', 'trainerid', ['id' => $record->sessionid]);
+            }
+            if ($subjectuserid !== false && $subjectuserid !== null) {
+                $DB->set_field('local_asstaff_history', 'subjectuserid', (int) $subjectuserid, ['id' => $record->id]);
+            }
+        }
+        $records->close();
+
+        $index = new xmldb_index('subjectuseridx', XMLDB_INDEX_NOTUNIQUE, ['subjectuserid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        upgrade_plugin_savepoint(true, 2026102201, 'local', 'asodeltolstaff');
+    }
+
+    if ($oldversion < 2026102202) {
+        upgrade_plugin_savepoint(true, 2026102202, 'local', 'asodeltolstaff');
+    }
+
+    return true;
+}
