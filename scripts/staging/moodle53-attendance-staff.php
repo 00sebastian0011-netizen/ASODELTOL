@@ -360,6 +360,38 @@ function m11_verify(): void {
             'Intento negativo sintético.'
         );
     }), 'El capacitador no autovalida su evidencia.');
+    $attendancehistorybefore = count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id));
+    $add('M11-NEG-005', m11_is_rejected(static function () use ($g01, $student1): void {
+        \local_asodeltolstaff\manager::save_attendance(
+            (int) $g01->id,
+            [(int) $student1->id => 'reported_absent'],
+            '   '
+        );
+    }) && $DB->get_field('local_asstaff_attendance', 'status', [
+        'sessionid' => $g01->id,
+        'studentid' => $student1->id,
+    ]) === 'reported_present'
+        && count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id)) === $attendancehistorybefore,
+        'Una corrección de asistencia sin motivo se rechaza sin modificar datos ni historial.');
+    $sessionhistorybefore = count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id));
+    $add('M11-NEG-006', m11_is_rejected(static function () use ($g01): void {
+        \local_asodeltolstaff\manager::save_session((object) [
+            'id' => (int) $g01->id,
+            'courseid' => (int) $g01->courseid,
+            'sectionnum' => (int) $g01->sectionnum,
+            'groupid' => (int) $g01->groupid,
+            'trainerid' => (int) $g01->trainerid,
+            'sessioncode' => (string) $g01->sessioncode,
+            'scheduledstart' => (int) $g01->scheduledstart,
+            'scheduledend' => (int) $g01->scheduledend,
+            'reportedstart' => (int) $g01->reportedstart,
+            'reportedend' => (int) $g01->reportedend,
+            'evidenceref' => (string) $g01->evidenceref,
+            'reason' => '',
+        ]);
+    }) && \local_asodeltolstaff\manager::get_session((int) $g01->id)->validationstatus === 'validated'
+        && count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id)) === $sessionhistorybefore,
+        'Una edición de sesión sin motivo se rechaza sin reiniciar la validación ni alterar el historial.');
     $group1 = m11_group(1, (int) $course->id);
     $add('M11-NEG-003', m11_is_rejected(static function () use ($course, $group1, $trainer1): void {
         \local_asodeltolstaff\manager::save_session((object) [
@@ -395,6 +427,43 @@ function m11_verify(): void {
         'Auditoría consulta y exporta transversalmente, sin validar ni modificar.');
 
     m11_set_user($admin);
+    $group2 = m11_group(2, (int) $course->id);
+    $trainer2 = m11_user('af8.synthetic.trainer.g02');
+    $groupchangehistorybefore = count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id));
+    $groupchangeattendancebefore = array_keys($DB->get_records(
+        'local_asstaff_attendance',
+        ['sessionid' => $g01->id],
+        'id',
+        'id'
+    ));
+    $groupchangerejected = m11_is_rejected(static function () use ($g01, $group2, $trainer2): void {
+        \local_asodeltolstaff\manager::save_session((object) [
+            'id' => (int) $g01->id,
+            'courseid' => (int) $g01->courseid,
+            'sectionnum' => (int) $g01->sectionnum,
+            'groupid' => (int) $group2->id,
+            'trainerid' => (int) $trainer2->id,
+            'sessioncode' => (string) $g01->sessioncode,
+            'scheduledstart' => (int) $g01->scheduledstart,
+            'scheduledend' => (int) $g01->scheduledend,
+            'reportedstart' => (int) $g01->reportedstart,
+            'reportedend' => (int) $g01->reportedend,
+            'evidenceref' => (string) $g01->evidenceref,
+            'reason' => 'Intento sintético de reasignación entre grupos.',
+        ]);
+    });
+    $groupchangeattendanceafter = array_keys($DB->get_records(
+        'local_asstaff_attendance',
+        ['sessionid' => $g01->id],
+        'id',
+        'id'
+    ));
+    $sessionaftergroupchange = \local_asodeltolstaff\manager::get_session((int) $g01->id);
+    $add('M11-ISO-002', $groupchangerejected
+        && (int) $sessionaftergroupchange->groupid === (int) $group1->id
+        && $groupchangeattendanceafter === $groupchangeattendancebefore
+        && count(\local_asodeltolstaff\manager::get_history_records((int) $g01->id)) === $groupchangehistorybefore,
+        'La reasignación G01 a G02 se rechaza sin mover la sesión, asistencia ni historial.');
     $history = \local_asodeltolstaff\manager::get_history_records((int) $g01->id);
     $actions = array_column($history, 'action');
     $add('M11-AUD-001', in_array('attendance_created', $actions, true)
@@ -488,6 +557,8 @@ function m11_verify(): void {
         ]);
     }), 'Se rechazan referencias HTTPS que incorporan credenciales en la URL.');
     $adminrows = \local_asodeltolstaff\manager::get_report_rows((int) $course->id);
+    $crossgrouprows = array_filter($adminrows, static fn(array $row): bool =>
+        $row['sessioncode'] === M11_SESSION_G01 && $row['group'] === $group2->name);
     $admincodes = array_unique(array_column($adminrows, 'sessioncode'));
     sort($admincodes);
     $section1 = $DB->get_record('course_sections', [
@@ -495,7 +566,8 @@ function m11_verify(): void {
         'section' => 1,
     ], 'id,name', MUST_EXIST);
     $add('M11-REP-001', $admincodes === [M11_SESSION_G01, M11_SESSION_G02]
-        && str_contains((string) $adminrows[0]['section'], (string) $section1->name),
+        && str_contains((string) $adminrows[0]['section'], (string) $section1->name)
+        && !$crossgrouprows,
         'El reporte contiene ambos grupos y la denominación académica real de la unidad.');
     $add('M11-SEC-003', !$DB->record_exists('local_asstaff_session', [
         'courseid' => $course->id,
@@ -581,7 +653,7 @@ function m11_plugin_status(): void {
     echo json_encode([
         'installed' => $installedversion !== false,
         'version' => $installedversion === false ? null : (int) $installedversion,
-        'expected' => 2026102201,
+        'expected' => 2026102202,
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 

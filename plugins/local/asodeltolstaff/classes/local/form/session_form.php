@@ -89,6 +89,9 @@ final class session_form extends \moodleform {
                 $errors['evidenceref'] = get_string('invalidevidence', 'local_asodeltolstaff');
             }
         }
+        if (!empty($data['id']) && trim((string) ($data['reason'] ?? '')) === '') {
+            $errors['reason'] = get_string('reasonrequired', 'local_asodeltolstaff');
+        }
         return $errors;
     }
 }

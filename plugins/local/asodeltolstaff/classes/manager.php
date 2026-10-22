@@ -188,6 +188,12 @@ final class manager {
         }
 
         $record = self::normalise_session($data, $existing);
+        if ($existing && (int) $record->groupid !== (int) $existing->groupid) {
+            throw new moodle_exception('groupchangeforbidden', 'local_asodeltolstaff');
+        }
+        if ($existing && trim((string) ($data->reason ?? '')) === '') {
+            throw new moodle_exception('reasonrequired', 'local_asodeltolstaff');
+        }
         self::validate_course_relations($course, $record);
         self::require_manage_pair($context, (int) $record->groupid, (int) $record->trainerid);
 
@@ -244,6 +250,10 @@ final class manager {
 
         $session = self::get_session($sessionid);
         self::require_session_manage($session);
+        $reason = trim($reason);
+        if ($reason === '') {
+            throw new moodle_exception('reasonrequired', 'local_asodeltolstaff');
+        }
         $students = self::get_group_students((int) $session->courseid, (int) $session->groupid);
         $transaction = $DB->start_delegated_transaction();
         foreach ($statuses as $studentid => $status) {
