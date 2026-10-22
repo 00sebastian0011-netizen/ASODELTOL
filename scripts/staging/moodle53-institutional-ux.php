@@ -11,9 +11,11 @@ require_once($CFG->dirroot . '/course/lib.php');
 
 const M12_COURSE_IDNUMBER = 'ASODELTOL-AF8';
 const M12_CATEGORY_IDNUMBER = 'ASODELTOL-STAGING';
+// Propuesta cromática y visual provisional (sujeta a confirmación oficial de identidad gráfica por parte de ASODELTOL).
 const M12_BRAND_COLOR = '#1B4D3E';
 const M12_SITE_FULLNAME = 'Aula Virtual ASODELTOL';
 const M12_SITE_SHORTNAME = 'ASODELTOL';
+const M12_SNAPSHOT_FILE = '/opt/asodeltol/artifacts/theme-snapshot-pre-m12.json';
 
 /**
  * Return with diagnostic error.
@@ -108,17 +110,37 @@ function m12_scss(): string {
     outline-offset: 2px !important;
 }
 
-/* Universal Page Canvas & Prevent Horizontal Overflow */
-html, body {
-    max-width: 100vw;
-    overflow-x: hidden;
-}
-
+/* Universal Page Canvas - Accessible & Naturally Responsive (No artificial overflow hiding) */
 body {
     background-color: #F8FAFC;
     color: #1E293B;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+/* Ensure embedded media, preformatted text and code adapt without overflowing container */
+img, svg, video, canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+pre, code {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Off-canvas containment: ensure closed drawers do not bleed into layout space */
+.drawer:not(.show),
+.drawer.hidden,
+.message-drawer.hidden,
+[data-region="right-hand-drawer"].hidden,
+.drawer[aria-hidden="true"] {
+    visibility: hidden;
+}
+
+.drawer.show,
+.message-drawer:not(.hidden) {
+    visibility: visible;
 }
 
 /* --------------------------------------------------------------------------
@@ -487,7 +509,26 @@ SCSS;
  * Apply institutional UX to theme_boost.
  */
 function m12_apply(): void {
+    global $DB, $SITE;
     m12_admin();
+
+    // Capture non-destructive snapshot of pre-existing state if not already captured.
+    if (!file_exists(M12_SNAPSHOT_FILE)) {
+        $snapshot = [
+            'captured_at' => gmdate('c'),
+            'brandcolor' => (string) (get_config('theme_boost', 'brandcolor') ?: ''),
+            'scsspre' => (string) (get_config('theme_boost', 'scsspre') ?: ''),
+            'scss' => (string) (get_config('theme_boost', 'scss') ?: ''),
+            'theme' => (string) (get_config('core', 'theme') ?: 'boost'),
+            'site_fullname' => (string) $SITE->fullname,
+            'site_shortname' => (string) $SITE->shortname,
+        ];
+        $snapshot_dir = dirname(M12_SNAPSHOT_FILE);
+        if (!is_dir($snapshot_dir)) {
+            mkdir($snapshot_dir, 0777, true);
+        }
+        file_put_contents(M12_SNAPSHOT_FILE, json_encode($snapshot, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
 
     set_config('brandcolor', M12_BRAND_COLOR, 'theme_boost');
     set_config('scsspre', m12_scsspre(), 'theme_boost');
@@ -495,13 +536,14 @@ function m12_apply(): void {
     set_config('theme', 'boost', 'core');
 
     // Update site titles cleanly if needed.
-    global $DB, $SITE;
     if ($SITE->fullname !== M12_SITE_FULLNAME || $SITE->shortname !== M12_SITE_SHORTNAME) {
         $DB->update_record('course', (object) [
             'id' => $SITE->id,
             'fullname' => M12_SITE_FULLNAME,
             'shortname' => M12_SITE_SHORTNAME,
         ]);
+        $SITE->fullname = M12_SITE_FULLNAME;
+        $SITE->shortname = M12_SITE_SHORTNAME;
     }
 
     theme_reset_all_caches();
@@ -517,21 +559,59 @@ function m12_apply(): void {
 }
 
 /**
- * Revert theme_boost to default unbranded state.
+ * Revert theme_boost to default unbranded state using snapshot if available.
  */
 function m12_revert(): void {
+    global $DB, $SITE;
     m12_admin();
 
-    set_config('brandcolor', '', 'theme_boost');
-    set_config('scsspre', '', 'theme_boost');
-    set_config('scss', '', 'theme_boost');
+    $restored_from_snapshot = false;
+    $brandcolor = '';
+    $scsspre = '';
+    $scss = '';
+    $theme = 'boost';
+    $site_fullname = 'ASODELTOL Moodle 5.3 Staging';
+    $site_shortname = 'ASODELTOL-STG';
+
+    if (file_exists(M12_SNAPSHOT_FILE)) {
+        $raw = file_get_contents(M12_SNAPSHOT_FILE);
+        $data = json_decode((string) $raw, true);
+        if (is_array($data)) {
+            $brandcolor = (string) ($data['brandcolor'] ?? '');
+            $scsspre = (string) ($data['scsspre'] ?? '');
+            $scss = (string) ($data['scss'] ?? '');
+            $theme = (string) ($data['theme'] ?? 'boost');
+            $site_fullname = (string) ($data['site_fullname'] ?? $site_fullname);
+            $site_shortname = (string) ($data['site_shortname'] ?? $site_shortname);
+            $restored_from_snapshot = true;
+        }
+        @unlink(M12_SNAPSHOT_FILE);
+    }
+
+    set_config('brandcolor', $brandcolor, 'theme_boost');
+    set_config('scsspre', $scsspre, 'theme_boost');
+    set_config('scss', $scss, 'theme_boost');
+    set_config('theme', $theme, 'core');
+
+    if ($SITE->fullname !== $site_fullname || $SITE->shortname !== $site_shortname) {
+        $DB->update_record('course', (object) [
+            'id' => $SITE->id,
+            'fullname' => $site_fullname,
+            'shortname' => $site_shortname,
+        ]);
+        $SITE->fullname = $site_fullname;
+        $SITE->shortname = $site_shortname;
+    }
 
     theme_reset_all_caches();
 
     echo json_encode([
         'status' => 'reverted',
-        'theme' => 'boost',
-        'brandcolor' => '',
+        'theme' => $theme,
+        'restored_from_snapshot' => $restored_from_snapshot,
+        'brandcolor' => $brandcolor,
+        'site_fullname' => $site_fullname,
+        'site_shortname' => $site_shortname,
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 

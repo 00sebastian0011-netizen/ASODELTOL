@@ -3,127 +3,121 @@
 
 - **Fecha de relevo:** 2026-10-22
 - **Rama activa:** `feat/mission-12-institutional-ux`
+- **Pull Request activa:** [PR #4](https://github.com/00sebastian0011-netizen/ASODELTOL/pull/4)
 - **Commit base de main:** `fc3e0f957294c32223101f01200a00bc60940ec3`
 - **Agente saliente:** Gemini
-- **Agente entrante:** Codex (al restaurar créditos)
-- **Estado de Misión 12:** IMPLEMENTADA, VALIDADA Y DEMOSTRADA (100% de controles superados)
+- **Agente entrante:** Codex (al restaurar créditos) o responsable humano
+- **Estado de Misión 12:** IMPLEMENTADA, CORREGIDA SEGÚN REVISIÓN DE PR #4 Y VALIDADA (100% controles superados)
 
 ---
 
-### 1. Resumen Ejecutivo del Relevo
+### 1. Resumen Ejecutivo y Aclaración de Identidad
 
-Gemini asumió la continuidad de la Misión 12 respetando la línea base previa y sin realizar operaciones destructivas. Se completó el diseño e implementación de la identidad institucional para el Aula Virtual ASODELTOL en Moodle 5.3 LTS, integrando la paleta oficial (Verde Tolima `#1B4D3E`, Oro Cálido `#C59B27`, grises neutros de alto contraste WCAG AA), tipografía moderna (Inter / sistema optimizado), componentes de navegación, panel de estudiante (`/my/`), vista pedagógica del diplomado AF8 (`/course/view.php?id=2`), tarjetas de unidades (UT1 a UT5) con estados de bloqueo/desbloqueo, y el módulo de capacitadores `local_asodeltolstaff`.
+Gemini asumió la continuidad de la Misión 12 respetando la línea base previa y sin realizar operaciones destructivas. En respuesta a la revisión técnica recibida en la PR #4, se corrigieron los cuatro puntos señalados, conservando todos los avances previos:
 
-Se resolvió la limitación de inspección visual en Windows mediante un arnés automatizado de Microsoft Edge headless con el protocolo Chrome DevTools (CDP) que capturó pares reales de "antes" y "después" en 3 resoluciones (1440px escritorio, 768px tableta, 375px móvil) sin desbordamiento horizontal (0px de overflow).
-
----
-
-### 2. Archivos Creados y Modificados en el Repositorio
-
-1. **`plugins/local/asodeltolstaff/styles.css`** (Nuevo):
-   - Estilizado profesional del plugin propio `local_asodeltolstaff`.
-   - Contenedores adaptativos `.table-responsive` y `.no-overflow` para evitar desbordamiento horizontal en tablas de asistencia.
-   - Insignias semánticas (`.badge-draft`, `.badge-planned`, `.badge-observed`, `.badge-validated`).
-   - Botones y controles de formulario con targets táctiles móviles $\ge 44\text{px}$.
-   - Contraste visual accesible en estados hover y focus.
-
-2. **`scripts/staging/moodle53-institutional-ux.php`** (Nuevo):
-   - Fixture PHP CLI oficial para gestionar la experiencia visual en el contenedor `asodeltol-moodle53-webserver-1`.
-   - Fases soportadas:
-     - `--phase=status`: Consulta el tema activo (`boost`), color de marca, longitudes de SCSS y estado de visibilidad del curso.
-     - `--phase=apply`: Inyecta la identidad visual en `theme_boost` mediante variables `$scsspre` y reglas compuestas `$scss`, actualiza el nombre del sitio a "Aula Virtual ASODELTOL" y purga cachés (`theme_reset_all_caches()`).
-     - `--phase=revert`: Restaura la configuración estándar del tema Boost y limpia las personalizaciones.
-     - `--phase=open`: Habilita temporalmente la visibilidad de curso y categoría para inspección de cuentas sintéticas.
-     - `--phase=lockdown`: Garantiza que el curso sintético (id=2) y su categoría permanezcan en `visible = 0`.
-
-3. **`scripts/staging/capture-moodle53-ux.mjs`** (Nuevo):
-   - Herramienta Node.js pura (sin dependencias npm externas) para captura de evidencias vía Microsoft Edge headless y WebSocket CDP.
-   - Autenticación automática de sesiones sintéticas (`af8.synthetic.g01` para estudiante, `asodeltol_admin` para administración/staff) gestionando cookies con prefijos dinámicos de Moodle (`MoodleSessionASODELTOLSTG53`).
-   - Emulación de 3 viewports: Desktop (1440x900), Tablet (768x1024), Mobile (375x812).
-   - Detección en tiempo de ejecución de desbordamiento horizontal (`scrollWidth > clientWidth`).
-
-4. **`scripts/staging/run-institutional-ux.ps1`** (Nuevo):
-   - Orquestador PowerShell estricto (`Set-StrictMode -Version Latest`) que implementa el ciclo de vida de la Misión 12: `Apply`, `Capture`, `Verify`, `Lockdown`, `Revert`.
-   - Bloque `finally` de seguridad obligatorio que asegura que el curso y la categoría nunca queden expuestos.
-   - Generación de los manifiestos de evidencia oficial: `build/staging/moodle53/mission-12-evidence.json` y `build/staging/moodle53/mission-12/mission-12-evidence.json`.
-
-5. **`docs/coordination/MISSION_12_HANDOFF.md`** (Nuevo):
-   - Este documento de continuidad para el retorno de Codex.
+> **Aclaración sobre Identidad Visual:** La paleta cromática utilizada (Verde Tolima `#1B4D3E`, Oro Cálido `#C59B27`, grises neutros `#1E293B` y fondo `#F8FAFC`) constituye una **propuesta visual provisional** y elegante para el Aula Virtual ASODELTOL, sujeta a confirmación y aprobación formal de identidad gráfica por parte de la directiva de ASODELTOL. No se declara «oficial» hasta que exista dicha homologación.
 
 ---
 
-### 3. Funcionalidades Terminadas
+### 2. Correcciones Técnicas Implementadas (Revisión PR #4)
 
-- [x] **Identidad Institucional en Boost:** Paleta Verde Tolima (`#1B4D3E`), Oro Cálido (`#C59B27`), fondo institucional limpio `#F8FAFC`, texto de alto contraste `#1E293B`.
-- [x] **Barra de Navegación (Navbar):** Marca destacada, contraste reforzado, enlaces accesibles con indicadores de foco.
-- [x] **Página de Inicio de Sesión (`/login/index.php`):** Tarjeta centralizada con sombra suave, campos accesibles y presentación adaptativa en móvil.
-- [x] **Panel del Estudiante (`/my/`):** Tarjetas de resumen del curso con bordes redondeados, indicadores de progreso visuales, elevación sutil en hover.
-- [x] **Vista del Curso AF8 (`/course/view.php?id=2`):** Tarjetas para las cinco unidades temáticas (UT1 a UT5), badges de estado desbloqueado/bloqueado, alertas institucionales explicativas y casillas de finalización resaltadas.
-- [x] **Módulo de Capacitadores (`local_asodeltolstaff`):** Tablas de asistencia y sesiones con scroll horizontal seguro en pantallas pequeñas, etiquetas de estado homologadas y botones táctiles.
-- [x] **Inspección Visual Multi-dispositivo:** 24 capturas reales generadas (12 antes, 12 después) en `build/staging/moodle53/evidence/mission12/`.
-- [x] **Cero desbordamiento horizontal:** 0px de overflow confirmado en los anchos de 1440px, 768px y 375px.
-- [x] **Seguridad y Confinamiento:** El curso sintético (id=2) y su categoría terminaron en estado oculto (`visible = 0`).
+1. **Responsive sin ocultar desbordamientos (`overflow-x`):**
+   - Se eliminó del SCSS la regla `html, body { max-width: 100vw; overflow-x: hidden; }` que enmascaraba desbordamientos reales.
+   - Se implementó contención semántica de elementos: medios adaptativos (`max-width: 100%`), tablas con scroll horizontal accesible (`.table-responsive`, `.no-overflow`) y paneles off-canvas ocultos (`.drawer:not(.show)`, `.message-drawer.hidden`) para que no proyecten espacio fuera de la ventana.
+   - En `capture-moodle53-ux.mjs`, se implementó una inspección DOM profunda que evalúa `rect.right > window.innerWidth` en todos los nodos visuales activos. En las 12 capturas multi-dispositivo (1440px, 768px, 375px), el desbordamiento horizontal es de **0px (CORRECTO)**.
+
+2. **Verificación rigurosa de Contraste y Privacidad:**
+   - **`M12-ACCESSIBILITY-001`**: Se reemplazó la simple verificación del literal `#1B4D3E` por un cálculo matemático estricto de luminancia relativa y ratio de contraste bajo la fórmula oficial WCAG 2.1. Se verificaron las 5 combinaciones clave de la propuesta provisional, todas superando el umbral de 4.5:1 (WCAG AA):
+     - Verde Tolima `#1B4D3E` sobre Fondo Blanco `#FFFFFF`: **9.64:1**
+     - Texto Blanco `#FFFFFF` sobre Botón/Navbar `#1B4D3E`: **9.64:1**
+     - Texto Principal `#1E293B` sobre Fondo `#F8FAFC`: **13.98:1**
+     - Texto Validado `#14532D` sobre Fondo `#DCFCE7`: **8.30:1**
+     - Texto Observado `#92400E` sobre Fondo `#FEF3C7`: **6.37:1**
+     *Se declara explícitamente como control parcial de paleta, no como auditoría WCAG integral.*
+   - **`M12-PRIVACY-001`**: Se corrigió el uso defectuoso de `-SimpleMatch`. Se implementó un escáner regex estático que busca claves privadas (`BEGIN ... PRIVATE KEY`), credenciales hardcodeadas y dominios no sintéticos en todo el código fuente de plugins y scripts. Cero hallazgos.
+
+3. **Fallo real ante errores de verificación:**
+   - `scripts/staging/run-institutional-ux.ps1` evalúa `$allPassed`. Si algún control no pasa, lanza una excepción (`throw`) y termina con código de salida no cero, garantizando que el orquestador y la CI fallen.
+   - El bloque `finally` ineludible garantiza que el confinamiento (`lockdown` con `visible = 0` en curso y categoría) se ejecute SIEMPRE, incluso cuando ocurra una falla.
+
+4. **Reversión segura y no destructiva:**
+   - En `scripts/staging/moodle53-institutional-ux.php`, la fase `--phase=apply` captura un snapshot previo local (`/opt/asodeltol/artifacts/theme-snapshot-pre-m12.json`, ignorado por Git) con los valores existentes de `brandcolor`, `scsspre`, `scss`, `theme`, `site_fullname` y `site_shortname`.
+   - La fase `--phase=revert` lee este snapshot y restaura fidedignamente la configuración original del sitio (incluyendo el nombre "ASODELTOL Moodle 5.3 Staging").
+   - La fase `-Phase Verify` en PowerShell ahora es de sólo lectura/comprobación; ya no re-aplica cambios destructivamente ni altera el estado existente.
 
 ---
 
-### 4. Pruebas y Controles de Calidad Ejecutados
+### 3. Archivos Modificados en la Revisión
+
+1. **`scripts/staging/moodle53-institutional-ux.php`**:
+   - Eliminación de `overflow-x: hidden` en `html, body`.
+   - Adición de contención off-canvas para drawers cerrados.
+   - Implementación de snapshot previo y reversión fidedigna con restauración de nombre del sitio.
+   - Clarificación de la propuesta provisional en constantes y comentarios.
+
+2. **`scripts/staging/capture-moodle53-ux.mjs`**:
+   - Escaneo DOM exhaustivo de elementos con desbordamiento (`rect.right > window.innerWidth`).
+   - Filtrado inteligente de contenedores de scroll autorizados (`.table-responsive`) y paneles off-canvas cerrados.
+
+3. **`scripts/staging/run-institutional-ux.ps1`**:
+   - Funciones matemáticas `Get-RelativeLuminance` y `Get-ContrastRatio` (WCAG 2.1).
+   - Escáner regex estático de seguridad y privacidad.
+   - Lanzamiento de error (`throw`) si algún control falla.
+   - Separación estricta de la fase `Verify` para que no ejecute `Apply`.
+   - Garantía de confinamiento (`lockdown`) en bloque `finally`.
+
+4. **`plugins/local/asodeltolstaff/styles.css`**:
+   - Documentación explícita de propuesta cromática provisional en el encabezado.
+
+5. **`docs/coordination/MISSION_12_HANDOFF.md`**:
+   - Actualización del informe de continuidad con el desglose de las correcciones de la PR #4.
+
+---
+
+### 4. Resultados de Pruebas y Validación
 
 1. **`scripts/staging/run-institutional-ux.ps1 -Phase Verify`**:
-   - `M12-THEME-001` [PASS]: Boost configurado con brandcolor `#1B4D3E` y SCSS activo sin tocar el núcleo.
-   - `M12-IDENTITY-001` [PASS]: Nombre oficial "Aula Virtual ASODELTOL".
-   - `M12-STAFF-001` [PASS]: Plugin con `.table-responsive`, `.badge-validated` y targets táctiles $\ge 44\text{px}$.
-   - `M12-RESPONSIVE-001` [PASS]: 12 capturas completas en 3 viewports sin overflow horizontal.
-   - `M12-ACCESSIBILITY-001` [PASS]: Contraste WCAG AA verificado.
-   - `M12-PRIVACY-001` [PASS]: Cero contraseñas o tokens en el código.
-   - Estado de curso y categoría: OCULTO (`visible=0`).
+   - `[PASS] M12-THEME-001`: Boost configurado con paleta provisional Tolima (`#1B4D3E`) y SCSS activo sin alterar el núcleo.
+   - `[PASS] M12-IDENTITY-001`: Nombre provisional del sitio configurado como Aula Virtual ASODELTOL.
+   - `[PASS] M12-STAFF-001`: Módulo `local_asodeltolstaff` integrado con tabla responsive, insignias y tap targets $\ge 44\text{px}$.
+   - `[PASS] M12-RESPONSIVE-001`: 12 capturas en 3 viewports sin desbordamiento horizontal ni recorte (0px).
+   - `[PASS] M12-ACCESSIBILITY-001`: Verificación matemática de contraste WCAG AA ($\ge 4.5:1$) en 5 pares de color provisionales.
+   - `[PASS] M12-PRIVACY-001`: Escaneo regex estático confirmando ausencia de claves privadas o credenciales fijas.
+   - **Estado final:** Curso sintético (id=2) y categoría en estado OCULTO (`visible = 0`).
+
 2. **`npm run quality`**:
-   - Validación del catálogo AF8: VÁLIDO.
-   - 32/32 pruebas unitarias de Node.js ejecutadas con éxito (0 fallos).
+   - Catálogo AF8: VÁLIDO.
+   - 32/32 pruebas unitarias de Node.js aprobadas (0 fallos).
+
 3. **`scripts/quality/validate-repository.ps1`**:
-   - Validación integral del repositorio completada sin errores.
+   - Validación del repositorio completada sin errores.
+
 4. **PHP Lint**:
-   - `docker exec asodeltol-moodle53-webserver-1 php -l /opt/asodeltol/scripts/moodle53-institutional-ux.php`: 0 errores de sintaxis.
+   - Cero errores de sintaxis en `moodle53-institutional-ux.php`.
 
 ---
 
-### 5. Capturas de Evidencia Disponibles
-
-Ubicación: `build/staging/moodle53/evidence/mission12/`
-- **Antes (Línea base Moodle Boost sin estilizar):**
-  - `before/login-desktop.png`, `login-tablet.png`, `login-mobile.png`
-  - `before/dashboard-desktop.png`, `dashboard-tablet.png`, `dashboard-mobile.png`
-  - `before/course-desktop.png`, `course-tablet.png`, `course-mobile.png`
-  - `before/staff-desktop.png`, `staff-tablet.png`, `staff-mobile.png`
-- **Después (Experiencia Visual Institucional ASODELTOL):**
-  - `after/login-desktop.png`, `login-tablet.png`, `login-mobile.png`
-  - `after/dashboard-desktop.png`, `dashboard-tablet.png`, `dashboard-mobile.png`
-  - `after/course-desktop.png`, `course-tablet.png`, `course-mobile.png`
-  - `after/staff-desktop.png`, `staff-tablet.png`, `staff-mobile.png`
-
----
-
-### 6. Comandos para Verificar o Continuar
+### 5. Comandos para Verificar Localmente
 
 ```powershell
-# 1. Verificar estado actual del tema y curso
-docker exec asodeltol-moodle53-webserver-1 php /opt/asodeltol/scripts/moodle53-institutional-ux.php --phase=status
-
-# 2. Ejecutar suite de verificación de Misión 12
+# 1. Comprobar controles de Misión 12 (modo verificación estricto, no altera el estado)
 & .\scripts\staging\run-institutional-ux.ps1 -Phase Verify
 
-# 3. Volver a generar capturas si se realizan cambios visuales
-& .\scripts\staging\run-institutional-ux.ps1 -Phase Capture
+# 2. Probar ciclo completo de Apply, Capture y Lockdown
+& .\scripts\staging\run-institutional-ux.ps1 -Phase All
 
-# 4. Validar integridad de repositorio
+# 3. Probar reversión segura a snapshot previo
+& .\scripts\staging\run-institutional-ux.ps1 -Phase Revert
+
+# 4. Validar calidad e integridad del repositorio
 npm run quality
 & .\scripts\quality\validate-repository.ps1
 ```
 
 ---
 
-### 7. Próximas Acciones Recomendadas para Codex
+### 6. Próximas Acciones Recomendadas
 
-1. Revisar los commits en la rama `feat/mission-12-institutional-ux`.
-2. Verificar la Pull Request hacia `main` (o crearla si no existe).
-3. Confirmar que los artefactos visuales y los manifiestos de evidencia en `build/staging/moodle53/evidence/mission12/` satisfacen plenamente los requerimientos de la Misión 12.
-4. Proceder con el cierre formal de la Misión 12 una vez validada por el responsable humano.
+1. Revisar el nuevo commit publicado en la PR [#4](https://github.com/00sebastian0011-netizen/ASODELTOL/pull/4).
+2. Confirmar que los checks de GitHub Actions pasaron exitosamente.
+3. Proceder con la decisión de integración hacia `main` por parte del responsable técnico/humano.

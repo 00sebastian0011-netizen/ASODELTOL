@@ -273,15 +273,55 @@ async function captureAll(mode = 'after') {
                 await new Promise(r => setTimeout(r, 1200));
 
                 const overflowCheck = await send('Runtime.evaluate', {
-                    expression: `({
-                        scrollWidth: document.documentElement.scrollWidth,
-                        clientWidth: document.documentElement.clientWidth,
-                        hasOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2
-                    })`,
+                    expression: `(() => {
+                        const vpWidth = window.innerWidth || document.documentElement.clientWidth;
+                        const overflowingElements = [];
+                        const allElements = document.querySelectorAll('body *');
+                        for (const el of allElements) {
+                            if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'NOSCRIPT' || el.offsetParent === null) continue;
+                            if (el.closest('.drawer:not(.show), .message-drawer.hidden, [aria-hidden="true"], .modal:not(.show)')) continue;
+                            const comp = window.getComputedStyle(el);
+                            if (comp.visibility === 'hidden' || comp.display === 'none') continue;
+                            const rect = el.getBoundingClientRect();
+                            if (rect.width <= 0 || rect.height <= 0) continue;
+                            if (rect.right > vpWidth + 2) {
+                                // Excluir elementos legítimamente contenidos dentro de un scroll horizontal (ej. tablas responsive)
+                                let isInsideScrollContainer = false;
+                                let parent = el.parentElement;
+                                while (parent && parent !== document.body) {
+                                    const style = window.getComputedStyle(parent);
+                                    if (style.overflowX === 'auto' || style.overflowX === 'scroll' || parent.classList.contains('table-responsive') || parent.classList.contains('no-overflow')) {
+                                        isInsideScrollContainer = true;
+                                        break;
+                                    }
+                                    parent = parent.parentElement;
+                                }
+                                if (!isInsideScrollContainer) {
+                                    overflowingElements.push({
+                                        tag: el.tagName.toLowerCase(),
+                                        id: el.id || '',
+                                        className: (el.className && typeof el.className === 'string') ? el.className.trim().substring(0, 60) : '',
+                                        right: Math.round(rect.right),
+                                        viewportWidth: vpWidth
+                                    });
+                                    if (overflowingElements.length >= 5) break;
+                                }
+                            }
+                        }
+                        const rootOverflow = document.documentElement.scrollWidth > vpWidth + 2;
+                        const hasOverflow = rootOverflow || overflowingElements.length > 0;
+                        return {
+                            hasOverflow,
+                            rootOverflow,
+                            scrollWidth: document.documentElement.scrollWidth,
+                            clientWidth: vpWidth,
+                            overflowingElements
+                        };
+                    })()`,
                     returnByValue: true
                 });
 
-                const overflowResult = overflowCheck.result?.value || { hasOverflow: false };
+                const overflowResult = overflowCheck.result?.value || { hasOverflow: false, overflowingElements: [] };
 
                 const screenshot = await send('Page.captureScreenshot', {
                     format: 'png',
@@ -291,7 +331,11 @@ async function captureAll(mode = 'after') {
                 const imageBuffer = Buffer.from(screenshot.data, 'base64');
                 writeFileSync(destPath, imageBuffer);
 
-                console.log(`  ✓ Guardado: ${filename} (${vp.width}x${vp.height}) - Desbordamiento horizontal: ${overflowResult.hasOverflow ? 'DETECTADO' : 'CORRECTO (0px)'}`);
+                const statusTag = overflowResult.hasOverflow ? 'DETECTADO (ERROR)' : 'CORRECTO (0px)';
+                console.log(`  ✓ Guardado: ${filename} (${vp.width}x${vp.height}) - Desbordamiento horizontal: ${statusTag}`);
+                if (overflowResult.hasOverflow && overflowResult.overflowingElements?.length > 0) {
+                    console.log(`    Elementos desbordados:`, JSON.stringify(overflowResult.overflowingElements));
+                }
 
                 capturedResults.push({
                     view: view.key,
@@ -301,7 +345,8 @@ async function captureAll(mode = 'after') {
                     filename,
                     path: destPath,
                     sizeBytes: imageBuffer.length,
-                    hasHorizontalOverflow: overflowResult.hasOverflow
+                    hasHorizontalOverflow: overflowResult.hasOverflow,
+                    overflowDetails: overflowResult.hasOverflow ? overflowResult.overflowingElements : []
                 });
             }
         }
