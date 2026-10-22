@@ -1,134 +1,101 @@
-# ASODELTOL — PROTOCOLO DE CONTINUIDAD (HANDOFF CODEX / GEMINI)
-## Misión 12: Experiencia Visual Institucional (Institutional UX/UI)
+# ASODELTOL — continuidad de la Misión 12
 
-- **Fecha de relevo:** 2026-10-22
-- **Rama activa:** `feat/mission-12-institutional-ux`
-- **Pull Request activa:** [PR #4](https://github.com/00sebastian0011-netizen/ASODELTOL/pull/4)
-- **Commit base de main:** `fc3e0f957294c32223101f01200a00bc60940ec3`
-- **Agente saliente:** Gemini
-- **Agente entrante:** Codex (al restaurar créditos) o responsable humano
-- **Estado de Misión 12:** IMPLEMENTADA, CORREGIDA SEGÚN REVISIÓN DE PR #4 Y VALIDADA (100% controles superados)
+## Estado
 
----
+- Fecha de actualización: 2026-10-22.
+- Rama: `feat/mission-12-institutional-ux`.
+- Pull Request: [PR #4](https://github.com/00sebastian0011-netizen/ASODELTOL/pull/4).
+- Base: `fc3e0f957294c32223101f01200a00bc60940ec3` (`main`, Misiones 01–11).
+- Entorno: Moodle 5.3 local aislado en `http://127.0.0.1:8053`.
+- Producción/VPS: no modificados.
 
-### 1. Resumen Ejecutivo y Aclaración de Identidad
+La personalización visual de Boost permanece activa. La paleta verde/oro, tipografía y demás decisiones gráficas son una propuesta provisional hasta recibir aprobación institucional.
 
-Gemini asumió la continuidad de la Misión 12 respetando la línea base previa y sin realizar operaciones destructivas. En respuesta a la revisión técnica recibida en la PR #4, se corrigieron los cuatro puntos señalados, conservando todos los avances previos:
+## Avances visuales preservados
 
-> **Aclaración sobre Identidad Visual:** La paleta cromática utilizada (Verde Tolima `#1B4D3E`, Oro Cálido `#C59B27`, grises neutros `#1E293B` y fondo `#F8FAFC`) constituye una **propuesta visual provisional** y elegante para el Aula Virtual ASODELTOL, sujeta a confirmación y aprobación formal de identidad gráfica por parte de la directiva de ASODELTOL. No se declara «oficial» hasta que exista dicha homologación.
+- Login, navegación, panel del estudiante y tarjetas de cursos.
+- Curso AF8 y estados visuales de sus cinco unidades oficiales.
+- Adaptaciones para 1440, 768 y 375 px.
+- Integración visual de `local_asodeltolstaff`, tablas responsive, insignias y objetivos táctiles.
+- Capturador real mediante Edge headless y controles parciales de contraste.
+- Doce capturas sanitizadas bajo `build/`, ignoradas por Git.
 
----
+## Corrección final de seguridad
 
-### 2. Correcciones Técnicas Implementadas (Revisión PR #4)
+### Verify de solo lectura
 
-1. **Responsive sin ocultar desbordamientos (`overflow-x`):**
-   - Se eliminó del SCSS la regla `html, body { max-width: 100vw; overflow-x: hidden; }` que enmascaraba desbordamientos reales.
-   - Se implementó contención semántica de elementos: medios adaptativos (`max-width: 100%`), tablas con scroll horizontal accesible (`.table-responsive`, `.no-overflow`) y paneles off-canvas ocultos (`.drawer:not(.show)`, `.message-drawer.hidden`) para que no proyecten espacio fuera de la ventana.
-   - En `capture-moodle53-ux.mjs`, se implementó una inspección DOM profunda que evalúa `rect.right > window.innerWidth` en todos los nodos visuales activos. En las 12 capturas multi-dispositivo (1440px, 768px, 375px), el desbordamiento horizontal es de **0px (CORRECTO)**.
+`run-institutional-ux.ps1 -Phase Verify` ya no ejecuta `Apply`, `Revert`, `Lockdown`, eliminación de archivos ni creación de snapshots. Lee el estado y las evidencias existentes, calcula controles y compara antes/después:
 
-2. **Verificación rigurosa de Contraste y Privacidad:**
-   - **`M12-ACCESSIBILITY-001`**: Se reemplazó la simple verificación del literal `#1B4D3E` por un cálculo matemático estricto de luminancia relativa y ratio de contraste bajo la fórmula oficial WCAG 2.1. Se verificaron las 5 combinaciones clave de la propuesta provisional, todas superando el umbral de 4.5:1 (WCAG AA):
-     - Verde Tolima `#1B4D3E` sobre Fondo Blanco `#FFFFFF`: **9.64:1**
-     - Texto Blanco `#FFFFFF` sobre Botón/Navbar `#1B4D3E`: **9.64:1**
-     - Texto Principal `#1E293B` sobre Fondo `#F8FAFC`: **13.98:1**
-     - Texto Validado `#14532D` sobre Fondo `#DCFCE7`: **8.30:1**
-     - Texto Observado `#92400E` sobre Fondo `#FEF3C7`: **6.37:1**
-     *Se declara explícitamente como control parcial de paleta, no como auditoría WCAG integral.*
-   - **`M12-PRIVACY-001`**: Se corrigió el uso defectuoso de `-SimpleMatch`. Se implementó un escáner regex estático que busca claves privadas (`BEGIN ... PRIVATE KEY`), credenciales hardcodeadas y dominios no sintéticos en todo el código fuente de plugins y scripts. Cero hallazgos.
+- tema, color y nombre del sitio;
+- hashes SHA-256 de SCSS y pre-SCSS;
+- existencia, tamaño y SHA-256 del snapshot;
+- visibilidad del curso y la categoría;
+- comprobaciones de humo de las restricciones de Misión 10 y del plugin/datos sintéticos de Misión 11.
 
-3. **Fallo real ante errores de verificación:**
-   - `scripts/staging/run-institutional-ux.ps1` evalúa `$allPassed`. Si algún control no pasa, lanza una excepción (`throw`) y termina con código de salida no cero, garantizando que el orquestador y la CI fallen.
-   - El bloque `finally` ineludible garantiza que el confinamiento (`lockdown` con `visible = 0` en curso y categoría) se ejecute SIEMPRE, incluso cuando ocurra una falla.
+Si el curso o la categoría aparecen visibles, `Verify` falla y lo informa sin cambiar su estado. Dos ejecuciones consecutivas conservaron exactamente los hashes del staging y del snapshot.
 
-4. **Reversión atómica, no destructiva y validada (Revisión Final PR #4):**
-   - **Almacenamiento en volumen escribible:** Se corrigió la ubicación del snapshot hacia `$CFG->dataroot` (`/var/www/moodledata/theme-snapshot-pre-m12.json`), evitando fallos de E/S en monturas de sólo lectura.
-   - **Rechazo estricto sin alteración de estado:** Si el snapshot no existe, está corrupto o le faltan campos obligatorios (`captured_at`, `theme`, `brandcolor`, `scsspre`, `scss`, `site_fullname`, `site_shortname`), `m12_revert()` aborta inmediatamente con error (`m12_fail`), sin alterar la configuración de Moodle ni modificar la base de datos.
-   - **Eliminación atómica post-restauración:** El archivo de snapshot se elimina mediante `unlink` **únicamente después** de que todas las operaciones de actualización en base de datos (`$DB->update_record`), escrituras de configuración (`set_config`) y purga de caché (`theme_reset_all_caches`) hayan concluido con éxito.
-   - **Protección de línea base en Apply:** `m12_apply()` comprueba y valida la creación efectiva del snapshot (`filesize > 0`). Si la personalización M12 ya se encuentra aplicada en el sitio y no existe un snapshot previo, `Apply` aborta con error en lugar de capturar el estilo modificado como línea base o inventar valores.
-   - **Siembra canónica controlada:** Se incorporó la fase `--phase=seed-snapshot` para inicializar deliberadamente el snapshot canónico original limpio (`site_fullname = 'ASODELTOL Moodle 5.3 Staging'`, `brandcolor = ''`) en entornos existentes que hayan aplicado M12 antes del sistema de snapshots, sin alterar el estilo visual activo.
+### Pruebas destructivas aisladas
 
----
-
-### 3. Archivos Modificados en la Revisión
-
-1. **`scripts/staging/moodle53-institutional-ux.php`**:
-   - Eliminación de `overflow-x: hidden` en `html, body`.
-   - Adición de contención off-canvas para drawers cerrados.
-   - Snapshot ubicable en `$CFG->dataroot` con validación estricta de estructura y valores.
-   - Revert atómico: rechaza con error si falta o está corrupto sin tocar Moodle; elimina snapshot solo tras restauración exitosa.
-   - Apply estricto: valida persistencia de snapshot y rechaza sobreescribir línea base si M12 ya está activo sin snapshot.
-   - Nueva fase CLI `--phase=seed-snapshot`.
-
-2. **`scripts/staging/capture-moodle53-ux.mjs`**:
-   - Escaneo DOM exhaustivo de elementos con desbordamiento (`rect.right > window.innerWidth`).
-   - Filtrado inteligente de contenedores de scroll autorizados (`.table-responsive`) y paneles off-canvas cerrados.
-
-3. **`scripts/staging/run-institutional-ux.ps1`**:
-   - Funciones matemáticas `Get-RelativeLuminance` y `Get-ContrastRatio` (WCAG 2.1).
-   - Escáner regex estático de seguridad y privacidad.
-   - Manejador seguro de fases con captura de errores `Invoke-M12PhaseSafe`.
-   - Incorporación de pruebas negativas automatizadas: `M12-REVERT-NEG-001`, `M12-REVERT-NEG-002`, `M12-APPLY-SAFE-001`.
-   - Incorporación de prueba real de ciclo reversible: `M12-REVERT-POS-001`.
-   - Lanzamiento de error (`throw`) si algún control falla.
-   - Separación estricta de la fase `Verify` para que no ejecute `Apply` destructivo.
-   - Garantía de confinamiento (`lockdown`) en bloque `finally`.
-
-4. **`plugins/local/asodeltolstaff/styles.css`**:
-   - Documentación explícita de propuesta cromática provisional en el encabezado.
-
-5. **`docs/coordination/MISSION_12_HANDOFF.md`**:
-   - Actualización del informe de continuidad con el desglose de las correcciones de la PR #4.
-
----
-
-### 4. Resultados de Pruebas y Validación (10/10 Controles Superados)
-
-1. **`scripts/staging/run-institutional-ux.ps1 -Phase Verify`**:
-   - `[PASS] M12-THEME-001`: Boost configurado con paleta provisional Tolima (`#1B4D3E`) y SCSS activo sin alterar el núcleo.
-   - `[PASS] M12-IDENTITY-001`: Nombre provisional del sitio configurado como Aula Virtual ASODELTOL.
-   - `[PASS] M12-STAFF-001`: Módulo `local_asodeltolstaff` integrado con tabla responsive, insignias y tap targets $\ge 44\text{px}$.
-   - `[PASS] M12-RESPONSIVE-001`: 12 capturas en 3 viewports sin desbordamiento horizontal ni recorte (0px).
-   - `[PASS] M12-ACCESSIBILITY-001`: Verificación matemática de contraste WCAG AA ($\ge 4.5:1$) en 5 pares de color provisionales.
-   - `[PASS] M12-PRIVACY-001`: Escaneo regex estático confirmando ausencia de claves privadas o credenciales fijas.
-   - `[PASS] M12-REVERT-NEG-001`: Revert rechaza la operación con error y sin alterar la configuración cuando no existe snapshot.
-   - `[PASS] M12-REVERT-NEG-002`: Revert rechaza la operación con error, sin alterar la configuración y conservando el snapshot cuando el archivo está corrupto.
-   - `[PASS] M12-APPLY-SAFE-001`: Apply aborta la operación si M12 ya está aplicada y no existe snapshot previo para evitar falsear la línea base.
-   - `[PASS] M12-REVERT-POS-001`: Ciclo real Apply -> Revert -> Apply restaura exactamente la configuración previa limpia, elimina el snapshot sólo tras el éxito y re-aplica la UX institucional verificando el nuevo respaldo.
-   - **Estado final:** Curso sintético (id=2) y categoría en estado OCULTO (`visible = 0`).
-
-2. **`npm run quality`**:
-   - Catálogo AF8: VÁLIDO.
-   - 32/32 pruebas unitarias de Node.js aprobadas (0 fallos).
-
-3. **`scripts/quality/validate-repository.ps1`**:
-   - Validación del repositorio completada sin errores.
-
-4. **PHP Lint**:
-   - Cero errores de sintaxis en `moodle53-institutional-ux.php`.
-
----
-
-### 5. Comandos para Verificar Localmente
+La nueva fase explícita:
 
 ```powershell
-# 1. Comprobar controles de Misión 12 y ciclo seguro de reversión (10 controles)
-& .\scripts\staging\run-institutional-ux.ps1 -Phase Verify
-
-# 2. Probar ciclo completo de Apply, Capture y Lockdown
-& .\scripts\staging\run-institutional-ux.ps1 -Phase All
-
-# 3. Probar reversión segura a snapshot previo
-& .\scripts\staging\run-institutional-ux.ps1 -Phase Revert
-
-# 4. Validar calidad e integridad del repositorio
-npm run quality
-& .\scripts\quality\validate-repository.ps1
+powershell -NoProfile -File scripts/staging/run-institutional-ux.ps1 -Phase TestReversibility
 ```
 
----
+crea un directorio temporal único dentro de `moodledata/temp`, usa exclusivamente estado sintético respaldado por archivos y lo elimina al terminar. No escribe configuraciones Moodle. Comprueba:
 
-### 6. Próximas Acciones Recomendadas
+1. rechazo de snapshot ausente sin cambios;
+2. rechazo y conservación de snapshot corrupto;
+3. `Apply` repetido sin sobrescribir el snapshot;
+4. conservación de estado y snapshot ante un fallo previo al commit;
+5. ciclo sintético `Apply → Revert → Apply`;
+6. invariancia del tema, nombre, SCSS, snapshot y visibilidad del staging cotidiano.
 
-1. Revisar el nuevo commit publicado en la PR [#4](https://github.com/00sebastian0011-netizen/ASODELTOL/pull/4).
-2. Confirmar que los checks de GitHub Actions pasaron exitosamente.
-3. Proceder con la decisión de integración hacia `main` por parte del responsable técnico/humano.
+### Protección del snapshot
+
+- Se eliminó por completo `seed-snapshot`; el script no fabrica una supuesta configuración histórica.
+- Los snapshots nuevos usan esquema versión 2, procedencia `pre_m12_live_capture` y checksum interno SHA-256.
+- La creación usa modo exclusivo: nunca sobrescribe una ruta existente.
+- Un snapshot ausente, corrupto, incompleto, heredado o sin integridad verificable se rechaza antes de cualquier escritura.
+- `Apply` con M12 ya activa y sin snapshot verificable se rechaza; requiere recuperación manual desde una fuente fiable y autorización operativa.
+
+El archivo actualmente presente en el staging conserva SHA-256 `c0d36448d4abfc8e398da44b900c995364ee4a7da2ab44e22ac72fe320c58b5e`. Se dejó intacto, pero se clasifica como heredado/no verificable porque el flujo anterior ejecutó `seed-snapshot`. No se presenta como respaldo histórico auténtico y no es elegible para reversión automática.
+
+### Semántica de Revert
+
+`m12_revert()` ya no se describe como una operación atómica de extremo a extremo:
+
+- valida primero un snapshot versión 2;
+- agrupa las escrituras de configuración y nombre del sitio en una transacción de base de datos;
+- verifica los valores persistidos antes y después del commit;
+- regenera la caché después del commit;
+- conserva el snapshot ante cualquier error de escritura, verificación o caché;
+- elimina el snapshot únicamente después de restaurar, verificar y regenerar la caché.
+
+Esto constituye una restauración transaccional en base de datos y recuperable durante la finalización de caché/archivo. Una invocación explícita de `-Phase Revert` sigue siendo una operación mutable y no forma parte de `Verify`.
+
+## Resultados focalizados
+
+- `TestReversibility`: 6/6 controles aprobados en sandbox desechable.
+- `Verify`: 10/10 controles aprobados.
+- Dos ejecuciones consecutivas de `Verify`: estado y snapshot sin cambios.
+- Hash del estado gobernado antes/después: `3d04450fbd40ec6982e0fc4085d4a5e5b59d3cee965bb79af31ffa0603e68ef4`.
+- Fase retirada `seed-snapshot`: código de salida 1.
+- Curso AF8 y categoría sintética: ocultos al finalizar.
+- `npm run quality`: 32/32 pruebas automatizadas aprobadas.
+- `scripts/quality/validate-repository.ps1`: validación completada sin errores.
+
+## Operación segura
+
+```powershell
+# Inspección repetible de solo lectura sobre la configuración Moodle.
+powershell -NoProfile -File scripts/staging/run-institutional-ux.ps1 -Phase Verify
+
+# Pruebas negativas y ciclo en sandbox desechable, nunca en la configuración cotidiana.
+powershell -NoProfile -File scripts/staging/run-institutional-ux.ps1 -Phase TestReversibility
+
+# Capturas reales; abre temporalmente el curso y garantiza Lockdown al finalizar.
+powershell -NoProfile -File scripts/staging/run-institutional-ux.ps1 -Phase Capture
+```
+
+No ejecutar `Apply` o `Revert` sobre un sitio activo sin revisar primero `status` y disponer de un snapshot versión 2 cuya procedencia sea verificable. El snapshot heredado actual requiere recuperación manual desde una copia fiable antes de autorizar una reversión.

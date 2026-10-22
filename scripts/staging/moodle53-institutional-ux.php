@@ -15,6 +15,8 @@ const M12_CATEGORY_IDNUMBER = 'ASODELTOL-STAGING';
 const M12_BRAND_COLOR = '#1B4D3E';
 const M12_SITE_FULLNAME = 'Aula Virtual ASODELTOL';
 const M12_SITE_SHORTNAME = 'ASODELTOL';
+const M12_SNAPSHOT_VERSION = 2;
+const M12_SNAPSHOT_PROVENANCE = 'pre_m12_live_capture';
 
 /**
  * Return resolved snapshot file path located in writable dataroot.
@@ -520,11 +522,108 @@ SCSS;
 }
 
 /**
- * Validate and read existing snapshot file.
+ * Calculate a stable checksum for a snapshot payload.
+ *
+ * @param array $snapshot Snapshot payload.
+ * @return string SHA-256 checksum.
+ */
+function m12_snapshot_checksum(array $snapshot): string {
+    unset($snapshot['payload_sha256']);
+    ksort($snapshot);
+    $payload = json_encode($snapshot, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($payload === false) {
+        throw new RuntimeException('No se pudo serializar el snapshot para calcular su integridad.');
+    }
+    return hash('sha256', $payload);
+}
+
+/**
+ * Read the live values governed by this mission.
+ *
+ * @return array Current state.
+ */
+function m12_current_state(): array {
+    global $SITE;
+    $boost = get_config('theme_boost');
+    return [
+        'theme' => (string) (get_config('core', 'theme') ?: 'boost'),
+        'brandcolor' => (string) ($boost->brandcolor ?? ''),
+        'scsspre' => (string) ($boost->scsspre ?? ''),
+        'scss' => (string) ($boost->scss ?? ''),
+        'site_fullname' => (string) $SITE->fullname,
+        'site_shortname' => (string) $SITE->shortname,
+    ];
+}
+
+/**
+ * Read the persisted values directly from Moodle tables for post-write verification.
+ *
+ * @return array Persisted state.
+ */
+function m12_persisted_state(): array {
+    global $DB, $SITE;
+    $theme = $DB->get_field('config', 'value', ['name' => 'theme']);
+    $brandcolor = $DB->get_field('config_plugins', 'value', ['plugin' => 'theme_boost', 'name' => 'brandcolor']);
+    $scsspre = $DB->get_field('config_plugins', 'value', ['plugin' => 'theme_boost', 'name' => 'scsspre']);
+    $scss = $DB->get_field('config_plugins', 'value', ['plugin' => 'theme_boost', 'name' => 'scss']);
+    $site = $DB->get_record('course', ['id' => $SITE->id], 'fullname,shortname', MUST_EXIST);
+    return [
+        'theme' => $theme === false ? 'boost' : (string) $theme,
+        'brandcolor' => $brandcolor === false ? '' : (string) $brandcolor,
+        'scsspre' => $scsspre === false ? '' : (string) $scsspre,
+        'scss' => $scss === false ? '' : (string) $scss,
+        'site_fullname' => (string) $site->fullname,
+        'site_shortname' => (string) $site->shortname,
+    ];
+}
+
+/**
+ * Compare the six values governed by the M12 snapshot.
+ *
+ * @param array $actual Actual state.
+ * @param array $expected Expected state or snapshot.
+ * @return bool True when all governed values match.
+ */
+function m12_states_equal(array $actual, array $expected): bool {
+    foreach (['theme', 'brandcolor', 'scsspre', 'scss', 'site_fullname', 'site_shortname'] as $key) {
+        if ((string) $actual[$key] !== (string) $expected[$key]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Build a versioned snapshot from an observed state.
+ *
+ * @param array $state State to preserve.
+ * @return array Snapshot payload.
+ */
+function m12_build_snapshot(array $state): array {
+    $snapshot = [
+        'snapshot_version' => M12_SNAPSHOT_VERSION,
+        'captured_at' => gmdate('c'),
+        'theme' => (string) $state['theme'],
+        'brandcolor' => (string) $state['brandcolor'],
+        'scsspre' => (string) $state['scsspre'],
+        'scss' => (string) $state['scss'],
+        'site_fullname' => (string) $state['site_fullname'],
+        'site_shortname' => (string) $state['site_shortname'],
+        'provenance' => M12_SNAPSHOT_PROVENANCE,
+    ];
+    $snapshot['payload_sha256'] = m12_snapshot_checksum($snapshot);
+    return $snapshot;
+}
+
+/**
+ * Validate and read a versioned snapshot.
+ *
+ * Legacy snapshots are rejected because their historical provenance and
+ * integrity cannot be demonstrated after the former seed-snapshot workflow.
  *
  * @param string|null $path Optional path to snapshot file.
  * @return array|null Validated snapshot data array, or null if file does not exist.
- * @throws RuntimeException If file exists but is invalid, corrupted, or incomplete.
+ * @throws RuntimeException If file exists but cannot be trusted.
  */
 function m12_read_snapshot(?string $path = null): ?array {
     $file = $path ?: m12_snapshot_file();
@@ -532,28 +631,133 @@ function m12_read_snapshot(?string $path = null): ?array {
         return null;
     }
 
-    $raw = @file_get_contents($file);
+    $raw = file_get_contents($file);
     if ($raw === false || trim($raw) === '') {
-        throw new RuntimeException("El archivo de snapshot existe pero está vacío o no es legible.");
+        throw new RuntimeException('El archivo de snapshot existe pero está vacío o no es legible.');
     }
 
     $data = json_decode($raw, true);
     if (!is_array($data)) {
-        throw new RuntimeException("El archivo de snapshot contiene JSON inválido o corrupto.");
+        throw new RuntimeException('El archivo de snapshot contiene JSON inválido o corrupto.');
     }
 
-    $required_keys = ['captured_at', 'theme', 'brandcolor', 'scsspre', 'scss', 'site_fullname', 'site_shortname'];
-    foreach ($required_keys as $key) {
-        if (!array_key_exists($key, $data) || !is_string($data[$key])) {
+    $requiredkeys = [
+        'snapshot_version',
+        'captured_at',
+        'theme',
+        'brandcolor',
+        'scsspre',
+        'scss',
+        'site_fullname',
+        'site_shortname',
+        'provenance',
+        'payload_sha256',
+    ];
+    foreach ($requiredkeys as $key) {
+        if (!array_key_exists($key, $data)) {
             throw new RuntimeException("El snapshot está incompleto: falta el campo obligatorio '{$key}'.");
         }
     }
 
-    if (empty($data['theme']) || empty($data['site_fullname']) || empty($data['site_shortname'])) {
-        throw new RuntimeException("El snapshot contiene campos obligatorios vacíos (theme, site_fullname o site_shortname).");
+    if ((int) $data['snapshot_version'] !== M12_SNAPSHOT_VERSION) {
+        throw new RuntimeException('El snapshot es heredado o usa una versión no verificable; se requiere una captura pre-Apply fiable.');
     }
 
+    foreach (['captured_at', 'theme', 'brandcolor', 'scsspre', 'scss', 'site_fullname', 'site_shortname',
+        'provenance', 'payload_sha256'] as $key) {
+        if (!is_string($data[$key])) {
+            throw new RuntimeException("El snapshot contiene un tipo inválido en '{$key}'.");
+        }
+    }
+
+    if (empty($data['theme']) || empty($data['site_fullname']) || empty($data['site_shortname'])) {
+        throw new RuntimeException('El snapshot contiene campos obligatorios vacíos.');
+    }
+    if ($data['provenance'] !== M12_SNAPSHOT_PROVENANCE) {
+        throw new RuntimeException('La procedencia del snapshot no corresponde a una captura en vivo inmediatamente anterior a Apply.');
+    }
+
+    $expectedchecksum = m12_snapshot_checksum($data);
+    if (!hash_equals($expectedchecksum, $data['payload_sha256'])) {
+        throw new RuntimeException('La comprobación SHA-256 del contenido del snapshot no coincide.');
+    }
     return $data;
+}
+
+/**
+ * Persist a new snapshot without ever overwriting an existing path.
+ *
+ * @param string $path Destination path.
+ * @param array $snapshot Validated snapshot payload.
+ */
+function m12_write_snapshot_exclusive(string $path, array $snapshot): void {
+    $directory = dirname($path);
+    if (!is_dir($directory) && !mkdir($directory, 0770, true) && !is_dir($directory)) {
+        throw new RuntimeException("No se pudo crear el directorio para el snapshot: {$directory}");
+    }
+
+    $json = json_encode($snapshot, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        throw new RuntimeException('No se pudo serializar el snapshot.');
+    }
+
+    $handle = fopen($path, 'x+b');
+    if ($handle === false) {
+        throw new RuntimeException('El snapshot ya existe o no se pudo crear de forma exclusiva; no se sobrescribió.');
+    }
+
+    $complete = false;
+    try {
+        $bytes = fwrite($handle, $json);
+        if ($bytes === false || $bytes !== strlen($json) || !fflush($handle)) {
+            throw new RuntimeException('No se pudo persistir el snapshot completo.');
+        }
+        if (function_exists('fsync') && !fsync($handle)) {
+            throw new RuntimeException('No se pudo sincronizar el snapshot con el almacenamiento.');
+        }
+        $complete = true;
+    } finally {
+        fclose($handle);
+        if (!$complete && file_exists($path)) {
+            unlink($path);
+        }
+    }
+
+    if (m12_read_snapshot($path) === null) {
+        throw new RuntimeException('El snapshot no pudo verificarse después de su escritura.');
+    }
+}
+
+/**
+ * Inspect snapshot metadata without changing it.
+ *
+ * @param string|null $path Optional snapshot path.
+ * @return array Read-only snapshot status.
+ */
+function m12_snapshot_status(?string $path = null): array {
+    $file = $path ?: m12_snapshot_file();
+    $exists = file_exists($file);
+    $status = [
+        'exists' => $exists,
+        'sha256' => $exists ? hash_file('sha256', $file) : null,
+        'bytes' => $exists ? filesize($file) : 0,
+        'valid' => false,
+        'validation' => $exists ? 'invalid' : 'absent',
+    ];
+    if (!$exists) {
+        return $status;
+    }
+
+    try {
+        $snapshot = m12_read_snapshot($file);
+        $status['valid'] = $snapshot !== null;
+        $status['validation'] = 'valid';
+        $status['version'] = $snapshot['snapshot_version'];
+        $status['provenance'] = $snapshot['provenance'];
+    } catch (RuntimeException $e) {
+        $status['validation_error'] = $e->getMessage();
+    }
+    return $status;
 }
 
 /**
@@ -563,203 +767,352 @@ function m12_apply(): void {
     global $DB, $SITE;
     m12_admin();
 
-    $snapshot_file = m12_snapshot_file();
-
-    // 1. Validar si ya existe un snapshot previo.
-    $existing_snapshot = null;
+    $snapshotfile = m12_snapshot_file();
+    $currentstate = m12_current_state();
+    $snapshotcreated = false;
     try {
-        $existing_snapshot = m12_read_snapshot($snapshot_file);
+        $existingsnapshot = m12_read_snapshot($snapshotfile);
     } catch (RuntimeException $e) {
-        m12_fail("No se puede aplicar M12 porque el snapshot existente está corrupto: " . $e->getMessage());
+        m12_fail('No se puede aplicar M12 porque el snapshot existente no es válido ni verificable: ' . $e->getMessage());
     }
 
-    // 2. Si no existe snapshot, verificar si el estado actual es limpio o ya es M12.
-    if ($existing_snapshot === null) {
-        $current_brand = (string) (get_config('theme_boost', 'brandcolor') ?: '');
-        $current_scss = (string) (get_config('theme_boost', 'scss') ?: '');
-        $current_fullname = (string) $SITE->fullname;
-
-        $is_already_m12 = ($current_brand === M12_BRAND_COLOR ||
-                           str_contains($current_scss, 'AULA VIRTUAL ASODELTOL') ||
-                           $current_fullname === M12_SITE_FULLNAME);
-
-        if ($is_already_m12) {
-            // M12 ya estaba aplicada y no existe snapshot pre-M12 previo.
-            // Para no falsear la línea base capturando la personalización como si fuera el original ni inventar datos,
-            // abortamos exigiendo inicializar/recuperar el snapshot pre-M12 de forma deliberada.
-            m12_fail("Operación rechazada: la personalización M12 ya se encuentra aplicada en el sitio pero no existe un snapshot pre-M12 válido. No se puede capturar el estado modificado como línea base ni inventar un respaldo. Inicialice o restaure el snapshot preexistente antes de volver a aplicar.");
+    if ($existingsnapshot === null) {
+        $isalreadym12 = ($currentstate['brandcolor'] === M12_BRAND_COLOR
+            || str_contains($currentstate['scss'], 'AULA VIRTUAL ASODELTOL')
+            || $currentstate['site_fullname'] === M12_SITE_FULLNAME);
+        if ($isalreadym12) {
+            m12_fail('Operación rechazada: M12 ya está aplicada y no existe un snapshot pre-M12 verificable. '
+                . 'No se inventará ni capturará el estado modificado como línea base.');
         }
-
-        // Estado limpio original: capturar fielmente el estado actual antes de aplicar M12.
-        $snapshot = [
-            'captured_at' => gmdate('c'),
-            'theme' => (string) (get_config('core', 'theme') ?: 'boost'),
-            'brandcolor' => $current_brand,
-            'scsspre' => (string) (get_config('theme_boost', 'scsspre') ?: ''),
-            'scss' => $current_scss,
-            'site_fullname' => $current_fullname,
-            'site_shortname' => (string) $SITE->shortname,
-            'provenance' => 'pre_m12_live_capture',
-        ];
-
-        $snapshot_dir = dirname($snapshot_file);
-        if (!is_dir($snapshot_dir) && !@mkdir($snapshot_dir, 0770, true)) {
-            m12_fail("No se pudo crear el directorio para el snapshot: {$snapshot_dir}");
-        }
-
-        $json = json_encode($snapshot, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $bytes = @file_put_contents($snapshot_file, $json);
-        if ($bytes === false || $bytes === 0 || !file_exists($snapshot_file) || filesize($snapshot_file) === 0) {
-            m12_fail("Fallo crítico de E/S: no se pudo escribir o verificar el snapshot de respaldo en {$snapshot_file}.");
+        try {
+            m12_write_snapshot_exclusive($snapshotfile, m12_build_snapshot($currentstate));
+            $snapshotcreated = true;
+        } catch (RuntimeException $e) {
+            m12_fail('No se pudo crear el snapshot pre-Apply sin sobrescritura: ' . $e->getMessage());
         }
     }
 
-    // 3. Aplicar personalización
-    set_config('brandcolor', M12_BRAND_COLOR, 'theme_boost');
-    set_config('scsspre', m12_scsspre(), 'theme_boost');
-    set_config('scss', m12_scss(), 'theme_boost');
-    set_config('theme', 'boost', 'core');
-
-    if ($SITE->fullname !== M12_SITE_FULLNAME || $SITE->shortname !== M12_SITE_SHORTNAME) {
-        $DB->update_record('course', (object) [
-            'id' => $SITE->id,
-            'fullname' => M12_SITE_FULLNAME,
-            'shortname' => M12_SITE_SHORTNAME,
-        ]);
-        $SITE->fullname = M12_SITE_FULLNAME;
-        $SITE->shortname = M12_SITE_SHORTNAME;
+    $transaction = $DB->start_delegated_transaction();
+    try {
+        set_config('brandcolor', M12_BRAND_COLOR, 'theme_boost');
+        set_config('scsspre', m12_scsspre(), 'theme_boost');
+        set_config('scss', m12_scss(), 'theme_boost');
+        set_config('theme', 'boost', 'core');
+        if ($SITE->fullname !== M12_SITE_FULLNAME || $SITE->shortname !== M12_SITE_SHORTNAME) {
+            $DB->update_record('course', (object) [
+                'id' => $SITE->id,
+                'fullname' => M12_SITE_FULLNAME,
+                'shortname' => M12_SITE_SHORTNAME,
+            ]);
+        }
+        $transaction->allow_commit();
+    } catch (Throwable $t) {
+        try {
+            $transaction->rollback($t);
+        } catch (Throwable $rollbackerror) {
+            m12_fail('Apply no pudo completar su transacción; el snapshot se conserva. Detalle: '
+                . $rollbackerror->getMessage());
+        }
+        m12_fail('Apply fue revertido y el snapshot se conserva para recuperación.');
     }
 
-    theme_reset_all_caches();
+    $SITE->fullname = M12_SITE_FULLNAME;
+    $SITE->shortname = M12_SITE_SHORTNAME;
+    try {
+        theme_reset_all_caches();
+    } catch (Throwable $t) {
+        m12_fail('La configuración M12 se guardó, pero falló la regeneración de caché. '
+            . "El snapshot se conserva para recuperación: {$snapshotfile}. Detalle: " . $t->getMessage());
+    }
 
     echo json_encode([
         'status' => 'applied',
         'theme' => 'boost',
         'brandcolor' => M12_BRAND_COLOR,
         'site_fullname' => M12_SITE_FULLNAME,
-        'snapshot_file' => $snapshot_file,
-        'snapshot_verified' => file_exists($snapshot_file) && filesize($snapshot_file) > 0,
+        'snapshot_file' => $snapshotfile,
+        'snapshot_created' => $snapshotcreated,
+        'snapshot_verified' => m12_snapshot_status($snapshotfile)['valid'],
+        'snapshot_sha256' => hash_file('sha256', $snapshotfile),
         'scsspre_bytes' => strlen(m12_scsspre()),
         'scss_bytes' => strlen(m12_scss()),
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 
 /**
- * Revert theme_boost to default unbranded state using snapshot if available.
+ * Restore the versioned pre-M12 state with transactional database writes.
+ *
+ * Cache regeneration and snapshot deletion occur after the database commit.
+ * A failure in either step leaves the snapshot available for an idempotent retry,
+ * so this is a recoverable restoration rather than an all-system atomic claim.
  */
 function m12_revert(): void {
     global $DB, $SITE;
     m12_admin();
 
-    $snapshot_file = m12_snapshot_file();
-
-    // 1. Validar estrictamente la presencia y contenido del snapshot SIN modificar nada en Moodle.
-    if (!file_exists($snapshot_file)) {
-        m12_fail("Operación rechazada: no existe el archivo de snapshot ({$snapshot_file}). No se alteró la configuración actual.");
+    $snapshotfile = m12_snapshot_file();
+    if (!file_exists($snapshotfile)) {
+        m12_fail("Operación rechazada: no existe el archivo de snapshot ({$snapshotfile}). No se alteró la configuración actual.");
     }
 
-    $snapshot = null;
     try {
-        $snapshot = m12_read_snapshot($snapshot_file);
+        $snapshot = m12_read_snapshot($snapshotfile);
     } catch (RuntimeException $e) {
-        m12_fail("Operación rechazada: el snapshot es inválido o está corrupto (" . $e->getMessage() . "). No se alteró la configuración actual.");
+        m12_fail('Operación rechazada: el snapshot es inválido, no verificable o está corrupto ('
+            . $e->getMessage() . '). No se alteró la configuración actual.');
     }
-
     if ($snapshot === null) {
-        m12_fail("Operación rechazada: no se pudo leer el snapshot. No se alteró la configuración actual.");
+        m12_fail('Operación rechazada: no se pudo leer el snapshot. No se alteró la configuración actual.');
     }
 
-    // 2. Ejecutar la restauración de configuración paso a paso
-    $brandcolor = $snapshot['brandcolor'];
-    $scsspre = $snapshot['scsspre'];
-    $scss = $snapshot['scss'];
-    $theme = $snapshot['theme'];
-    $site_fullname = $snapshot['site_fullname'];
-    $site_shortname = $snapshot['site_shortname'];
-
+    $snapshotsha = hash_file('sha256', $snapshotfile);
+    $transaction = $DB->start_delegated_transaction();
     try {
-        set_config('brandcolor', $brandcolor, 'theme_boost');
-        set_config('scsspre', $scsspre, 'theme_boost');
-        set_config('scss', $scss, 'theme_boost');
-        set_config('theme', $theme, 'core');
-
-        if ($SITE->fullname !== $site_fullname || $SITE->shortname !== $site_shortname) {
+        set_config('brandcolor', $snapshot['brandcolor'], 'theme_boost');
+        set_config('scsspre', $snapshot['scsspre'], 'theme_boost');
+        set_config('scss', $snapshot['scss'], 'theme_boost');
+        set_config('theme', $snapshot['theme'], 'core');
+        if ($SITE->fullname !== $snapshot['site_fullname'] || $SITE->shortname !== $snapshot['site_shortname']) {
             $DB->update_record('course', (object) [
                 'id' => $SITE->id,
-                'fullname' => $site_fullname,
-                'shortname' => $site_shortname,
+                'fullname' => $snapshot['site_fullname'],
+                'shortname' => $snapshot['site_shortname'],
             ]);
-            $SITE->fullname = $site_fullname;
-            $SITE->shortname = $site_shortname;
         }
-
-        theme_reset_all_caches();
+        if (!m12_states_equal(m12_persisted_state(), $snapshot)) {
+            throw new RuntimeException('La verificación transaccional no coincide con el snapshot.');
+        }
+        $transaction->allow_commit();
     } catch (Throwable $t) {
-        m12_fail("Fallo durante la restauración de configuración en Moodle: " . $t->getMessage() . ". El snapshot se conserva en: {$snapshot_file}");
+        try {
+            $transaction->rollback($t);
+        } catch (Throwable $rollbackerror) {
+            m12_fail('La restauración transaccional fue rechazada y Moodle solicitó rollback. '
+                . "El snapshot se conserva en {$snapshotfile}. Detalle: " . $rollbackerror->getMessage());
+        }
+        m12_fail("La restauración transaccional fue revertida. El snapshot se conserva en {$snapshotfile}.");
     }
 
-    // 3. SOLO después de confirmar que TODAS las operaciones de restauración fueron exitosas, se elimina el snapshot.
-    if (!@unlink($snapshot_file)) {
-        fwrite(STDERR, "ADVERTENCIA: La configuración fue revertida con éxito pero no se pudo eliminar el archivo de snapshot.\n");
+    $SITE->fullname = $snapshot['site_fullname'];
+    $SITE->shortname = $snapshot['site_shortname'];
+    if (!m12_states_equal(m12_persisted_state(), $snapshot)) {
+        m12_fail("La transacción terminó, pero la verificación persistida falló. El snapshot se conserva en {$snapshotfile}.");
+    }
+
+    try {
+        theme_reset_all_caches();
+    } catch (Throwable $t) {
+        m12_fail('La base de datos fue restaurada, pero falló la regeneración de caché. '
+            . "El snapshot se conserva para reintento en {$snapshotfile}. Detalle: " . $t->getMessage());
+    }
+
+    if (!unlink($snapshotfile)) {
+        m12_fail("La configuración fue restaurada, pero no se pudo retirar el snapshot. Se conserva en {$snapshotfile} para revisión.");
     }
 
     echo json_encode([
         'status' => 'reverted',
-        'theme' => $theme,
-        'brandcolor' => $brandcolor,
-        'scsspre_length' => strlen($scsspre),
-        'scss_length' => strlen($scss),
-        'site_fullname' => $site_fullname,
-        'site_shortname' => $site_shortname,
-        'snapshot_deleted' => !file_exists($snapshot_file),
+        'restoration_semantics' => 'transactional_database_and_recoverable_cache_finalization',
+        'theme' => $snapshot['theme'],
+        'brandcolor' => $snapshot['brandcolor'],
+        'scsspre_length' => strlen($snapshot['scsspre']),
+        'scss_length' => strlen($snapshot['scss']),
+        'site_fullname' => $snapshot['site_fullname'],
+        'site_shortname' => $snapshot['site_shortname'],
+        'snapshot_sha256' => $snapshotsha,
+        'snapshot_deleted' => !file_exists($snapshotfile),
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 
 /**
- * Seed canonical pre-M12 baseline snapshot if it does not already exist.
- * Enables clean baseline tracking for existing staging installations where M12 was applied
- * before snapshots were introduced, without inventing data or capturing customized state as baseline.
+ * Persist synthetic state atomically inside the disposable snapshot sandbox.
+ *
+ * @param string $path State file path.
+ * @param array $state Synthetic state.
  */
-function m12_seed_snapshot(): void {
-    m12_admin();
-    $snapshot_file = m12_snapshot_file();
-
-    if (file_exists($snapshot_file)) {
-        echo json_encode([
-            'status' => 'exists',
-            'message' => 'El snapshot ya existe; no se sobreescribe.',
-            'snapshot_file' => $snapshot_file,
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
-        return;
+function m12_sandbox_write_state(string $path, array $state): void {
+    $temporary = $path . '.tmp';
+    $json = json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false || file_put_contents($temporary, $json, LOCK_EX) === false || !rename($temporary, $path)) {
+        if (file_exists($temporary)) {
+            unlink($temporary);
+        }
+        throw new RuntimeException('No se pudo persistir el estado sintético aislado.');
     }
+}
 
+/**
+ * Read synthetic state from the disposable snapshot sandbox.
+ *
+ * @param string $path State file path.
+ * @return array Synthetic state.
+ */
+function m12_sandbox_read_state(string $path): array {
+    $raw = file_get_contents($path);
+    $state = $raw === false ? null : json_decode($raw, true);
+    if (!is_array($state)) {
+        throw new RuntimeException('El estado sintético aislado no es legible.');
+    }
+    return $state;
+}
+
+/**
+ * Apply M12 values only to a disposable file-backed state.
+ *
+ * @param string $statefile Synthetic state file.
+ * @param string $snapshotfile Synthetic snapshot file.
+ */
+function m12_sandbox_apply(string $statefile, string $snapshotfile): void {
+    $state = m12_sandbox_read_state($statefile);
+    $snapshot = m12_read_snapshot($snapshotfile);
+    if ($snapshot === null) {
+        $isalreadym12 = ($state['brandcolor'] === M12_BRAND_COLOR
+            || str_contains((string) $state['scss'], 'AULA VIRTUAL ASODELTOL')
+            || $state['site_fullname'] === M12_SITE_FULLNAME);
+        if ($isalreadym12) {
+            throw new RuntimeException('El estado sintético ya contiene M12 sin snapshot fiable.');
+        }
+        m12_write_snapshot_exclusive($snapshotfile, m12_build_snapshot($state));
+    }
+    $state['theme'] = 'boost';
+    $state['brandcolor'] = M12_BRAND_COLOR;
+    $state['scsspre'] = m12_scsspre();
+    $state['scss'] = m12_scss();
+    $state['site_fullname'] = M12_SITE_FULLNAME;
+    $state['site_shortname'] = M12_SITE_SHORTNAME;
+    m12_sandbox_write_state($statefile, $state);
+}
+
+/**
+ * Revert only a disposable file-backed state.
+ *
+ * @param string $statefile Synthetic state file.
+ * @param string $snapshotfile Synthetic snapshot file.
+ * @param bool $simulatefailure Simulate a failure before committing state.
+ */
+function m12_sandbox_revert(string $statefile, string $snapshotfile, bool $simulatefailure = false): void {
+    $snapshot = m12_read_snapshot($snapshotfile);
+    if ($snapshot === null) {
+        throw new RuntimeException('No existe snapshot sintético aislado.');
+    }
+    if ($simulatefailure) {
+        throw new RuntimeException('Fallo sintético previo al commit de restauración.');
+    }
+    $restored = array_intersect_key($snapshot, array_flip([
+        'theme', 'brandcolor', 'scsspre', 'scss', 'site_fullname', 'site_shortname',
+    ]));
+    m12_sandbox_write_state($statefile, $restored);
+    if (!m12_states_equal(m12_sandbox_read_state($statefile), $snapshot)) {
+        throw new RuntimeException('La verificación del estado sintético restaurado falló.');
+    }
+    if (!unlink($snapshotfile)) {
+        throw new RuntimeException('No se pudo retirar el snapshot sintético después de restaurarlo.');
+    }
+}
+
+/**
+ * Exercise destructive snapshot scenarios only in an owned disposable sandbox.
+ */
+function m12_snapshot_selftest(): void {
+    global $CFG;
+    $testroot = rtrim($CFG->dataroot, '/') . '/temp/m12-snapshot-selftest-' . bin2hex(random_bytes(8));
+    $statefile = $testroot . '/state.json';
+    $snapshotfile = $testroot . '/snapshot.json';
+    $controls = [];
     $baseline = [
-        'captured_at' => gmdate('c'),
         'theme' => 'boost',
-        'brandcolor' => '',
-        'scsspre' => '',
-        'scss' => '',
-        'site_fullname' => 'ASODELTOL Moodle 5.3 Staging',
-        'site_shortname' => 'ASODELTOL-STG',
-        'provenance' => 'staging_canonical_baseline',
+        'brandcolor' => '#123456',
+        'scsspre' => '// synthetic isolated pre-SCSS',
+        'scss' => '// synthetic isolated SCSS',
+        'site_fullname' => 'M12 synthetic snapshot sandbox',
+        'site_shortname' => 'M12-SANDBOX',
     ];
 
-    $snapshot_dir = dirname($snapshot_file);
-    if (!is_dir($snapshot_dir) && !@mkdir($snapshot_dir, 0770, true)) {
-        m12_fail("No se pudo crear el directorio para el snapshot: {$snapshot_dir}");
+    if (!mkdir($testroot, 0770, true) && !is_dir($testroot)) {
+        m12_fail('No se pudo crear el sandbox desechable de snapshots.');
     }
 
-    $json = json_encode($baseline, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    $bytes = @file_put_contents($snapshot_file, $json);
-    if ($bytes === false || $bytes === 0 || !file_exists($snapshot_file) || filesize($snapshot_file) === 0) {
-        m12_fail("No se pudo escribir el snapshot canónico en {$snapshot_file}.");
-    }
+    $failure = null;
+    try {
+        m12_sandbox_write_state($statefile, $baseline);
 
-    echo json_encode([
-        'status' => 'seeded',
-        'snapshot_file' => $snapshot_file,
-        'bytes' => $bytes,
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
+        $statehash = hash_file('sha256', $statefile);
+        try {
+            m12_sandbox_revert($statefile, $snapshotfile);
+            $missingrejected = false;
+        } catch (RuntimeException $e) {
+            $missingrejected = hash_equals($statehash, hash_file('sha256', $statefile)) && !file_exists($snapshotfile);
+        }
+        $controls[] = ['id' => 'M12-ISO-NEG-001', 'passed' => $missingrejected,
+            'detail' => 'Snapshot ausente rechazado sin cambiar el estado sintético.'];
+
+        file_put_contents($snapshotfile, '{ corrupt_json: true }', LOCK_EX);
+        $corrupthash = hash_file('sha256', $snapshotfile);
+        try {
+            m12_sandbox_revert($statefile, $snapshotfile);
+            $corruptrejected = false;
+        } catch (RuntimeException $e) {
+            $corruptrejected = hash_equals($statehash, hash_file('sha256', $statefile))
+                && hash_equals($corrupthash, hash_file('sha256', $snapshotfile));
+        }
+        $controls[] = ['id' => 'M12-ISO-NEG-002', 'passed' => $corruptrejected,
+            'detail' => 'Snapshot corrupto rechazado y conservado sin cambiar el estado sintético.'];
+        unlink($snapshotfile);
+
+        m12_sandbox_apply($statefile, $snapshotfile);
+        $firstsnapshothash = hash_file('sha256', $snapshotfile);
+        m12_sandbox_apply($statefile, $snapshotfile);
+        $snapshotpreserved = hash_equals($firstsnapshothash, hash_file('sha256', $snapshotfile));
+        $controls[] = ['id' => 'M12-ISO-APPLY-001', 'passed' => $snapshotpreserved,
+            'detail' => 'Apply repetido no sobrescribe el snapshot sintético auténtico.'];
+
+        $m12statehash = hash_file('sha256', $statefile);
+        try {
+            m12_sandbox_revert($statefile, $snapshotfile, true);
+            $failurepreserved = false;
+        } catch (RuntimeException $e) {
+            $failurepreserved = hash_equals($m12statehash, hash_file('sha256', $statefile))
+                && hash_equals($firstsnapshothash, hash_file('sha256', $snapshotfile));
+        }
+        $controls[] = ['id' => 'M12-ISO-RECOVERY-001', 'passed' => $failurepreserved,
+            'detail' => 'Un fallo previo al commit conserva estado y snapshot para reintento.'];
+
+        m12_sandbox_revert($statefile, $snapshotfile);
+        $restored = m12_states_equal(m12_sandbox_read_state($statefile), $baseline) && !file_exists($snapshotfile);
+        m12_sandbox_apply($statefile, $snapshotfile);
+        $applied = m12_sandbox_read_state($statefile);
+        $cyclepassed = $restored
+            && $applied['brandcolor'] === M12_BRAND_COLOR
+            && $applied['site_fullname'] === M12_SITE_FULLNAME
+            && m12_snapshot_status($snapshotfile)['valid'];
+        $controls[] = ['id' => 'M12-ISO-CYCLE-001', 'passed' => $cyclepassed,
+            'detail' => 'Apply/Revert/Apply funciona dentro del sandbox desechable.'];
+
+        $passed = count(array_filter($controls, static fn(array $control): bool => !$control['passed'])) === 0;
+        echo json_encode([
+            'status' => $passed ? 'PASS' : 'FAIL',
+            'isolated' => true,
+            'live_moodle_configuration_touched' => false,
+            'controls' => $controls,
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
+        if (!$passed) {
+            throw new RuntimeException('Fallaron controles del sandbox desechable de snapshots.');
+        }
+    } catch (Throwable $t) {
+        $failure = $t;
+    } finally {
+        foreach ([$snapshotfile, $statefile . '.tmp', $statefile] as $ownedfile) {
+            if (file_exists($ownedfile)) {
+                unlink($ownedfile);
+            }
+        }
+        if (is_dir($testroot)) {
+            rmdir($testroot);
+        }
+    }
+    if ($failure !== null) {
+        m12_fail('Falló el sandbox desechable de snapshots: ' . $failure->getMessage());
+    }
 }
 
 /**
@@ -812,25 +1165,43 @@ function m12_lockdown(): void {
  * Output current status.
  */
 function m12_status(): void {
-    global $CFG, $SITE;
+    global $DB;
     m12_admin();
     $course = m12_course();
     $category = \core_course_category::get((int) $course->category);
-    $boost = get_config('theme_boost');
-    $snapshot_file = m12_snapshot_file();
+    $state = m12_current_state();
+    $statejson = json_encode($state, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $sessiontable = new xmldb_table('local_asstaff_session');
+    $sessiontableexists = $DB->get_manager()->table_exists($sessiontable);
+    $restrictedsections = $DB->count_records_select(
+        'course_sections',
+        'course = :courseid AND section >= :firstsection AND section <= :lastsection '
+            . "AND availability IS NOT NULL AND availability <> ''",
+        ['courseid' => $course->id, 'firstsection' => 2, 'lastsection' => 5]
+    );
 
     echo json_encode([
-        'theme' => get_config('core', 'theme'),
-        'brandcolor' => $boost->brandcolor ?? '',
-        'scsspre_length' => strlen($boost->scsspre ?? ''),
-        'scss_length' => strlen($boost->scss ?? ''),
-        'site_fullname' => $SITE->fullname,
-        'site_shortname' => $SITE->shortname,
+        'theme' => $state['theme'],
+        'brandcolor' => $state['brandcolor'],
+        'scsspre_length' => strlen($state['scsspre']),
+        'scsspre_sha256' => hash('sha256', $state['scsspre']),
+        'scss_length' => strlen($state['scss']),
+        'scss_sha256' => hash('sha256', $state['scss']),
+        'site_fullname' => $state['site_fullname'],
+        'site_shortname' => $state['site_shortname'],
+        'governed_state_sha256' => hash('sha256', (string) $statejson),
         'course_id' => (int) $course->id,
         'course_visible' => (bool) $course->visible,
         'category_visible' => (bool) $category->visible,
-        'snapshot_exists' => file_exists($snapshot_file),
-        'snapshot_file' => $snapshot_file,
+        'snapshot' => m12_snapshot_status(),
+        'mission10' => [
+            'restricted_following_units' => (int) $restrictedsections,
+        ],
+        'mission11' => [
+            'plugin_version' => (int) (get_config('local_asodeltolstaff', 'version') ?: 0),
+            'session_table_exists' => $sessiontableexists,
+            'synthetic_session_count' => $sessiontableexists ? $DB->count_records('local_asstaff_session') : 0,
+        ],
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 
@@ -844,8 +1215,8 @@ switch ($phase) {
     case 'revert':
         m12_revert();
         break;
-    case 'seed-snapshot':
-        m12_seed_snapshot();
+    case 'snapshot-selftest':
+        m12_snapshot_selftest();
         break;
     case 'open':
         m12_open();
@@ -854,7 +1225,8 @@ switch ($phase) {
         m12_lockdown();
         break;
     case 'status':
-    default:
         m12_status();
         break;
+    default:
+        m12_fail("Fase desconocida: {$phase}");
 }
