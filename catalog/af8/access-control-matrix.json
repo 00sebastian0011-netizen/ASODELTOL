@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "matrix_id": "ASODELTOL-AF8-ACCESS-2026",
+  "status": "draft_requires_staging_validation",
+  "importable_role_definition": false,
+  "architecture": {
+    "course_model": "single_course_seven_separate_groups",
+    "moodle_groupmode": 1,
+    "moodle_groupmodeforce": 1,
+    "security_statement": "Los grupos separados son un control lógico basado en capacidades; no constituyen aislamiento físico de datos."
+  },
+  "roles": [
+    {
+      "role_id": "administrator",
+      "business_name": "Administrador",
+      "moodle_basis": "site_administrator_or_restricted_manager",
+      "scope": "system_or_category",
+      "allowed_intents": [
+        "manage_courses",
+        "manage_groups_and_cohorts",
+        "manage_users",
+        "review_audit_evidence"
+      ],
+      "forbidden_intents": [],
+      "scope_controls": ["separate_named_accounts", "least_privilege_for_daily_operations"]
+    },
+    {
+      "role_id": "trainer",
+      "business_name": "Capacitador",
+      "moodle_basis": "editingteacher_restricted_by_authorized_group",
+      "scope": "course_and_authorized_groups",
+      "allowed_intents": [
+        "manage_activities_and_content",
+        "grade_authorized_students",
+        "track_authorized_groups",
+        "communicate_with_authorized_groups"
+      ],
+      "forbidden_intents": [
+        "access_unauthorized_groups",
+        "manage_site_users",
+        "change_site_configuration"
+      ],
+      "scope_controls": ["prohibit_moodle_site_accessallgroups", "explicit_group_assignment"]
+    },
+    {
+      "role_id": "student",
+      "business_name": "Estudiante o beneficiario",
+      "moodle_basis": "student",
+      "scope": "self_and_own_group",
+      "allowed_intents": [
+        "view_available_content",
+        "attempt_available_assessments",
+        "view_own_grades_and_progress",
+        "participate_in_own_group_communications"
+      ],
+      "forbidden_intents": [
+        "view_other_students_grades",
+        "view_other_groups_private_activity",
+        "edit_course_content",
+        "manage_users"
+      ],
+      "scope_controls": ["own_records_only", "own_group_only"]
+    },
+    {
+      "role_id": "auditor",
+      "business_name": "Interventoría/Auditoría",
+      "moodle_basis": "custom_role_from_minimum_capabilities",
+      "scope": "approved_course_or_category_read_only",
+      "allowed_intents": [
+        "view_authorized_progress",
+        "view_authorized_grades",
+        "view_authorized_audit_evidence",
+        "export_only_when_approved"
+      ],
+      "forbidden_intents": [
+        "edit_grades",
+        "edit_users",
+        "edit_course_content",
+        "alter_audit_evidence"
+      ],
+      "scope_controls": ["read_only", "approved_export_capability_separate"]
+    }
+  ],
+  "negative_access_tests": [
+    {
+      "test_id": "NAC-001",
+      "actor_role": "student",
+      "scenario": "Abrir por URL directa el perfil o listado de participantes de otro grupo.",
+      "expected": "denied_or_other_group_records_absent",
+      "data_fixture": "synthetic_two_groups"
+    },
+    {
+      "test_id": "NAC-002",
+      "actor_role": "student",
+      "scenario": "Manipular parámetros de URL para consultar la calificación de otro estudiante.",
+      "expected": "denied_or_only_own_grade_visible",
+      "data_fixture": "synthetic_two_groups"
+    },
+    {
+      "test_id": "NAC-003",
+      "actor_role": "trainer",
+      "scenario": "Abrir por URL directa intentos, entregas o calificaciones de un grupo no asignado.",
+      "expected": "denied",
+      "data_fixture": "synthetic_two_groups_two_trainers"
+    },
+    {
+      "test_id": "NAC-004",
+      "actor_role": "trainer",
+      "scenario": "Cambiar el selector de grupo o su parámetro para activar la vista de todos los participantes.",
+      "expected": "all_participants_view_unavailable",
+      "data_fixture": "synthetic_two_groups_two_trainers"
+    },
+    {
+      "test_id": "NAC-005",
+      "actor_role": "auditor",
+      "scenario": "Enviar una solicitud directa al formulario de edición de calificaciones.",
+      "expected": "denied_and_grade_unchanged",
+      "data_fixture": "synthetic_auditor"
+    },
+    {
+      "test_id": "NAC-006",
+      "actor_role": "auditor",
+      "scenario": "Abrir o enviar por URL directa formularios de edición de actividades o secciones.",
+      "expected": "denied_and_content_unchanged",
+      "data_fixture": "synthetic_auditor"
+    },
+    {
+      "test_id": "NAC-007",
+      "actor_role": "auditor",
+      "scenario": "Intentar crear, suspender o modificar un usuario.",
+      "expected": "denied_and_user_unchanged",
+      "data_fixture": "synthetic_auditor"
+    },
+    {
+      "test_id": "NAC-008",
+      "actor_role": "student",
+      "scenario": "Abrir por URL directa una discusión de foro perteneciente a otro grupo.",
+      "expected": "denied_or_discussion_absent",
+      "data_fixture": "synthetic_two_groups"
+    },
+    {
+      "test_id": "NAC-009",
+      "actor_role": "student",
+      "scenario": "Abrir por URL directa una entrega perteneciente a otro grupo.",
+      "expected": "denied",
+      "data_fixture": "synthetic_two_groups"
+    },
+    {
+      "test_id": "NAC-010",
+      "actor_role": "trainer",
+      "scenario": "Intentar cambiar una actividad a modo sin grupos cuando el modo del curso está forzado.",
+      "expected": "group_mode_remains_forced",
+      "data_fixture": "synthetic_trainer"
+    }
+  ],
+  "execution_gate": {
+    "environment": "moodle_5_3_staging_only",
+    "synthetic_data_only": true,
+    "production_authorized": false,
+    "status": "blocked_until_restoration_and_upgrade_validation"
+  }
+}

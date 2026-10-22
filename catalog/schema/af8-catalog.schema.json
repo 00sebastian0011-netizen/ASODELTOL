@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://asodeltol.example.invalid/schema/af8-catalog.schema.json",
+  "title": "Catálogo académico ASODELTOL AF8",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "catalog_id",
+    "catalog_status",
+    "course",
+    "component_templates",
+    "general_resources",
+    "units",
+    "groups",
+    "progression",
+    "academic_inconsistencies"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema_version": { "const": "1.0.0" },
+    "catalog_id": { "type": "string", "pattern": "^[A-Z0-9-]+$" },
+    "catalog_status": { "enum": ["draft", "approved"] },
+    "course": { "$ref": "#/$defs/course" },
+    "component_templates": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/componentTemplate" }
+    },
+    "general_resources": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/generalResource" }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/unit" }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": { "$ref": "#/$defs/group" }
+    },
+    "progression": { "$ref": "#/$defs/progression" },
+    "academic_inconsistencies": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/inconsistency" }
+    }
+  },
+  "$defs": {
+    "course": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "shortname", "idnumber", "fullname", "target_moodle", "format", "total_hours", "unit_count", "item_count", "enumerated_general_resource_count", "declared_general_resource_count", "group_mode", "force_group_mode", "completion_tracking", "publication_status", "category_idnumber"],
+      "properties": {
+        "code": { "const": "AF8" },
+        "shortname": { "const": "AF8" },
+        "idnumber": { "const": "ASODELTOL-AF8" },
+        "fullname": { "type": "string", "minLength": 1 },
+        "target_moodle": { "const": "5.3" },
+        "format": { "const": "topics" },
+        "total_hours": { "const": 80 },
+        "unit_count": { "const": 5 },
+        "item_count": { "const": 50 },
+        "enumerated_general_resource_count": { "const": 4 },
+        "declared_general_resource_count": { "const": 9 },
+        "group_mode": { "const": "separate" },
+        "force_group_mode": { "const": true },
+        "completion_tracking": { "const": true },
+        "publication_status": { "enum": ["unpublished", "published"] },
+        "category_idnumber": { "type": ["string", "null"] }
+      }
+    },
+    "componentTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["template_id", "position", "title", "moodle_type_options", "selected_moodle_type", "required_for_unit_completion"],
+      "properties": {
+        "template_id": { "type": "string", "pattern": "^C(0[1-9]|10)$" },
+        "position": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "title": { "type": "string", "minLength": 1 },
+        "moodle_type_options": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["page", "resource", "folder", "url", "h5pactivity", "glossary", "quiz"] }
+        },
+        "selected_moodle_type": {
+          "type": ["string", "null"],
+          "enum": ["page", "resource", "folder", "url", "h5pactivity", "glossary", "quiz", null]
+        },
+        "required_for_unit_completion": { "type": ["boolean", "null"] }
+      }
+    },
+    "generalResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "stable_id", "position", "title", "moodle_type_options", "selected_moodle_type", "content_status", "publication_status"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^0\\.0[1-4]$" },
+        "stable_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "position": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "title": { "type": "string", "minLength": 1 },
+        "moodle_type_options": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["page", "url", "resource", "forum"] } },
+        "selected_moodle_type": { "type": ["string", "null"], "enum": ["page", "url", "resource", "forum", null] },
+        "content_status": { "enum": ["pendiente_contenido", "ready"] },
+        "publication_status": { "enum": ["unpublished", "published"] }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "stable_id", "position", "template_id", "content_status", "publication_status", "completion_status"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^UT[1-5]\\.(0[1-9]|10)$" },
+        "stable_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "position": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "template_id": { "type": "string", "pattern": "^C(0[1-9]|10)$" },
+        "content_status": { "enum": ["pendiente_contenido", "ready"] },
+        "publication_status": { "enum": ["unpublished", "published"] },
+        "completion_status": { "enum": ["pendiente_definicion", "configured"] }
+      }
+    },
+    "unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "stable_id", "position", "title", "duration_hours", "publication_status", "depends_on_unit", "passing_grade", "temporal_rule", "components"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^UT[1-5]$" },
+        "stable_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "position": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "title": { "type": "string", "minLength": 1 },
+        "duration_hours": { "const": 16 },
+        "publication_status": { "enum": ["unpublished", "published"] },
+        "depends_on_unit": { "type": ["string", "null"], "pattern": "^UT[1-5]$" },
+        "passing_grade": { "type": ["number", "null"], "minimum": 0 },
+        "temporal_rule": { "$ref": "#/$defs/temporalRule" },
+        "components": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "$ref": "#/$defs/component" } }
+      }
+    },
+    "temporalRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["business_day_limit", "start_trigger", "calendar_id", "group_schedule_status", "exception_policy_status"],
+      "properties": {
+        "business_day_limit": { "const": 8 },
+        "start_trigger": { "type": ["string", "null"], "enum": ["fixed_group_date", "previous_unit_completion", null] },
+        "calendar_id": { "type": ["string", "null"] },
+        "group_schedule_status": { "enum": ["pendiente_definicion", "configured"] },
+        "exception_policy_status": { "enum": ["pendiente_definicion", "configured"] }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "stable_id", "position", "cohort_idnumber", "group_name", "planned_capacity", "start_date", "end_date", "sync_strategy", "status"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^AF8-G0[1-7]$" },
+        "stable_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "position": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "cohort_idnumber": { "type": "string", "pattern": "^AF8-G0[1-7]$" },
+        "group_name": { "type": "string", "pattern": "^AF8-G0[1-7]$" },
+        "planned_capacity": { "const": 50 },
+        "start_date": { "type": ["string", "null"], "format": "date" },
+        "end_date": { "type": ["string", "null"], "format": "date" },
+        "sync_strategy": { "const": "cohort_sync" },
+        "status": { "enum": ["pending_provisioning", "provisioned"] }
+      }
+    },
+    "progression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "completion_source", "requires_previous_unit_completion", "requires_previous_unit_passing_grade", "passing_grade_status", "native_moodle_controls", "custom_temporal_plugin_status", "exception_audit_status"],
+      "properties": {
+        "mode": { "const": "sequential" },
+        "completion_source": { "const": "moodle_activity_and_course_completion" },
+        "requires_previous_unit_completion": { "const": true },
+        "requires_previous_unit_passing_grade": { "const": true },
+        "passing_grade_status": { "enum": ["pendiente_definicion", "configured"] },
+        "native_moodle_controls": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "enum": ["activity_completion", "grade_to_pass", "restrict_access", "group_overrides"] } },
+        "custom_temporal_plugin_status": { "enum": ["not_implemented", "implemented"] },
+        "exception_audit_status": { "enum": ["not_implemented", "implemented"] }
+      }
+    },
+    "inconsistency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "declared", "enumerated", "status", "resolution_rule"],
+      "properties": {
+        "decision_id": { "enum": ["DP-001", "DP-002"] },
+        "declared": { "type": "integer", "minimum": 0 },
+        "enumerated": { "type": "integer", "minimum": 0 },
+        "status": { "const": "pending_academic_approval" },
+        "resolution_rule": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

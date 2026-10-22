@@ -1,0 +1,28 @@
+{
+  "name": "asodeltol/platform-extensions",
+  "description": "Herramientas de desarrollo, calidad y estandares para plugins Moodle de ASODELTOL",
+  "type": "project",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Equipo Tecnico ASODELTOL"
+    }
+  ],
+  "require": {
+    "php": ">=8.3.0"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.11",
+    "moodlehq/moodle-cs": "^3.4"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "lint": "phpcs --standard=config/phpcs.xml.dist",
+    "lint:fix": "phpcbf --standard=config/phpcs.xml.dist"
+  }
+}

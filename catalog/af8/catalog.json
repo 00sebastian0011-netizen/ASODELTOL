@@ -1,0 +1,330 @@
+{
+  "$schema": "../schema/af8-catalog.schema.json",
+  "schema_version": "1.0.0",
+  "catalog_id": "ASODELTOL-AF8-2026",
+  "catalog_status": "draft",
+  "course": {
+    "code": "AF8",
+    "shortname": "AF8",
+    "idnumber": "ASODELTOL-AF8",
+    "fullname": "AF8 — Ecosistemas de Transformación Digital, Inteligencia Artificial y Competitividad Territorial para el Turismo Rural Sostenible.",
+    "target_moodle": "5.3",
+    "format": "topics",
+    "total_hours": 80,
+    "unit_count": 5,
+    "item_count": 50,
+    "enumerated_general_resource_count": 4,
+    "declared_general_resource_count": 9,
+    "group_mode": "separate",
+    "force_group_mode": true,
+    "completion_tracking": true,
+    "publication_status": "unpublished",
+    "category_idnumber": null
+  },
+  "component_templates": [
+    {
+      "template_id": "C01",
+      "position": 1,
+      "title": "Introducción a la unidad temática",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C02",
+      "position": 2,
+      "title": "Objetivos",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C03",
+      "position": 3,
+      "title": "Resultados de aprendizaje esperados",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C04",
+      "position": 4,
+      "title": "Presentación del docente",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C05",
+      "position": 5,
+      "title": "Hoja de vida del docente",
+      "moodle_type_options": ["resource"],
+      "selected_moodle_type": "resource",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C06",
+      "position": 6,
+      "title": "Material de formación",
+      "moodle_type_options": ["folder", "resource"],
+      "selected_moodle_type": null,
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C07",
+      "position": 7,
+      "title": "Recursos educativos digitales",
+      "moodle_type_options": ["url", "h5pactivity"],
+      "selected_moodle_type": null,
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C08",
+      "position": 8,
+      "title": "Glosario",
+      "moodle_type_options": ["glossary"],
+      "selected_moodle_type": "glossary",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C09",
+      "position": 9,
+      "title": "Evaluación de la unidad",
+      "moodle_type_options": ["quiz"],
+      "selected_moodle_type": "quiz",
+      "required_for_unit_completion": null
+    },
+    {
+      "template_id": "C10",
+      "position": 10,
+      "title": "Referencias bibliográficas",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "required_for_unit_completion": null
+    }
+  ],
+  "general_resources": [
+    {
+      "code": "0.01",
+      "stable_id": "asodeltol-af8-general-01",
+      "position": 1,
+      "title": "Video institucional SENA",
+      "moodle_type_options": ["url", "resource"],
+      "selected_moodle_type": null,
+      "content_status": "pendiente_contenido",
+      "publication_status": "unpublished"
+    },
+    {
+      "code": "0.02",
+      "stable_id": "asodeltol-af8-general-02",
+      "position": 2,
+      "title": "Objetivo general y objetivos específicos",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "content_status": "pendiente_contenido",
+      "publication_status": "unpublished"
+    },
+    {
+      "code": "0.03",
+      "stable_id": "asodeltol-af8-general-03",
+      "position": 3,
+      "title": "Cronograma y orientaciones para el estudiante",
+      "moodle_type_options": ["page"],
+      "selected_moodle_type": "page",
+      "content_status": "pendiente_contenido",
+      "publication_status": "unpublished"
+    },
+    {
+      "code": "0.04",
+      "stable_id": "asodeltol-af8-general-04",
+      "position": 4,
+      "title": "Foro de avisos y comunicaciones",
+      "moodle_type_options": ["forum"],
+      "selected_moodle_type": "forum",
+      "content_status": "pendiente_contenido",
+      "publication_status": "unpublished"
+    }
+  ],
+  "units": [
+    {
+      "code": "UT1",
+      "stable_id": "asodeltol-af8-ut1",
+      "position": 1,
+      "title": "Gestión estratégica del turismo rural sostenible y desarrollo de destinos competitivos.",
+      "duration_hours": 16,
+      "publication_status": "unpublished",
+      "depends_on_unit": null,
+      "passing_grade": null,
+      "temporal_rule": {
+        "business_day_limit": 8,
+        "start_trigger": null,
+        "calendar_id": null,
+        "group_schedule_status": "pendiente_definicion",
+        "exception_policy_status": "pendiente_definicion"
+      },
+      "components": [
+        { "code": "UT1.01", "stable_id": "asodeltol-af8-ut1-01", "position": 1, "template_id": "C01", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.02", "stable_id": "asodeltol-af8-ut1-02", "position": 2, "template_id": "C02", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.03", "stable_id": "asodeltol-af8-ut1-03", "position": 3, "template_id": "C03", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.04", "stable_id": "asodeltol-af8-ut1-04", "position": 4, "template_id": "C04", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.05", "stable_id": "asodeltol-af8-ut1-05", "position": 5, "template_id": "C05", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.06", "stable_id": "asodeltol-af8-ut1-06", "position": 6, "template_id": "C06", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.07", "stable_id": "asodeltol-af8-ut1-07", "position": 7, "template_id": "C07", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.08", "stable_id": "asodeltol-af8-ut1-08", "position": 8, "template_id": "C08", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.09", "stable_id": "asodeltol-af8-ut1-09", "position": 9, "template_id": "C09", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT1.10", "stable_id": "asodeltol-af8-ut1-10", "position": 10, "template_id": "C10", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" }
+      ]
+    },
+    {
+      "code": "UT2",
+      "stable_id": "asodeltol-af8-ut2",
+      "position": 2,
+      "title": "Diseño estratégico de experiencias turísticas, calidad del servicio y generación de valor.",
+      "duration_hours": 16,
+      "publication_status": "unpublished",
+      "depends_on_unit": "UT1",
+      "passing_grade": null,
+      "temporal_rule": {
+        "business_day_limit": 8,
+        "start_trigger": null,
+        "calendar_id": null,
+        "group_schedule_status": "pendiente_definicion",
+        "exception_policy_status": "pendiente_definicion"
+      },
+      "components": [
+        { "code": "UT2.01", "stable_id": "asodeltol-af8-ut2-01", "position": 1, "template_id": "C01", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.02", "stable_id": "asodeltol-af8-ut2-02", "position": 2, "template_id": "C02", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.03", "stable_id": "asodeltol-af8-ut2-03", "position": 3, "template_id": "C03", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.04", "stable_id": "asodeltol-af8-ut2-04", "position": 4, "template_id": "C04", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.05", "stable_id": "asodeltol-af8-ut2-05", "position": 5, "template_id": "C05", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.06", "stable_id": "asodeltol-af8-ut2-06", "position": 6, "template_id": "C06", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.07", "stable_id": "asodeltol-af8-ut2-07", "position": 7, "template_id": "C07", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.08", "stable_id": "asodeltol-af8-ut2-08", "position": 8, "template_id": "C08", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.09", "stable_id": "asodeltol-af8-ut2-09", "position": 9, "template_id": "C09", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT2.10", "stable_id": "asodeltol-af8-ut2-10", "position": 10, "template_id": "C10", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" }
+      ]
+    },
+    {
+      "code": "UT3",
+      "stable_id": "asodeltol-af8-ut3",
+      "position": 3,
+      "title": "Marketing estratégico y gestión competitiva de destinos turísticos.",
+      "duration_hours": 16,
+      "publication_status": "unpublished",
+      "depends_on_unit": "UT2",
+      "passing_grade": null,
+      "temporal_rule": {
+        "business_day_limit": 8,
+        "start_trigger": null,
+        "calendar_id": null,
+        "group_schedule_status": "pendiente_definicion",
+        "exception_policy_status": "pendiente_definicion"
+      },
+      "components": [
+        { "code": "UT3.01", "stable_id": "asodeltol-af8-ut3-01", "position": 1, "template_id": "C01", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.02", "stable_id": "asodeltol-af8-ut3-02", "position": 2, "template_id": "C02", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.03", "stable_id": "asodeltol-af8-ut3-03", "position": 3, "template_id": "C03", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.04", "stable_id": "asodeltol-af8-ut3-04", "position": 4, "template_id": "C04", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.05", "stable_id": "asodeltol-af8-ut3-05", "position": 5, "template_id": "C05", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.06", "stable_id": "asodeltol-af8-ut3-06", "position": 6, "template_id": "C06", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.07", "stable_id": "asodeltol-af8-ut3-07", "position": 7, "template_id": "C07", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.08", "stable_id": "asodeltol-af8-ut3-08", "position": 8, "template_id": "C08", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.09", "stable_id": "asodeltol-af8-ut3-09", "position": 9, "template_id": "C09", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT3.10", "stable_id": "asodeltol-af8-ut3-10", "position": 10, "template_id": "C10", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" }
+      ]
+    },
+    {
+      "code": "UT4",
+      "stable_id": "asodeltol-af8-ut4",
+      "position": 4,
+      "title": "Transformación digital, inteligencia artificial y tecnologías emergentes aplicadas al turismo.",
+      "duration_hours": 16,
+      "publication_status": "unpublished",
+      "depends_on_unit": "UT3",
+      "passing_grade": null,
+      "temporal_rule": {
+        "business_day_limit": 8,
+        "start_trigger": null,
+        "calendar_id": null,
+        "group_schedule_status": "pendiente_definicion",
+        "exception_policy_status": "pendiente_definicion"
+      },
+      "components": [
+        { "code": "UT4.01", "stable_id": "asodeltol-af8-ut4-01", "position": 1, "template_id": "C01", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.02", "stable_id": "asodeltol-af8-ut4-02", "position": 2, "template_id": "C02", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.03", "stable_id": "asodeltol-af8-ut4-03", "position": 3, "template_id": "C03", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.04", "stable_id": "asodeltol-af8-ut4-04", "position": 4, "template_id": "C04", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.05", "stable_id": "asodeltol-af8-ut4-05", "position": 5, "template_id": "C05", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.06", "stable_id": "asodeltol-af8-ut4-06", "position": 6, "template_id": "C06", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.07", "stable_id": "asodeltol-af8-ut4-07", "position": 7, "template_id": "C07", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.08", "stable_id": "asodeltol-af8-ut4-08", "position": 8, "template_id": "C08", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.09", "stable_id": "asodeltol-af8-ut4-09", "position": 9, "template_id": "C09", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT4.10", "stable_id": "asodeltol-af8-ut4-10", "position": 10, "template_id": "C10", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" }
+      ]
+    },
+    {
+      "code": "UT5",
+      "stable_id": "asodeltol-af8-ut5",
+      "position": 5,
+      "title": "Desarrollo rural sostenible, economía campesina y sistemas alimentarios.",
+      "duration_hours": 16,
+      "publication_status": "unpublished",
+      "depends_on_unit": "UT4",
+      "passing_grade": null,
+      "temporal_rule": {
+        "business_day_limit": 8,
+        "start_trigger": null,
+        "calendar_id": null,
+        "group_schedule_status": "pendiente_definicion",
+        "exception_policy_status": "pendiente_definicion"
+      },
+      "components": [
+        { "code": "UT5.01", "stable_id": "asodeltol-af8-ut5-01", "position": 1, "template_id": "C01", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.02", "stable_id": "asodeltol-af8-ut5-02", "position": 2, "template_id": "C02", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.03", "stable_id": "asodeltol-af8-ut5-03", "position": 3, "template_id": "C03", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.04", "stable_id": "asodeltol-af8-ut5-04", "position": 4, "template_id": "C04", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.05", "stable_id": "asodeltol-af8-ut5-05", "position": 5, "template_id": "C05", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.06", "stable_id": "asodeltol-af8-ut5-06", "position": 6, "template_id": "C06", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.07", "stable_id": "asodeltol-af8-ut5-07", "position": 7, "template_id": "C07", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.08", "stable_id": "asodeltol-af8-ut5-08", "position": 8, "template_id": "C08", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.09", "stable_id": "asodeltol-af8-ut5-09", "position": 9, "template_id": "C09", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" },
+        { "code": "UT5.10", "stable_id": "asodeltol-af8-ut5-10", "position": 10, "template_id": "C10", "content_status": "pendiente_contenido", "publication_status": "unpublished", "completion_status": "pendiente_definicion" }
+      ]
+    }
+  ],
+  "groups": [
+    { "code": "AF8-G01", "stable_id": "asodeltol-af8-g01", "position": 1, "cohort_idnumber": "AF8-G01", "group_name": "AF8-G01", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G02", "stable_id": "asodeltol-af8-g02", "position": 2, "cohort_idnumber": "AF8-G02", "group_name": "AF8-G02", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G03", "stable_id": "asodeltol-af8-g03", "position": 3, "cohort_idnumber": "AF8-G03", "group_name": "AF8-G03", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G04", "stable_id": "asodeltol-af8-g04", "position": 4, "cohort_idnumber": "AF8-G04", "group_name": "AF8-G04", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G05", "stable_id": "asodeltol-af8-g05", "position": 5, "cohort_idnumber": "AF8-G05", "group_name": "AF8-G05", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G06", "stable_id": "asodeltol-af8-g06", "position": 6, "cohort_idnumber": "AF8-G06", "group_name": "AF8-G06", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" },
+    { "code": "AF8-G07", "stable_id": "asodeltol-af8-g07", "position": 7, "cohort_idnumber": "AF8-G07", "group_name": "AF8-G07", "planned_capacity": 50, "start_date": null, "end_date": null, "sync_strategy": "cohort_sync", "status": "pending_provisioning" }
+  ],
+  "progression": {
+    "mode": "sequential",
+    "completion_source": "moodle_activity_and_course_completion",
+    "requires_previous_unit_completion": true,
+    "requires_previous_unit_passing_grade": true,
+    "passing_grade_status": "pendiente_definicion",
+    "native_moodle_controls": ["activity_completion", "grade_to_pass", "restrict_access"],
+    "custom_temporal_plugin_status": "not_implemented",
+    "exception_audit_status": "not_implemented"
+  },
+  "academic_inconsistencies": [
+    {
+      "decision_id": "DP-001",
+      "declared": 80,
+      "enumerated": 50,
+      "status": "pending_academic_approval",
+      "resolution_rule": "Se modelan sólo los 50 componentes enumerados; no se crean 30 elementos sin fuente académica."
+    },
+    {
+      "decision_id": "DP-002",
+      "declared": 9,
+      "enumerated": 4,
+      "status": "pending_academic_approval",
+      "resolution_rule": "Se modelan sólo los cuatro recursos generales enumerados; no se crean cinco elementos sin fuente académica."
+    }
+  ]
+}

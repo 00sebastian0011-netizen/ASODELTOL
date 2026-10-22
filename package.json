@@ -1,0 +1,16 @@
+{
+  "name": "asodeltol-academic-catalog",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Herramientas locales sin dependencias para validar y preparar el catálogo AF8.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "catalog:validate": "node scripts/catalog/validate-catalog.mjs",
+    "catalog:bundle": "node scripts/catalog/build-provisioning-bundle.mjs",
+    "test": "node --test tests/catalog/*.test.mjs",
+    "quality": "npm run catalog:validate && npm test"
+  }
+}

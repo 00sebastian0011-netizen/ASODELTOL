@@ -1,0 +1,89 @@
+name: asodeltol-moodle53
+
+services:
+  database:
+    image: mysql:8.4@sha256:76f0358884cb92d9a086d24e5671c38048d3fef40f2588703d73eb55392d6b69
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-log-bin
+    environment:
+      MYSQL_DATABASE: moodle
+      MYSQL_USER: moodle
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_password
+      - db_root_password
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$(cat /run/secrets/db_root_password)\" mysqladmin ping --host=127.0.0.1 --user=root --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: "no"
+
+  webserver:
+    image: moodlehq/moodle-php-apache:8.4-bookworm@sha256:3e910075c08dc73c8e18732f5e80c8fb9a60ae72eaf52b1ee198bb510e4fd9d6
+    depends_on:
+      database:
+        condition: service_healthy
+    command:
+      - /bin/bash
+      - -lc
+      - install -d -o www-data -g www-data -m 0770 /var/www/moodledata && exec apache2-foreground
+    ports:
+      - name: moodle-http
+        target: 80
+        host_ip: 127.0.0.1
+        published: "${MOODLE_PORT:-8053}"
+        protocol: tcp
+    secrets:
+      - db_password
+      - admin_password
+      - student_password
+    volumes:
+      - type: bind
+        source: ${MOODLE_SOURCE:?MOODLE_SOURCE is required}
+        target: /var/www/html
+        read_only: true
+      - type: bind
+        source: ${STAGING_ARTIFACTS:?STAGING_ARTIFACTS is required}
+        target: /opt/asodeltol/artifacts
+        read_only: true
+      - type: bind
+        source: ${STAGING_SCRIPTS:?STAGING_SCRIPTS is required}
+        target: /opt/asodeltol/scripts
+        read_only: true
+      - moodle_data:/var/www/moodledata
+    networks:
+      - frontend
+      - backend
+    restart: "no"
+
+secrets:
+  db_password:
+    file: ${DB_PASSWORD_FILE:?DB_PASSWORD_FILE is required}
+  db_root_password:
+    file: ${DB_ROOT_PASSWORD_FILE:?DB_ROOT_PASSWORD_FILE is required}
+  admin_password:
+    file: ${ADMIN_PASSWORD_FILE:?ADMIN_PASSWORD_FILE is required}
+  student_password:
+    file: ${STUDENT_PASSWORD_FILE:?STUDENT_PASSWORD_FILE is required}
+
+volumes:
+  database_data:
+    name: asodeltol-moodle53-database
+  moodle_data:
+    name: asodeltol-moodle53-moodledata
+
+networks:
+  frontend:
+    name: asodeltol-moodle53-frontend
+  backend:
+    name: asodeltol-moodle53-backend
+    internal: true
