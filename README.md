@@ -4,7 +4,7 @@ Repositorio de ingeniería para extender y operar de forma controlada la instala
 
 ## Estado
 
-Misiones 01–03 completadas a nivel de arquitectura y auditoría. La Misión 04 incorpora un catálogo AF8 funcional, validadores, pruebas sintéticas y un generador local de insumos oficiales de aprovisionamiento. Todavía no hay plugins instalables, un curso aprovisionado ni cambios aplicados a producción. Los directorios de `plugins/` son contratos de diseño para **Moodle 5.3 LTS**.
+Las Misiones 01–09 dejaron un Moodle 5.3 local aislado con el curso AF8 piloto, siete grupos, datos exclusivamente sintéticos, recorrido funcional y una plantilla estructural reutilizable. La Misión 09 creó un segundo curso sintético oculto mediante backup/restore nativo, sin copiar estudiantes, entregas, calificaciones ni finalizaciones, y validó exportaciones nativas de participantes, progreso y calificaciones por grupo. No hay plugins instalables ni cambios aplicados a producción. Los directorios de `plugins/` son contratos de diseño para **Moodle 5.3 LTS**.
 
 Objetivo formal de compatibilidad ([ADR-0004](docs/adr/0004-objetivo-moodle-53-lts-y-documentroot-public.md)): **Moodle 5.3 LTS y PHP 8.4**. La rama previa Moodle 5.0.10+ finalizó su soporte de seguridad el 5 de octubre de 2026. Moodle 5.3 LTS garantiza soporte extendido de parches hasta octubre de 2029. La actualización requiere la reconfiguración del servidor web (NGINX/CloudPanel) para apuntar el DocumentRoot exclusivamente a `/public` (cambio arquitectónico de Moodle 5.1+) y validar la base de datos (MariaDB $\ge$ 11.4 o MySQL $\ge$ 8.4) antes de desplegar código.
 
@@ -55,7 +55,15 @@ Los plugins se desarrollan aquí y se prueban montándolos o copiándolos a una 
    node scripts/catalog/build-provisioning-bundle.mjs --category-idnumber=ASODELTOL-STAGING
    ```
 
-6. Cuando existan plugins instalables, generar artefactos locales con:
+6. Para repetir en el Moodle local aislado la comprobación de plantilla y reportes:
+
+   ```powershell
+   powershell -NoProfile -File scripts/staging/run-template-reports.ps1 -Phase All
+   ```
+
+   El MBZ, los XLSX y la evidencia JSON quedan bajo `build/` y nunca se versionan.
+
+7. Cuando existan plugins instalables, generar artefactos locales con:
 
    ```powershell
    powershell -NoProfile -File scripts/release/package-plugins.ps1

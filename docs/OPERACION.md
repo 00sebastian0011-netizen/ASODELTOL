@@ -273,4 +273,39 @@ En el VPS Hostinger KVM 2, vigilar:
 3. Consultas lentas de MySQL (`slow_query_log = 1`, `long_query_time = 2`).
 4. **Disparador para habilitar Redis:** Si durante la prueba de carga con 50 estudiantes en staging se detectan bloqueos recurrentes en `mdl_sessions` o degradación de I/O disk $> 15\%$, se activará Redis en CloudPanel dedicando máximo 256 MB para sesiones y almacén MUC.
 
+## 11. Reutilización de la plantilla y reportes nativos en Moodle 5.3
 
+La Misión 09 validó este procedimiento únicamente en el Moodle local aislado. El curso fuente y toda nueva edición deben permanecer ocultos hasta la aprobación correspondiente.
+
+### 11.1 Crear una edición sin datos académicos personales
+
+1. En el curso fuente, abrir `Más > Reutilización del curso > Copia de seguridad`.
+2. Desactivar usuarios matriculados y todo dato relacionado: asignaciones de rol, actividades, bloques, archivos, filtros, comentarios, insignias, eventos de calendario, finalizaciones, logs, historiales de calificación, grupos, competencias, campos personalizados, banco de contenido, estado xAPI y archivos heredados.
+3. Conservar únicamente la configuración general y las cinco secciones oficiales. Descargar el MBZ a almacenamiento administrativo temporal, nunca al repositorio.
+4. Abrir `Administración del sitio > Cursos > Restaurar curso` y restaurar como curso nuevo en la categoría aprobada.
+5. Asignar `Nombre corto` e `ID del curso` únicos, dejar las fechas sin definir hasta que exista cronograma aprobado y mantener `Visibilidad del curso = Ocultar`.
+6. Antes de matricular a nadie, comprobar cinco secciones y cero actividades, participantes, grupos, matrículas, entregas, calificaciones y finalizaciones heredadas.
+7. Crear las cohortes y grupos propios de la nueva edición. Configurar una sincronización de cohorte por grupo y asignar capacitadores sólo al contexto autorizado.
+8. Revisar modo de grupos separados forzado, seguimiento de finalización, capacidades del capacitador/auditor y acceso por URL directa antes de habilitar el curso.
+
+Se reutilizan: formato por temas, cinco secciones, modo de grupos separados forzado y seguimiento de finalización. Se asignan nuevamente: categoría, identificadores, fechas, cohortes, grupos, métodos de matrícula, usuarios, capacitadores, permisos dependientes del contexto y cualquier criterio académico aún pendiente.
+
+La comprobación reproducible local es:
+
+```powershell
+powershell -NoProfile -File scripts/staging/run-template-reports.ps1 -Phase All
+```
+
+El runner ejecuta el CLI como `www-data`, el mismo usuario de Apache, para no crear archivos o bloqueos de caché de `moodledata` propiedad de `root`. El MBZ, los XLSX y `mission-09-evidence.json` quedan bajo `build/staging/moodle53/mission-09/`, directorio ignorado por Git.
+
+### 11.2 Reportes disponibles
+
+| Necesidad | Mecanismo nativo validado | Resultado y control de acceso |
+|---|---|---|
+| Matrículas y participantes por grupo | `Participantes` y descarga Excel | Administrador y auditor ven todos los grupos. Estudiante y capacitador quedan limitados a sus grupos; en el piloto G01 sólo obtiene `AF8-G01`. |
+| Calificaciones por estudiante y grupo | `Calificaciones > Exportar > Excel` con filtro de grupo | Administrador exporta todo; el capacitador G01 puede exportar sólo G01. Estudiante y auditor no tienen capacidad de exportación. Los archivos G01/G02 contienen únicamente al estudiante solicitado. |
+| Actividades completadas y pendientes | `Informes > Finalización de actividad` y formato Excel | Administrador y capacitador autorizado; el capacitador sin `accessallgroups` queda limitado a su grupo. Estudiante y auditor no tienen esta capacidad en los roles del piloto. |
+| Finalización global del curso | Informe de finalización | No disponible hasta aprobar y configurar criterios globales de finalización. |
+| Asistencia | No existe fuente nativa suficiente en este staging | `mod_attendance` no está instalado. Navegación, logs y sesiones no prueban asistencia efectiva ni tiempo trabajado. |
+
+Los archivos exportados son evidencia temporal de staging y no se publican. En operación real se deben definir audiencia, campos mínimos, fecha de corte, retención y custodia antes de autorizar descargas con datos personales.

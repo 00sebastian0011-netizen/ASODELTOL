@@ -2,7 +2,7 @@
 
 El roadmap usa criterios de salida, no fechas ficticias. Ninguna fase autoriza trabajo en producción por sí misma.
 
-Estado tras Misión 04 y correcciones de auditoría: existe catálogo AF8 validado (5 unidades, 50 componentes, 4 recursos, 7 grupos), matriz de acceso, suite local automatizada en verde y generador de CSV/plan/manifiesto protegido contra inyección de fórmulas. La importación y el piloto siguen bloqueados por la restauración y actualización de staging.
+Estado tras Misión 09: el catálogo AF8 sigue validado y el Moodle 5.3 local aislado ya demuestra aprovisionamiento, siete grupos, recorrido funcional, plantilla por backup/restore y exportaciones nativas de participantes, progreso y calificaciones por grupo. El curso original y la edición sintética permanecen ocultos. Esta evidencia no sustituye el inventario, respaldo, migración ni aceptación del entorno de producción.
 
 ## Fase 0 — Gobierno, diagnóstico y definiciones
 
@@ -23,6 +23,8 @@ Criterio de salida: diagnóstico de servidor completado, decisiones críticas ap
 ## Fase 1 — Migración a Moodle 5.3 LTS y línea base en Staging aislado
 
 Objetivo: actualizar el entorno a Moodle 5.3 LTS y demostrar cuánto se resuelve sin código propio.
+
+Estado: **demostrado en staging local aislado** para curso, cohortes/grupos, roles, actividad evaluable, plantilla estructural y reportes nativos. La migración de la instalación alojada y su diagnóstico continúan fuera del alcance y requieren operador autorizado.
 
 - Clonar la instalación existente en un staging aislado con la misma pila (Hostinger KVM 2 / Ubuntu 24.04).
 - Ajustar configuración NGINX en CloudPanel para apuntar DocumentRoot a `/public` (Moodle 5.1+).
@@ -124,8 +126,8 @@ Criterio de salida: servicio estable, métricas dentro de umbrales aprobados y e
 
 Después de liberar los locks y asignar propietarios distintos:
 
-- **Gemini:** auditar de sólo lectura la Misión 04 siguiendo `AUDITORIA_MISION_04.md`, contrastar CSV/API con Moodle 5.3 oficial y entregar hallazgos con archivo/línea.
-- **Codex:** atender los hallazgos y preparar escenarios Behat del piloto de aislamiento, sin conectarse al VPS ni asumir notas, calendarios o contenidos.
-- **Operador humano autorizado:** validar una restauración, actualizar un staging aislado a Moodle 5.3 y ejecutar allí la primera previsualización; esta acción no está autorizada para los agentes.
+- **Operador humano:** completar la lista visual de Misión 09 en el Moodle local y aprobar o rechazar la plantilla administrativa.
+- **Gemini:** revisar de sólo lectura la evidencia sanitizada de Misión 09, sin abrir MBZ, bases de datos ni secretos.
+- **Codex:** atender únicamente hallazgos reproducibles y mantener congelado `report_asodeltol` mientras los reportes nativos cubran la necesidad aprobada.
 
-El siguiente desarrollo de plugin es el spike de `availability_asodeltolwindow`, pero sólo después de aprobar disparador, calendario y política de excepciones. Mientras esas decisiones sigan abiertas, la prioridad funcional es el piloto nativo del curso y de acceso.
+El siguiente desarrollo de plugin continúa condicionado a las decisiones académicas y contractuales abiertas. No se inicia `availability_asodeltolwindow`, asistencia o reportes personalizados sin aprobar primero sus reglas y evidencias.
