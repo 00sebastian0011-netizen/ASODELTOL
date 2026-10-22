@@ -7,11 +7,11 @@ No se debe convertir una suposición de esta tabla en código o contenido defini
 | DP-001 | Crítica | Resolver cinco unidades × diez ítems = 50 frente al total reportado de 80 ítems. | Inventario académico canónico aprobado. | Carga de contenido, progreso detallado y aceptación. | **Pendiente académica; el catálogo modela sólo los 50 enumerados** |
 | DP-002 | Crítica | Resolver cuatro recursos generales enumerados frente a nueve mencionados. | Lista canónica de recursos con identificadores. | Carga de recursos y aceptación. | **Pendiente académica; el catálogo modela sólo los 4 enumerados** |
 | DP-003 | Crítica | Definir relación entre unidad, módulo, actividad, recurso e ítem. | Glosario contractual/académico. | Modelo del curso y regla de tiempo. | Pendiente académica |
-| DP-004 | Crítica | Definir qué inicia los ocho días hábiles: fecha fija por grupo o finalización de unidad previa. | Responsable académico/contractual. | Plugin temporal. | Contrato técnico preparado para ambos modos |
-| DP-005 | Crítica | Definir calendario laboral, festivos, zona horaria, hora límite y pausas. | Política aprobada y calendario versionado. | Cálculo y pruebas de vencimiento. | **Reglas técnicas definidas:** Ley 51/1983 (Emiliani), L-V, America/Bogota (UTC-5) |
-| DP-006 | Crítica | Definir quién solicita/aprueba/revoca excepciones, motivos permitidos y efecto retroactivo. | Matriz de autoridad. | Auditoría y permisos del plugin temporal. | Contrato de excepciones inmutables preparado |
+| DP-004 | Crítica | Definir qué inicia los ocho días hábiles: fecha fija por grupo o finalización de unidad previa. | Responsable académico/contractual. | Plugin temporal. | Misión 10 probó ambos modos sólo en el calculador sintético; el disparador institucional sigue pendiente |
+| DP-005 | Crítica | Definir calendario laboral, festivos, zona horaria, hora límite y pausas. | Política aprobada y calendario versionado. | Cálculo y pruebas de vencimiento. | `America/Bogota` y lunes–viernes están modelados; faltan fuente/versionado de festivos, inclusión del día inicial y hora límite |
+| DP-006 | Crítica | Definir quién solicita/aprueba/revoca excepciones, motivos permitidos y efecto retroactivo. | Matriz de autoridad. | Auditoría y permisos del plugin temporal. | El core no aporta el historial de excepción requerido; autoridad, motivos y retroactividad siguen pendientes |
 | DP-007 | Alta | Elegir un curso con siete grupos o siete cursos; definir aislamiento y asignación de capacitadores. | Operación académica y piloto en staging. | Plantilla, reportes y matriculación. | **Resuelta provisionalmente ([ADR-0005](adr/0005-provisionalidad-grupos-separados-y-piloto.md)):** piloto sintético local superado para G01/G02; la aceptación institucional sigue pendiente |
-| DP-008 | Crítica | Definir calificación aprobatoria, intentos, recuperación y reapertura por unidad. | Reglamento académico. | Secuencia nativa y aceptación. | Pendiente académica |
+| DP-008 | Crítica | Definir calificación aprobatoria, intentos, recuperación y reapertura por unidad. | Reglamento académico. | Secuencia nativa y aceptación. | Misión 10 validó la mecánica con umbral sintético 60; la nota y política definitivas siguen pendientes |
 | DP-009 | Crítica | Definir método válido de asistencia, estados, correcciones y autoridad. | Reglamento/contrato y prueba de BBB/`mod_attendance`. | Seguimiento de asistencia. | Pendiente; `mod_attendance` no está instalado y los logs no bastan |
 | DP-010 | Crítica | Definir “disponibilidad sincrónica”, unidad de tiempo, pausas, redondeo, evidencia y validación. | Contrato/operación. | `local_asodeltolstaff` y reportes. | Modelo de 3 niveles definido en contrato |
 | DP-011 | Alta | Elegir proveedor de videoconferencia, capacidad, integración, residencia y retención de grabaciones. | Evaluación técnica, jurídica y económica. | Integración sincrónica. | Pendiente de selección de proveedor |
@@ -25,6 +25,14 @@ No se debe convertir una suposición de esta tabla en código o contenido defini
 | DP-019 | Alta | Definir fuente maestra de identidad/matrícula y campos únicos permitidos. | Gobierno de datos. | Importación, deduplicación y bajas. | Pendiente institucional |
 | DP-020 | Media | Confirmar licencias, propietario y proceso de aprobación para plugins terceros. | Gobierno TI/compras. | Instalación de `mod_attendance` u otros. | Pendiente TI |
 | DP-021 | Alta | Aprobar la categoría Moodle y su `idnumber` para AF8 en staging y, por separado, en producción. | Administración Moodle y gobierno del servicio. | Generación/importación del CSV de curso. | Categoría sintética usada sólo en staging local; producción sigue pendiente y el generador exige valor explícito |
+
+## Evidencia técnica de Misión 10 que no cierra decisiones
+
+- Moodle nativo puede encadenar las cinco secciones dentro de un curso mediante finalización automática por calificación y una restricción que exige `COMPLETION_COMPLETE_PASS` en la actividad inmediatamente anterior.
+- Recibir una nota, completar una actividad y aprobarla son estados distintos. El escenario sintético reprobado quedó en `COMPLETION_COMPLETE_FAIL` y no abrió la unidad siguiente.
+- La finalización del curso es un mecanismo de seguimiento, no la barrera de acceso. La misión no agregó criterios globales porque su definición depende de DP-003 y DP-008.
+- Las restricciones nativas de fecha y grupo sirven para ventanas absolutas ya calculadas, pero no calculan días hábiles colombianos, no versionan una fuente de festivos y no ofrecen por sí solas excepciones auditables por grupo.
+- `availability_asodeltolwindow` continúa siendo la propuesta mínima para calcular y evaluar la ventana por estudiante/grupo. Debe recibir una política aprobada —disparador, inclusión del día inicial, calendario versionado, hora límite y zona— y registrar las excepciones sin sobrescribir el historial.
 
 ## Formato para cerrar una decisión
 

@@ -9,6 +9,9 @@ Estos scripts preparan calidad y artefactos; ninguno se conecta al VPS, instala 
 - `deploy/verify-release.ps1`: verifica localmente el manifiesto, los checksums y la estructura de los ZIP antes de que un operador considere el despliegue.
 - `staging/moodle53-template-reports.php`: inspecciona el AF8 local, genera una copia estructural sin datos personales, restaura una edición sintética independiente y produce evidencia de configuración/reportes mediante APIs de Moodle.
 - `staging/run-template-reports.ps1`: orquesta la plantilla, exporta cuatro reportes nativos XLSX y valida trece controles en el Moodle 5.3 local; ejecuta el CLI como `www-data` y escribe únicamente bajo `build/` ignorado.
+- `staging/moodle53-academic-progression.php`: crea cinco controles técnicos sintéticos, encadena UT1–UT5 con finalización aprobada nativa y expone fases idempotentes de preparación, calificación, evidencia y cierre oculto.
+- `staging/run-academic-progression.ps1`: demuestra la progresión individual en G01/G02, incluidos accesos directos bloqueados, y siempre devuelve curso y categoría al estado oculto; la evidencia queda bajo `build/staging/moodle53/mission-10/`.
+- `academic/business-day-window.mjs`: modelo puro de cálculo para escenarios sintéticos de ocho días hábiles; exige declarar zona, festivos y si el día disparador cuenta, sin convertir esas entradas en política institucional.
 
 La futura automatización de despliegue debe diseñarse después del inventario del entorno y requerir aprobación explícita. No se guardarán hosts, usuarios, rutas de producción ni credenciales en estos scripts.
 
