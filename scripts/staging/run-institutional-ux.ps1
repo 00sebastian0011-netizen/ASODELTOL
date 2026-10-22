@@ -31,6 +31,25 @@ function Invoke-M12Phase {
     return ($output -join [Environment]::NewLine)
 }
 
+function Invoke-M12PhaseSafe {
+    param([Parameter(Mandatory)][string]$Name)
+
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = & docker exec --user www-data $container php $fixture "--phase=$Name" 2>&1
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $prev
+    }
+
+    return [pscustomobject]@{
+        output = ($output -join [Environment]::NewLine)
+        exitCode = $exitCode
+        success = ($exitCode -eq 0)
+    }
+}
+
 function Add-Control {
     param(
         [System.Collections.Generic.List[object]]$List,
@@ -98,9 +117,10 @@ try {
         Write-Host "`n[Fase: Revert] Restaurando configuracion previa desde snapshot..." -ForegroundColor Yellow
         $revertOut = Invoke-M12Phase -Name 'revert'
         $revertObj = $revertOut | ConvertFrom-Json
-        Write-Host "  Snapshot restaurado: $($revertObj.restored_from_snapshot)"
+        Write-Host "  Estado: $($revertObj.status)"
         Write-Host "  Sitio restaurado a: $($revertObj.site_fullname)"
         Write-Host "  Tema: $($revertObj.theme) | Brandcolor: '$($revertObj.brandcolor)'"
+        Write-Host "  Snapshot eliminado tras exito: $($revertObj.snapshot_deleted)"
         return
     }
 
@@ -229,6 +249,89 @@ try {
         Add-Control $controls 'M12-PRIVACY-001' (
             -not $leakedSecretsFound
         ) 'Escaneo regex estatico en plugins y scripts confirmando ausencia de claves privadas o credenciales fijas en codigo fuente.'
+
+        # 4. Pruebas de seguridad y reversibilidad atomica de snapshot (Revert / Apply)
+        Write-Host "`n  [Pruebas de Reversibilidad] Validando rechazo estricto y ciclo real de snapshot..." -ForegroundColor DarkYellow
+
+        $snapFileInContainer = '/var/www/moodledata/theme-snapshot-pre-m12.json'
+        $statusPreTests = (& docker exec --user www-data $container php $fixture --phase=status) | ConvertFrom-Json
+
+        # --- Negativa 1: Revert con snapshot ausente debe fallar sin alterar Moodle ---
+        & docker exec --user www-data $container rm -f $snapFileInContainer
+        $missingRes = Invoke-M12PhaseSafe -Name 'revert'
+        $statusAfterMissing = (& docker exec --user www-data $container php $fixture --phase=status) | ConvertFrom-Json
+
+        $missingSnapRejected = (
+            $missingRes.exitCode -ne 0 -and
+            $missingRes.output.Contains('no existe el archivo de snapshot') -and
+            $statusAfterMissing.brandcolor -eq $statusPreTests.brandcolor -and
+            $statusAfterMissing.site_fullname -eq $statusPreTests.site_fullname -and
+            $statusAfterMissing.scss_length -eq $statusPreTests.scss_length
+        )
+        Add-Control $controls 'M12-REVERT-NEG-001' $missingSnapRejected 'Revert rechaza la operacion con error y sin alterar la configuracion cuando no existe snapshot.'
+
+        # --- Negativa 2: Revert con snapshot corrupto debe fallar sin alterar Moodle ni borrar el archivo ---
+        & docker exec --user www-data $container sh -c "echo '{ corrupt_json: invalid }' > $snapFileInContainer"
+        $corruptRes = Invoke-M12PhaseSafe -Name 'revert'
+        $statusAfterCorrupt = (& docker exec --user www-data $container php $fixture --phase=status) | ConvertFrom-Json
+        $corruptFileStillExists = (& docker exec --user www-data $container php -r "echo file_exists('$snapFileInContainer') ? '1' : '0';") -eq '1'
+
+        $corruptSnapRejected = (
+            $corruptRes.exitCode -ne 0 -and
+            $corruptRes.output.Contains('snapshot') -and
+            $corruptRes.output.Contains('corrupto') -and
+            $statusAfterCorrupt.brandcolor -eq $statusPreTests.brandcolor -and
+            $statusAfterCorrupt.site_fullname -eq $statusPreTests.site_fullname -and
+            $corruptFileStillExists
+        )
+        Add-Control $controls 'M12-REVERT-NEG-002' $corruptSnapRejected 'Revert rechaza la operacion con error, sin alterar la configuracion y conservando el snapshot cuando el archivo esta corrupto.'
+
+        # Limpiar archivo corrupto de prueba
+        & docker exec --user www-data $container rm -f $snapFileInContainer
+
+        # --- Negativa 3: Apply rechaza capturar personalizacion M12 como linea base si no hay snapshot ---
+        $applyRejectRes = Invoke-M12PhaseSafe -Name 'apply'
+        $applyWithoutSnapRejected = (
+            $applyRejectRes.exitCode -ne 0 -and
+            $applyRejectRes.output.Contains('M12 ya se encuentra aplicada')
+        )
+        Add-Control $controls 'M12-APPLY-SAFE-001' $applyWithoutSnapRejected 'Apply aborta la operacion si M12 ya esta aplicada y no existe snapshot previo para evitar falsear la linea base.'
+
+        # --- Positiva 4: Ciclo real Revert -> Apply con verificacion integral de configuracion ---
+        # Sembrar snapshot canonico de la linea base original
+        $null = Invoke-M12Phase -Name 'seed-snapshot'
+
+        # Ejecutar Revert real
+        $revertOut = (Invoke-M12Phase -Name 'revert') | ConvertFrom-Json
+        $statusReverted = (& docker exec --user www-data $container php $fixture --phase=status) | ConvertFrom-Json
+        $snapshotDeletedOnRevert = (& docker exec --user www-data $container php -r "echo file_exists('$snapFileInContainer') ? '1' : '0';") -eq '0'
+
+        $revertSucceeded = (
+            $revertOut.status -eq 'reverted' -and
+            $revertOut.brandcolor -eq '' -and
+            $revertOut.site_fullname -eq 'ASODELTOL Moodle 5.3 Staging' -and
+            $statusReverted.brandcolor -eq '' -and
+            $statusReverted.scsspre_length -eq 0 -and
+            $statusReverted.site_fullname -eq 'ASODELTOL Moodle 5.3 Staging' -and
+            $snapshotDeletedOnRevert
+        )
+
+        # Ejecutar Apply real desde el estado limpio para restaurar personalización y capturar snapshot original live
+        $applyOut = (Invoke-M12Phase -Name 'apply') | ConvertFrom-Json
+        $statusApplied = (& docker exec --user www-data $container php $fixture --phase=status) | ConvertFrom-Json
+        $snapshotCreatedOnApply = (& docker exec --user www-data $container php -r "echo (file_exists('$snapFileInContainer') && filesize('$snapFileInContainer') > 0) ? '1' : '0';") -eq '1'
+
+        $applySucceeded = (
+            $applyOut.status -eq 'applied' -and
+            $applyOut.brandcolor -eq '#1B4D3E' -and
+            $applyOut.site_fullname -eq 'Aula Virtual ASODELTOL' -and
+            $statusApplied.brandcolor -eq '#1B4D3E' -and
+            $statusApplied.scss_length -gt 1000 -and
+            $statusApplied.site_fullname -eq 'Aula Virtual ASODELTOL' -and
+            $snapshotCreatedOnApply
+        )
+
+        Add-Control $controls 'M12-REVERT-POS-001' ($revertSucceeded -and $applySucceeded) 'Ciclo real Apply -> Revert -> Apply restaura exactamente la configuracion previa limpia, elimina el snapshot solo tras el exito y re-aplica la UX institucional verificando el nuevo respaldo.'
 
         $allPassed = @($controls | Where-Object { -not $_.passed }).Count -eq 0
 

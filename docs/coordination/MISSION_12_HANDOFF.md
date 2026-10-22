@@ -40,10 +40,12 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
    - `scripts/staging/run-institutional-ux.ps1` evalúa `$allPassed`. Si algún control no pasa, lanza una excepción (`throw`) y termina con código de salida no cero, garantizando que el orquestador y la CI fallen.
    - El bloque `finally` ineludible garantiza que el confinamiento (`lockdown` con `visible = 0` en curso y categoría) se ejecute SIEMPRE, incluso cuando ocurra una falla.
 
-4. **Reversión segura y no destructiva:**
-   - En `scripts/staging/moodle53-institutional-ux.php`, la fase `--phase=apply` captura un snapshot previo local (`/opt/asodeltol/artifacts/theme-snapshot-pre-m12.json`, ignorado por Git) con los valores existentes de `brandcolor`, `scsspre`, `scss`, `theme`, `site_fullname` y `site_shortname`.
-   - La fase `--phase=revert` lee este snapshot y restaura fidedignamente la configuración original del sitio (incluyendo el nombre "ASODELTOL Moodle 5.3 Staging").
-   - La fase `-Phase Verify` en PowerShell ahora es de sólo lectura/comprobación; ya no re-aplica cambios destructivamente ni altera el estado existente.
+4. **Reversión atómica, no destructiva y validada (Revisión Final PR #4):**
+   - **Almacenamiento en volumen escribible:** Se corrigió la ubicación del snapshot hacia `$CFG->dataroot` (`/var/www/moodledata/theme-snapshot-pre-m12.json`), evitando fallos de E/S en monturas de sólo lectura.
+   - **Rechazo estricto sin alteración de estado:** Si el snapshot no existe, está corrupto o le faltan campos obligatorios (`captured_at`, `theme`, `brandcolor`, `scsspre`, `scss`, `site_fullname`, `site_shortname`), `m12_revert()` aborta inmediatamente con error (`m12_fail`), sin alterar la configuración de Moodle ni modificar la base de datos.
+   - **Eliminación atómica post-restauración:** El archivo de snapshot se elimina mediante `unlink` **únicamente después** de que todas las operaciones de actualización en base de datos (`$DB->update_record`), escrituras de configuración (`set_config`) y purga de caché (`theme_reset_all_caches`) hayan concluido con éxito.
+   - **Protección de línea base en Apply:** `m12_apply()` comprueba y valida la creación efectiva del snapshot (`filesize > 0`). Si la personalización M12 ya se encuentra aplicada en el sitio y no existe un snapshot previo, `Apply` aborta con error en lugar de capturar el estilo modificado como línea base o inventar valores.
+   - **Siembra canónica controlada:** Se incorporó la fase `--phase=seed-snapshot` para inicializar deliberadamente el snapshot canónico original limpio (`site_fullname = 'ASODELTOL Moodle 5.3 Staging'`, `brandcolor = ''`) en entornos existentes que hayan aplicado M12 antes del sistema de snapshots, sin alterar el estilo visual activo.
 
 ---
 
@@ -52,8 +54,10 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
 1. **`scripts/staging/moodle53-institutional-ux.php`**:
    - Eliminación de `overflow-x: hidden` en `html, body`.
    - Adición de contención off-canvas para drawers cerrados.
-   - Implementación de snapshot previo y reversión fidedigna con restauración de nombre del sitio.
-   - Clarificación de la propuesta provisional en constantes y comentarios.
+   - Snapshot ubicable en `$CFG->dataroot` con validación estricta de estructura y valores.
+   - Revert atómico: rechaza con error si falta o está corrupto sin tocar Moodle; elimina snapshot solo tras restauración exitosa.
+   - Apply estricto: valida persistencia de snapshot y rechaza sobreescribir línea base si M12 ya está activo sin snapshot.
+   - Nueva fase CLI `--phase=seed-snapshot`.
 
 2. **`scripts/staging/capture-moodle53-ux.mjs`**:
    - Escaneo DOM exhaustivo de elementos con desbordamiento (`rect.right > window.innerWidth`).
@@ -62,8 +66,11 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
 3. **`scripts/staging/run-institutional-ux.ps1`**:
    - Funciones matemáticas `Get-RelativeLuminance` y `Get-ContrastRatio` (WCAG 2.1).
    - Escáner regex estático de seguridad y privacidad.
+   - Manejador seguro de fases con captura de errores `Invoke-M12PhaseSafe`.
+   - Incorporación de pruebas negativas automatizadas: `M12-REVERT-NEG-001`, `M12-REVERT-NEG-002`, `M12-APPLY-SAFE-001`.
+   - Incorporación de prueba real de ciclo reversible: `M12-REVERT-POS-001`.
    - Lanzamiento de error (`throw`) si algún control falla.
-   - Separación estricta de la fase `Verify` para que no ejecute `Apply`.
+   - Separación estricta de la fase `Verify` para que no ejecute `Apply` destructivo.
    - Garantía de confinamiento (`lockdown`) en bloque `finally`.
 
 4. **`plugins/local/asodeltolstaff/styles.css`**:
@@ -74,7 +81,7 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
 
 ---
 
-### 4. Resultados de Pruebas y Validación
+### 4. Resultados de Pruebas y Validación (10/10 Controles Superados)
 
 1. **`scripts/staging/run-institutional-ux.ps1 -Phase Verify`**:
    - `[PASS] M12-THEME-001`: Boost configurado con paleta provisional Tolima (`#1B4D3E`) y SCSS activo sin alterar el núcleo.
@@ -83,6 +90,10 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
    - `[PASS] M12-RESPONSIVE-001`: 12 capturas en 3 viewports sin desbordamiento horizontal ni recorte (0px).
    - `[PASS] M12-ACCESSIBILITY-001`: Verificación matemática de contraste WCAG AA ($\ge 4.5:1$) en 5 pares de color provisionales.
    - `[PASS] M12-PRIVACY-001`: Escaneo regex estático confirmando ausencia de claves privadas o credenciales fijas.
+   - `[PASS] M12-REVERT-NEG-001`: Revert rechaza la operación con error y sin alterar la configuración cuando no existe snapshot.
+   - `[PASS] M12-REVERT-NEG-002`: Revert rechaza la operación con error, sin alterar la configuración y conservando el snapshot cuando el archivo está corrupto.
+   - `[PASS] M12-APPLY-SAFE-001`: Apply aborta la operación si M12 ya está aplicada y no existe snapshot previo para evitar falsear la línea base.
+   - `[PASS] M12-REVERT-POS-001`: Ciclo real Apply -> Revert -> Apply restaura exactamente la configuración previa limpia, elimina el snapshot sólo tras el éxito y re-aplica la UX institucional verificando el nuevo respaldo.
    - **Estado final:** Curso sintético (id=2) y categoría en estado OCULTO (`visible = 0`).
 
 2. **`npm run quality`**:
@@ -100,7 +111,7 @@ Gemini asumió la continuidad de la Misión 12 respetando la línea base previa 
 ### 5. Comandos para Verificar Localmente
 
 ```powershell
-# 1. Comprobar controles de Misión 12 (modo verificación estricto, no altera el estado)
+# 1. Comprobar controles de Misión 12 y ciclo seguro de reversión (10 controles)
 & .\scripts\staging\run-institutional-ux.ps1 -Phase Verify
 
 # 2. Probar ciclo completo de Apply, Capture y Lockdown
