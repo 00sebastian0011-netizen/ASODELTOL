@@ -241,12 +241,30 @@ try {
     if ($Phase -in @('All', 'Setup')) {
         $setup = (Invoke-M10Phase -Name 'setup') | ConvertFrom-Json
         if ($Phase -eq 'Setup') {
-            $setup | ConvertTo-Json -Depth 5
+            $lockdown = (Invoke-M10Phase -Name 'lockdown') | ConvertFrom-Json
+            $lockdownApplied = $true
+            $setupSnapshot = Get-M10Snapshot
+            if ($setupSnapshot.runtime.course_visible -or $setupSnapshot.runtime.category_visible) {
+                throw 'El curso o la categoría de pruebas quedaron visibles tras la fase Setup.'
+            }
+            [pscustomobject]@{
+                status = $setup.status
+                course_id = $setup.course_id
+                course_visible = $setupSnapshot.runtime.course_visible
+                category_visible = $setupSnapshot.runtime.category_visible
+                synthetic_pass_grade = $setup.synthetic_pass_grade
+                threshold_is_institutional_policy = $setup.threshold_is_institutional_policy
+                course_completion_criteria_unchanged = $setup.course_completion_criteria_unchanged
+                synthetic_only = $setup.synthetic_only
+                lockdown = $lockdown.status
+            } | ConvertTo-Json -Depth 5
             exit 0
         }
     }
     if ($Phase -eq 'Lockdown') {
-        Invoke-M10Phase -Name 'lockdown' | Out-Host
+        $lockdown = (Invoke-M10Phase -Name 'lockdown') | ConvertFrom-Json
+        $lockdownApplied = $true
+        $lockdown | ConvertTo-Json
         exit 0
     }
 
@@ -254,6 +272,8 @@ try {
     Write-Output 'M10_PROGRESS=baseline_ready'
     if ($Phase -eq 'Verify') {
         $baseline | ConvertTo-Json -Depth 12
+        $lockdown = (Invoke-M10Phase -Name 'lockdown') | ConvertFrom-Json
+        $lockdownApplied = $true
         exit 0
     }
 
@@ -421,9 +441,10 @@ try {
     }
 } finally {
     $studentPassword = $null
-    if ($Phase -in @('All', 'Verify') -and -not $lockdownApplied) {
+    if (-not $lockdownApplied) {
         try {
             Invoke-M10Phase -Name 'lockdown' | Out-Null
+            $lockdownApplied = $true
         } catch {
             Write-Warning "No fue posible ocultar automáticamente el curso: $($_.Exception.Message)"
         }

@@ -1,4 +1,5 @@
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const INSTANT_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?(?:Z|[+-]\d{2}(?::?\d{2})?)$/i;
 
 export const ASODELTOL_TIME_ZONE = 'America/Bogota';
 
@@ -11,6 +12,23 @@ function assertDateString(value, label) {
   if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
     throw new RangeError(`${label} is not a valid calendar date.`);
   }
+}
+
+function assertInstantString(value, label = 'startInstant') {
+  if (typeof value !== 'string' || !INSTANT_PATTERN.test(value)) {
+    throw new TypeError(
+      `${label} must be an ISO-8601 instant with an explicit offset or Z (e.g. 2026-07-18T02:30:00Z).`,
+    );
+  }
+
+  assertDateString(value.slice(0, 10), label);
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    throw new RangeError(`${label} is not a valid ISO-8601 instant.`);
+  }
+
+  return parsed;
 }
 
 function addCalendarDays(value, days) {
@@ -33,10 +51,7 @@ function assertTimeZone(timeZone) {
 
 export function localDateFromInstant(instant, timeZone = ASODELTOL_TIME_ZONE) {
   assertTimeZone(timeZone);
-  const parsed = new Date(instant);
-  if (Number.isNaN(parsed.getTime())) {
-    throw new RangeError('startInstant must be a valid ISO-8601 instant.');
-  }
+  const parsed = assertInstantString(instant, 'startInstant');
 
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone,
