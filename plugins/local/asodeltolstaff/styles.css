@@ -1,0 +1,238 @@
+/**
+ * Styles for local_asodeltolstaff - ASODELTOL Academic Staff & Attendance Module
+ * Integrates staff workflows with Moodle 5.3 Boost theme and provisional institutional styling
+ * (Palette: Tolima Forest Green #1B4D3E and Ochre #C59B27, pending official confirmation by ASODELTOL).
+ */
+
+/* Scoped container styling */
+.path-local-asodeltolstaff #page-content {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding-bottom: 2.5rem;
+}
+
+/* Page header and action toolbar */
+.path-local-asodeltolstaff h2 {
+    color: #1B4D3E;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.path-local-asodeltolstaff .singlebutton {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.path-local-asodeltolstaff .singlebutton .btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.path-local-asodeltolstaff .singlebutton .btn-secondary {
+    background-color: #FFFFFF;
+    color: #1B4D3E;
+    border: 1.5px solid #1B4D3E;
+}
+
+.path-local-asodeltolstaff .singlebutton .btn-secondary:hover,
+.path-local-asodeltolstaff .singlebutton .btn-secondary:focus {
+    background-color: #1B4D3E;
+    color: #FFFFFF;
+    box-shadow: 0 4px 6px -1px rgba(27, 77, 62, 0.2);
+}
+
+.path-local-asodeltolstaff .singlebutton .btn-primary {
+    background-color: #1B4D3E;
+    border-color: #1B4D3E;
+    color: #FFFFFF;
+}
+
+.path-local-asodeltolstaff .singlebutton .btn-primary:hover,
+.path-local-asodeltolstaff .singlebutton .btn-primary:focus {
+    background-color: #13382D;
+    border-color: #13382D;
+    box-shadow: 0 4px 6px -1px rgba(19, 56, 45, 0.3);
+}
+
+/* General table enhancement for staff views */
+.path-local-asodeltolstaff .generaltable {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 0.75rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.path-local-asodeltolstaff .generaltable thead th {
+    background-color: #F1F5F9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.875rem 1rem;
+    border-bottom: 2px solid #CBD5E1;
+    border-top: none;
+    vertical-align: middle;
+}
+
+.path-local-asodeltolstaff .generaltable tbody td {
+    padding: 0.875rem 1rem;
+    border-top: 1px solid #F1F5F9;
+    color: #1E293B;
+    vertical-align: middle;
+    font-size: 0.925rem;
+}
+
+.path-local-asodeltolstaff .generaltable tbody tr:nth-of-type(even) {
+    background-color: #FAFAFA;
+}
+
+.path-local-asodeltolstaff .generaltable tbody tr:hover {
+    background-color: #F8FAFC;
+}
+
+/* Table scroll wrapper for mobile */
+.path-local-asodeltolstaff .table-responsive,
+.path-local-asodeltolstaff .no-overflow {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Action links inside tables */
+.path-local-asodeltolstaff .generaltable td a {
+    color: #1B4D3E;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    display: inline-block;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.path-local-asodeltolstaff .generaltable td a:hover,
+.path-local-asodeltolstaff .generaltable td a:focus {
+    background-color: rgba(27, 77, 62, 0.08);
+    text-decoration: underline;
+}
+
+/* Status Badges */
+.path-local-asodeltolstaff .badge,
+.path-local-asodeltolstaff .status-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.785rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.35rem 0.7rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+}
+
+.path-local-asodeltolstaff .badge-planned,
+.path-local-asodeltolstaff .status-planned {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    border-color: #BFDBFE;
+}
+
+.path-local-asodeltolstaff .badge-observed,
+.path-local-asodeltolstaff .status-observed {
+    background-color: #FEF3C7;
+    color: #B45309;
+    border-color: #FDE68A;
+}
+
+.path-local-asodeltolstaff .badge-validated,
+.path-local-asodeltolstaff .status-validated {
+    background-color: #DCFCE7;
+    color: #15803D;
+    border-color: #BBF7D0;
+}
+
+.path-local-asodeltolstaff .badge-draft,
+.path-local-asodeltolstaff .status-draft {
+    background-color: #F1F5F9;
+    color: #475569;
+    border-color: #CBD5E1;
+}
+
+/* Form layout enhancement for staff attendance & session forms */
+.path-local-asodeltolstaff .mform {
+    background: #FFFFFF;
+    padding: 1.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.path-local-asodeltolstaff .mform legend {
+    color: #1B4D3E;
+    font-weight: 700;
+    font-size: 1.15rem;
+    border-bottom: 2px solid #E2E8F0;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.path-local-asodeltolstaff .mform .form-control,
+.path-local-asodeltolstaff .mform .custom-select {
+    border-radius: 0.5rem;
+    border: 1.5px solid #CBD5E1;
+    min-height: 44px;
+    font-size: 0.95rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.path-local-asodeltolstaff .mform .form-control:focus,
+.path-local-asodeltolstaff .mform .custom-select:focus {
+    border-color: #1B4D3E;
+    box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.2);
+    outline: none;
+}
+
+/* Attendance list styling */
+.path-local-asodeltolstaff .fitem.attendance-row {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .path-local-asodeltolstaff h2 {
+        font-size: 1.4rem;
+    }
+
+    .path-local-asodeltolstaff .singlebutton {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .path-local-asodeltolstaff .singlebutton .btn {
+        width: 100%;
+    }
+
+    .path-local-asodeltolstaff .mform {
+        padding: 1rem;
+    }
+}
