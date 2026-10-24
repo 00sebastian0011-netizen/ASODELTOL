@@ -6,6 +6,13 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $errors = [System.Collections.Generic.List[string]]::new()
 $publishableFiles = @()
 
+# Moodle plugins legitimately use config.php as their public component
+# configuration filename. Keep this allowlist exact and intentionally small:
+# the Moodle root config.php and every other config.php remain forbidden.
+$allowedConfigFiles = @(
+    'plugins/theme/rsmax/config.php'
+)
+
 $requiredFiles = @(
     'README.md',
     'AGENTS.md',
@@ -75,11 +82,15 @@ else {
 }
 
 foreach ($relativePath in $publishableFiles) {
+    $normalizedPath = $relativePath.Replace('\', '/')
     if ($relativePath -match '^tests/fixtures/[^/]+\.csv$') {
         continue
     }
     foreach ($pattern in $forbiddenRepositoryPatterns) {
-        if ($relativePath -match $pattern) {
+        if ($normalizedPath -match $pattern) {
+            if ($pattern -eq '(^|/)config\.php$' -and $normalizedPath -cin $allowedConfigFiles) {
+                continue
+            }
             $errors.Add("Archivo sensible/prohibido publicable: $relativePath")
             break
         }
