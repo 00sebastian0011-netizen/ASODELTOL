@@ -1,86 +1,11 @@
-# Secretos y configuración local
-.env
-.env.*
-**/.env
-**/.env.*
-config.php
-**/config.php
-*.pem
-*.key
-*.ppk
-*.p12
-*.pfx
-*.jks
-id_rsa
-id_rsa.*
-id_ed25519
-id_ed25519.*
-known_hosts
-
-# Datos de Moodle y copias de seguridad
-moodledata/
-**/moodledata/
-*.mbz
-*.sql
-*.sql.*
-*.dump
-*.backup
-*.bak
-/backups/
-/backup/
-
-# Datos personales, importaciones y exportaciones
-/private-data/
-/personal-data/
-/pii/
-/imports/
-/exports/
-/reports-output/
-**/private-data/
-**/personal-data/
-**/pii/
-*.csv
-!tests/fixtures/*.csv
-*.tsv
-*.xls
-*.xlsx
-*.ods
-
-# Artefactos de construcción y dependencias
-build/
-dist/
-artifacts/
-vendor/
-node_modules/
-.phpunit.result.cache
-.phpunit.cache/
-.php-cs-fixer.cache
-coverage/
-behatdata/
-phpunitdata/
-
-# Archivos temporales y registros
-*.log
-*.tmp
-*.temp
-*.swp
-*.swo
-/tmp/
-/temp/
+/config.php
+/moodledata/
+/.well-known/
 /cache/
-
-# IDE y sistema operativo
-.idea/
-.vscode/*.local.json
+/localcache/
+/sessions/
+/temp/
+/trashdir/
+/vendor/bin/
+*.log
 .DS_Store
-Thumbs.db
-Desktop.ini
-
-# Paquetes locales; los artefactos publicados deben generarse en CI controlada.
-*.zip
-*.tar
-*.tar.gz
-*.tgz
-
-# Configuracion del plugin de tema Moodle rsmax
-!plugins/theme/rsmax/config.php
