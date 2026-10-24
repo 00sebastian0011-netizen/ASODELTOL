@@ -1,0 +1,69 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/footer
+
+    Site footer shown above Boost's help popover: about text, link columns, social links and copyright.
+
+    Context variables required for this template:
+    * style - light, dark or brand
+    * sitename - full name of the site
+    * text - formatted HTML set in the theme settings
+    * columns - list of objects with title and links (objects with text and url)
+    * hassocial, social - list of objects with url, icon and name
+    * copyright - copyright line
+
+    Example context (json):
+    {
+        "style": "dark",
+        "sitename": "Moodle",
+        "text": "<p>Learning for everyone.</p>",
+        "columns": [{"title": "Courses", "links": [{"text": "All courses", "url": "#"}]}],
+        "hassocial": true,
+        "social": [{"url": "https://example.com", "icon": "fa-linkedin-in", "name": "LinkedIn"}],
+        "copyright": "2026 Moodle"
+    }
+}}
+<div class="rsmax-footer rsmax-footer-{{style}} d-print-none">
+    <div class="rsmax-footer-inner">
+        <div class="rsmax-footer-about">
+            <div class="rsmax-footer-sitename">{{{sitename}}}</div>
+            {{#text}}<div class="rsmax-footer-text">{{{text}}}</div>{{/text}}
+            {{#hassocial}}
+                <ul class="rsmax-footer-social list-unstyled" aria-label="{{#str}} socialheading, theme_rsmax {{/str}}">
+                    {{#social}}
+                        <li>
+                            <a href="{{url}}" target="_blank" rel="noopener noreferrer" title="{{name}}">
+                                <i class="fa-brands {{icon}}" aria-hidden="true"></i>
+                                <span class="visually-hidden">{{name}}</span>
+                            </a>
+                        </li>
+                    {{/social}}
+                </ul>
+            {{/hassocial}}
+        </div>
+        {{#columns}}
+            <nav class="rsmax-footer-column" aria-label="{{title}}">
+                {{#title}}<div class="rsmax-footer-heading">{{{title}}}</div>{{/title}}
+                <ul class="rsmax-footer-links list-unstyled">
+                    {{#links}}<li><a href="{{url}}">{{{text}}}</a></li>{{/links}}
+                </ul>
+            </nav>
+        {{/columns}}
+    </div>
+    <div class="rsmax-footer-copyright">{{{copyright}}}</div>
+</div>

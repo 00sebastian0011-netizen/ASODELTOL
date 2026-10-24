@@ -1,0 +1,81 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/course_progress
+
+    The learner's progress in the current course: a panel on the main page of the course when the
+    course header is off, a slim bar on the other pages of the course.
+
+    Context variables required for this template:
+    * percentage, completed, total, iscomplete - overall progress
+    * inhero - true when the course header already shows the overall progress
+    * iscompact - true for the slim bar of the inner pages
+    * coursename, courseurl - the course, for the slim bar
+    * next - false, or the next activity to do (name and url)
+
+    Example context (json):
+    {
+        "percentage": 40,
+        "completed": 4,
+        "total": 10,
+        "iscomplete": false,
+        "inhero": false,
+        "iscompact": false,
+        "coursename": "Project management",
+        "activitytype": "Forum",
+        "courseurl": "#",
+        "next": {"name": "Schedule template", "url": "#"}
+    }
+}}
+{{#iscompact}}
+    <section class="rsmax-progress rsmax-progress-compact d-print-none" aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+        <a class="rsmax-progress-course" href="{{courseurl}}">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i> {{{coursename}}}
+        </a>
+        {{#activitytype}}<span class="rsmax-progress-kind">{{activitytype}}</span>{{/activitytype}}
+        <div class="rsmax-progress-compactbar">
+            <div class="progress" role="progressbar" aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100"
+                 aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+                <div class="progress-bar" style="width: {{percentage}}%"></div>
+            </div>
+            <span>{{percentage}}%</span>
+        </div>
+    </section>
+{{/iscompact}}
+{{^iscompact}}
+    {{^inhero}}
+        <section class="rsmax-progress d-print-none{{#iscomplete}} rsmax-progress-complete{{/iscomplete}}"
+                 aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+            <div class="rsmax-progress-summary">
+                <div class="rsmax-progress-figure">{{percentage}}%</div>
+                <div class="rsmax-progress-main">
+                    <div class="rsmax-progress-heading">
+                        <span class="rsmax-progress-title">{{#str}} yourprogress, theme_rsmax {{/str}}</span>
+                        <span class="rsmax-progress-count">
+                            {{#iscomplete}}{{#str}} progresscomplete, theme_rsmax {{/str}}{{/iscomplete}}
+                            {{^iscomplete}}{{#str}} progresscount, theme_rsmax, { "completed": {{completed}}, "total": {{total}} } {{/str}}{{/iscomplete}}
+                        </span>
+                    </div>
+                    <div class="progress" role="progressbar" aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100"
+                         aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+                        <div class="progress-bar" style="width: {{percentage}}%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {{/inhero}}
+{{/iscompact}}

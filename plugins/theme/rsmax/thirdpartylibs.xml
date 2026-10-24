@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<libraries>
+  <library>
+    <location>fonts/InterVariable.woff2</location>
+    <name>Inter</name>
+    <description>Inter is a typeface designed for computer screens, used as the default font of the theme.</description>
+    <version>4.1</version>
+    <license>OFL</license>
+    <licenseversion>1.1</licenseversion>
+    <repository>https://github.com/rsms/inter</repository>
+    <copyrights>
+      <copyright>2016 The Inter Project Authors</copyright>
+    </copyrights>
+  </library>
+</libraries>

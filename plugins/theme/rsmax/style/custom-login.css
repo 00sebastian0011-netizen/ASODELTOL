@@ -1,0 +1,56 @@
+/* Oculta únicamente el texto promocional; conserva la imagen/fondo del panel izquierdo. */
+body.pagelayout-login .login-layout-left-content > h1,
+body.pagelayout-login .login-layout-left-content > div.mx-auto.mb-4.text-start,
+body.pagelayout-login .login-layout-left-content > p.mx-auto.mb-4,
+body.pagelayout-login .login-layout-left-content > .login-layout-stats {
+    display: none !important;
+}
+
+/* Elimina únicamente el cuadro vacío que quedaba al retirar el texto. */
+body.pagelayout-login .login-layout-left-content {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    padding: 0 !important;
+}
+
+body.pagelayout-login .login-layout-left-content::before,
+body.pagelayout-login .login-layout-left-content::after {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Oculta el acceso a "Área personal" / Dashboard en la navegación. */
+.primary-navigation a[href$="/my/"],
+.primary-navigation a[href*="/my/index.php"],
+.moremenu a[href$="/my/"],
+.moremenu a[href*="/my/index.php"],
+#nav-drawer a[href$="/my/"],
+#nav-drawer a[href*="/my/index.php"],
+.secondary-navigation a[href$="/my/"],
+.secondary-navigation a[href*="/my/index.php"] {
+    display: none !important;
+}
+
+.primary-navigation li:has(> a[href$="/my/"]),
+.primary-navigation li:has(> a[href*="/my/index.php"]),
+.moremenu .nav-item:has(> a[href$="/my/"]),
+.moremenu .nav-item:has(> a[href*="/my/index.php"]),
+#nav-drawer li:has(> a[href$="/my/"]),
+#nav-drawer li:has(> a[href*="/my/index.php"]) {
+    display: none !important;
+}
+
+/* Refuerzo global: oculta Área personal/Dashboard para cualquier rol y usuario. */
+body a[href$="/my/"],
+body a[href*="/my/index.php"] {
+    display: none !important;
+}
+
+body li:has(> a[href$="/my/"]),
+body li:has(> a[href*="/my/index.php"]) {
+    display: none !important;
+}

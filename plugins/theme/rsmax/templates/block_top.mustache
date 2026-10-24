@@ -1,0 +1,42 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/block_top
+
+    Top row of a Pluginia landing block: the heading and, on carousels, the buttons.
+
+    Context variables required for this template:
+    * hasheading, heading, subheading - see theme_rsmax/block_heading
+    * iscarousel, autoplay, empty - see theme_rsmax/block_carousel_controls
+
+    Example context (json):
+    {
+        "hasheading": true,
+        "heading": "What our students say",
+        "subheading": "",
+        "iscarousel": true,
+        "autoplay": 5000,
+        "empty": false
+    }
+}}
+<div class="pluginia-block-top">
+    {{> theme_rsmax/block_heading }}
+    {{#iscarousel}}{{^empty}}{{> theme_rsmax/block_carousel_controls }}{{/empty}}{{/iscarousel}}
+</div>
+{{#empty}}
+    <div class="alert alert-info mb-0">{{#str}} block:noitems, theme_rsmax {{/str}}</div>
+{{/empty}}
