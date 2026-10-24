@@ -84,3 +84,5 @@ Desktop.ini
 
 # Configuracion del plugin de tema Moodle rsmax
 !plugins/theme/rsmax/config.php
+!plugins/theme/rsmax/amd/build/
+!plugins/theme/rsmax/amd/build/**

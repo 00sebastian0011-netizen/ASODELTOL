@@ -30,6 +30,7 @@ Las inconsistencias sobre el número de ítems y recursos se conservan abiertas;
 catalog/       Fuente académica AF8, esquema y matriz de acceso
 config/        Configuración versionada de herramientas, nunca secretos
 docs/          Arquitectura, requisitos, seguridad, operación, ADR y coordinación
+overlays/      Divergencias reproducibles y verificadas respecto de Moodle oficial
 plugins/       Código fuente futuro de plugins propios, separado por tipo Moodle
 scripts/       Validaciones, empaquetado y operaciones controladas
 tests/         Estrategia y activos transversales de prueba
@@ -91,6 +92,7 @@ Los paquetes se escriben en `build/`, que está ignorado por Git. El empaquetado
 - [Guía de auditoría independiente de la Misión 04](docs/AUDITORIA_MISION_04.md)
 - [Decisiones pendientes](docs/DECISIONES_PENDIENTES.md)
 - [Fuentes técnicas](docs/FUENTES.md)
+- [Sincronización de producción con Git](docs/SINCRONIZACION_PRODUCCION_GIT.md)
 
 ## Autorizaciones y límites operativos
 
