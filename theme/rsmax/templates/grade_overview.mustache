@@ -1,0 +1,93 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/grade_overview
+
+    How a whole course is doing, above the grader report.
+
+    Context variables required for this template:
+    * learners - number of graded learners
+    * hasaverage, average - average of the course, as a percentage
+    * gradedpercentage - how much of what can be graded has a grade
+    * items - list of name, kind, average, hasaverage, graded, learners, haspass, passpercentage and state
+    * hasattention, attention - learners below attentionlimit: name, url and percentage
+
+    Example context (json):
+    {
+        "learners": 24,
+        "hasaverage": true,
+        "average": 71,
+        "gradedpercentage": 60,
+        "attentionlimit": 50,
+        "items": [
+            {"name": "First quiz", "kind": "Quiz", "average": 78, "hasaverage": true, "graded": 22, "learners": 24, "haspass": true, "passpercentage": 86, "state": "passed"},
+            {"name": "Essay", "kind": "Assignment", "average": 0, "hasaverage": false, "graded": 0, "learners": 24, "haspass": false, "passpercentage": 0, "state": "pending"}
+        ],
+        "hasattention": true,
+        "attention": [{"name": "Ana Lopez", "url": "#", "percentage": 38}]
+    }
+}}
+<details class="rsmax-gradeoverview d-print-none" open>
+    <summary>
+        <span class="rsmax-gradeoverview-title">{{#str}} gradeoverview, theme_rsmax {{/str}}</span>
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+    </summary>
+    <div class="rsmax-grades-top">
+        <div class="rsmax-grades-course">
+            <div class="rsmax-ring rsmax-grades-ring" style="--rsmax-ring: {{#hasaverage}}{{average}}{{/hasaverage}}{{^hasaverage}}0{{/hasaverage}}">
+                <span class="rsmax-ring-figure">{{#hasaverage}}{{average}}<small>%</small>{{/hasaverage}}{{^hasaverage}}–{{/hasaverage}}</span>
+            </div>
+            <div class="rsmax-grades-coursetext">
+                <span class="rsmax-grades-label">{{#str}} gradeoverviewaverage, theme_rsmax {{/str}}</span>
+                <span class="rsmax-grades-points">{{#str}} gradeoverviewlearners, theme_rsmax, {{learners}} {{/str}}</span>
+            </div>
+        </div>
+        <dl class="rsmax-grades-figures">
+            <div><dt>{{#str}} gradeoverviewgraded, theme_rsmax {{/str}}</dt><dd>{{gradedpercentage}}%</dd></div>
+        </dl>
+    </div>
+    <div class="rsmax-gradeoverview-body">
+        <ol class="rsmax-grades-items list-unstyled">
+            {{#items}}
+                <li class="rsmax-grades-item is-{{state}}">
+                    <div class="rsmax-grades-itemhead">
+                        <span class="rsmax-grades-itemlabel">
+                            {{#kind}}<span class="rsmax-grades-kind">{{kind}}</span>{{/kind}}
+                            <span class="rsmax-grades-itemname">{{{name}}}</span>
+                        </span>
+                        <span class="rsmax-grades-value">
+                            <span>{{#str}} gradeoverviewcount, theme_rsmax, { "graded": {{graded}}, "learners": {{learners}} } {{/str}}</span>
+                            {{#haspass}}<span class="rsmax-grades-state">{{#str}} gradeoverviewpass, theme_rsmax, {{passpercentage}} {{/str}}</span>{{/haspass}}
+                            {{#hasaverage}}<b>{{average}}%</b>{{/hasaverage}}
+                        </span>
+                    </div>
+                    <div class="rsmax-grades-bar"><span style="width: {{average}}%"></span></div>
+                </li>
+            {{/items}}
+        </ol>
+        {{#hasattention}}
+            <aside class="rsmax-gradeoverview-attention">
+                <h3>{{#str}} gradeoverviewattention, theme_rsmax, {{attentionlimit}} {{/str}}</h3>
+                <ul class="list-unstyled">
+                    {{#attention}}
+                        <li><a href="{{url}}">{{{name}}}</a> <b>{{percentage}}%</b></li>
+                    {{/attention}}
+                </ul>
+            </aside>
+        {{/hasattention}}
+    </div>
+</details>

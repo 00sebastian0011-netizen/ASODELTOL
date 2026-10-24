@@ -1,0 +1,54 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/activity_stage_route
+
+    Last line of the header of an activity page: the section as a route, one stop per activity.
+
+    Context variables required for this template:
+    * section, sectionurl - the section the activity belongs to
+    * position, total - place of the activity among those of the section
+    * stops - list of name, url, isdone, iscurrent
+
+    Example context (json):
+    {
+        "section": "Basics",
+        "sectionurl": "#",
+        "position": 2,
+        "total": 3,
+        "stops": [
+            {"name": "What is a project", "url": "#", "isdone": true, "iscurrent": false},
+            {"name": "Introduce yourself", "url": "#", "isdone": false, "iscurrent": true},
+            {"name": "First quiz", "url": "#", "isdone": false, "iscurrent": false}
+        ]
+    }
+}}
+<nav class="rsmax-stage-route d-print-none" aria-label="{{#str}} stageroute, theme_rsmax {{/str}}">
+    <div class="rsmax-stage-where">
+        <a href="{{sectionurl}}">{{{section}}}</a>
+        <span>{{#str}} stageposition, theme_rsmax, { "position": {{position}}, "total": {{total}} } {{/str}}</span>
+    </div>
+    <ol class="rsmax-stage-stops list-unstyled">
+        {{#stops}}
+            <li class="rsmax-stage-stop{{#isdone}} is-done{{/isdone}}{{#iscurrent}} is-current{{/iscurrent}}">
+                <a href="{{url}}" title="{{name}}"{{#iscurrent}} aria-current="page"{{/iscurrent}}>
+                    <span class="visually-hidden">{{{name}}}</span>
+                </a>
+            </li>
+        {{/stops}}
+    </ol>
+</nav>

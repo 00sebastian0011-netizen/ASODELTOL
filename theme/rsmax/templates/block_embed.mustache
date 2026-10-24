@@ -1,0 +1,43 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/block_embed
+
+    Content from another site (a map, a video) that is loaded only when the visitor asks for it,
+    so nothing is sent to that site before. Fill the blocks src, title, label and notice, and
+    optionally poster with the address of an image to show meanwhile.
+
+    Context variables required for this template:
+    * none: it is used as a parent template
+
+    Example context (json):
+    {
+    }
+}}
+<div class="pluginia-embed" data-region="pluginia-embed" data-src="{{$src}}{{/src}}" data-title="{{$title}}{{/title}}">
+    <div class="pluginia-embed-placeholder" style="background-image: url('{{$poster}}{{/poster}}')">
+        <button type="button" class="btn btn-primary" data-action="load-embed">
+            <i class="fa fa-play" aria-hidden="true"></i> {{$label}}{{/label}}
+        </button>
+        <p class="pluginia-embed-notice">{{$notice}}{{/notice}}</p>
+    </div>
+</div>
+{{#js}}
+require(['theme_rsmax/embed'], function(Embed) {
+    Embed.init();
+});
+{{/js}}

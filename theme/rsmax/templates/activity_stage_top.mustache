@@ -1,0 +1,49 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/activity_stage_top
+
+    First line of the header of an activity page: the way back to the course, the kind of activity
+    and the progress of the learner in the course.
+
+    Context variables required for this template:
+    * coursename, courseurl - the course
+    * kind - name of the kind of activity
+    * hasprogress, percentage - progress of the learner in the course
+
+    Example context (json):
+    {
+        "coursename": "Project management",
+        "courseurl": "#",
+        "kind": "Forum",
+        "hasprogress": true,
+        "percentage": 42
+    }
+}}
+<div class="rsmax-stage-top d-print-none">
+    <a class="rsmax-stage-course" href="{{courseurl}}">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> {{{coursename}}}
+    </a>
+    <span class="rsmax-stage-kind">{{kind}}</span>
+    {{#hasprogress}}
+        <span class="rsmax-stage-progress" role="progressbar" aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100"
+              aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+            <span class="rsmax-stage-progressbar" aria-hidden="true"><span style="width: {{percentage}}%"></span></span>
+            {{percentage}}%
+        </span>
+    {{/hasprogress}}
+</div>

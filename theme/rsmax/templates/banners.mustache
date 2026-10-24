@@ -1,0 +1,46 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/banners
+
+    The sections of a course, each with its banner and a link to change it.
+
+    Context variables required for this template:
+    * sections - list of name, image (URL, may be empty) and editurl
+
+    Example context (json):
+    {
+        "sections": [
+            {"name": "General", "image": "", "editurl": "#"},
+            {"name": "Basics", "image": "https://placekitten.com/1200/200", "editurl": "#"}
+        ]
+    }
+}}
+<h3 class="rsmax-banners-heading">{{#str}} bannersections, theme_rsmax {{/str}}</h3>
+<ul class="rsmax-banners list-unstyled">
+    {{#sections}}
+        <li class="rsmax-banners-row">
+            <span class="rsmax-banners-thumb{{^image}} is-empty{{/image}}"{{#image}} style="background-image: url('{{image}}')"{{/image}}></span>
+            <span class="rsmax-banners-name">{{{name}}}</span>
+            <a class="btn btn-outline-secondary btn-sm" href="{{editurl}}">
+                {{#image}}{{#str}} bannerchange, theme_rsmax {{/str}}{{/image}}
+                {{^image}}{{#str}} banneradd, theme_rsmax {{/str}}{{/image}}
+                <span class="visually-hidden">: {{{name}}}</span>
+            </a>
+        </li>
+    {{/sections}}
+</ul>

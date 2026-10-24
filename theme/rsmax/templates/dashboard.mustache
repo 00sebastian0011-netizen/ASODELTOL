@@ -1,0 +1,122 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/dashboard
+
+    Summary at the top of the dashboard: greeting, figures, the course to continue with and the
+    other courses in progress.
+
+    Context variables required for this template:
+    * greeting, date - heading and today's date
+    * figures - list of objects with icon, value and label
+    * continue - false, or the course to continue with (name, url, image, hasprogress, progress, isstarted)
+    * hascourses, courses - other courses in progress, same fields
+    * nocourses - true when the user is not enrolled in any course
+    * allcoursesurl, catalogueurl - links
+
+    Example context (json):
+    {
+        "greeting": "Hello, Ana",
+        "date": "Wednesday, 7 October 2026",
+        "figures": [{"icon": "fa-book-open", "value": 3, "label": "Courses in progress"}],
+        "continue": {"name": "Project management", "url": "#", "image": "https://placekitten.com/600/340",
+            "hasprogress": true, "progress": 42, "isstarted": true},
+        "hascourses": true,
+        "courses": [{"name": "Statistics", "url": "#", "image": "https://placekitten.com/600/340",
+            "hasprogress": true, "progress": 10, "isstarted": true}],
+        "nocourses": false,
+        "allcoursesurl": "#",
+        "catalogueurl": "#"
+    }
+}}
+<section class="rsmax-dashboard d-print-none" aria-labelledby="rsmax-dashboard-greeting">
+    <div class="rsmax-dashboard-top">
+        <div>
+            <h2 id="rsmax-dashboard-greeting" class="rsmax-dashboard-greeting">{{{greeting}}}</h2>
+            <p class="rsmax-dashboard-date">{{date}}</p>
+        </div>
+        <ul class="rsmax-dashboard-figures list-unstyled">
+            {{#figures}}
+                <li>
+                    <i class="fa {{icon}}" aria-hidden="true"></i>
+                    <strong>{{value}}</strong>
+                    <span>{{label}}</span>
+                </li>
+            {{/figures}}
+        </ul>
+    </div>
+
+    {{#nocourses}}
+        <div class="rsmax-dashboard-empty">
+            <p>{{#str}} dashboard:nocourses, theme_rsmax {{/str}}</p>
+            <a class="btn btn-primary" href="{{catalogueurl}}">{{#str}} dashboard:browse, theme_rsmax {{/str}}</a>
+        </div>
+    {{/nocourses}}
+
+    {{#continue}}
+        <a class="rsmax-dashboard-continue" href="{{url}}">
+            <img src="{{image}}" alt="" loading="lazy">
+            <span class="rsmax-dashboard-continue-body">
+                <span class="rsmax-dashboard-eyebrow">
+                    {{#isstarted}}{{#str}} dashboard:continue, theme_rsmax {{/str}}{{/isstarted}}
+                    {{^isstarted}}{{#str}} dashboard:start, theme_rsmax {{/str}}{{/isstarted}}
+                </span>
+                <span class="rsmax-dashboard-continue-name">{{{name}}}</span>
+                {{#hasprogress}}
+                    <span class="rsmax-dashboard-progress">
+                        <span class="progress" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100"
+                              aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+                            <span class="progress-bar" style="width: {{progress}}%"></span>
+                        </span>
+                        <span>{{progress}}%</span>
+                    </span>
+                {{/hasprogress}}
+            </span>
+            <span class="btn btn-primary rsmax-dashboard-continue-button">
+                {{#isstarted}}{{#str}} dashboard:continuebutton, theme_rsmax {{/str}}{{/isstarted}}
+                {{^isstarted}}{{#str}} dashboard:startbutton, theme_rsmax {{/str}}{{/isstarted}}
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </span>
+        </a>
+    {{/continue}}
+
+    {{#hascourses}}
+        <div class="rsmax-dashboard-heading">
+            <h3>{{#str}} dashboard:othercourses, theme_rsmax {{/str}}</h3>
+            <a href="{{allcoursesurl}}">{{#str}} dashboard:allcourses, theme_rsmax {{/str}}</a>
+        </div>
+        <ul class="rsmax-dashboard-courses list-unstyled">
+            {{#courses}}
+                <li>
+                    <a href="{{url}}">
+                        <img src="{{image}}" alt="" loading="lazy">
+                        <span class="rsmax-dashboard-course-name">{{{name}}}</span>
+                        {{#hasprogress}}
+                            <span class="rsmax-dashboard-progress">
+                                <span class="progress" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0"
+                                      aria-valuemax="100" aria-label="{{#str}} yourprogress, theme_rsmax {{/str}}">
+                                    <span class="progress-bar" style="width: {{progress}}%"></span>
+                                </span>
+                                <span>{{progress}}%</span>
+                            </span>
+                        {{/hasprogress}}
+                    </a>
+                </li>
+            {{/courses}}
+        </ul>
+    {{/hascourses}}
+</section>
