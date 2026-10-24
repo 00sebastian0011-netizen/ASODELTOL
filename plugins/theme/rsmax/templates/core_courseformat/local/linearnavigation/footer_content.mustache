@@ -1,0 +1,100 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template core_courseformat/local/linearnavigation/footer_content
+
+    The bar that moves between the pages of a course. Besides the two addresses Moodle gives it,
+    each button names what it leads to and the middle says how far along the section the page is.
+
+    Context variables required for this template:
+    * previousurl, nexturl, backtocourseurl - where the buttons go; each may be missing
+    * previousname, nextname - what they lead to
+    * previousissection, nextissection - true when that is the page of a section
+    * position, total, percentage - place of the page among those of its section
+    * completion - HTML of the completion control, may be empty
+
+    Example context (json):
+    {
+        "previousurl": "#",
+        "previousname": "What is a project",
+        "previousissection": false,
+        "nexturl": "#",
+        "nextname": "First quiz",
+        "nextissection": false,
+        "position": 2,
+        "total": 5,
+        "percentage": 40,
+        "completion": "<button class=\"btn btn-sm btn-outline-secondary\">Mark as done</button>"
+    }
+}}
+<div class="course-linear-navigation-footer-content rsmax-dock">
+    <div class="rsmax-dock-side">
+        {{#previousurl}}
+            <a href="{{previousurl}}" class="course-linear-navigation-link rsmax-dock-link rsmax-dock-previous">
+                <span class="rsmax-dock-arrow" aria-hidden="true">
+                    <i class="fa fa-arrow-left dir-rtl-hide"></i><i class="fa fa-arrow-right dir-ltr-hide"></i>
+                </span>
+                <span class="rsmax-dock-text">
+                    <span class="rsmax-dock-kicker">
+                        {{#previousissection}}{{#str}} dockbacktosection, theme_rsmax {{/str}}{{/previousissection}}
+                        {{^previousissection}}{{#str}} previous, core {{/str}}{{/previousissection}}
+                    </span>
+                    {{#previousname}}<span class="rsmax-dock-name">{{{previousname}}}</span>{{/previousname}}
+                </span>
+            </a>
+        {{/previousurl}}
+    </div>
+
+    <div class="rsmax-dock-middle" data-for="course-linear-navigation-footer">
+        {{#total}}
+            <div class="rsmax-dock-place">
+                <span class="rsmax-dock-count" aria-hidden="true"><b>{{position}}</b>/{{total}}</span>
+                <span class="visually-hidden">{{#str}} stageposition, theme_rsmax, { "position": {{position}}, "total": {{total}} } {{/str}}</span>
+                <span class="rsmax-dock-bar" aria-hidden="true"><span style="width: {{percentage}}%"></span></span>
+            </div>
+        {{/total}}
+        {{#completion}}
+            <div class="course-linear-navigation-completion">{{{completion}}}</div>
+        {{/completion}}
+    </div>
+
+    <div class="rsmax-dock-side rsmax-dock-side-end">
+        {{#nexturl}}
+            <a href="{{nexturl}}" class="course-linear-navigation-link rsmax-dock-link rsmax-dock-next">
+                <span class="rsmax-dock-text">
+                    <span class="rsmax-dock-kicker">
+                        {{#nextissection}}{{#str}} docknextsection, theme_rsmax {{/str}}{{/nextissection}}
+                        {{^nextissection}}{{#str}} next, core {{/str}}{{/nextissection}}
+                    </span>
+                    {{#nextname}}<span class="rsmax-dock-name">{{{nextname}}}</span>{{/nextname}}
+                </span>
+                <span class="rsmax-dock-arrow" aria-hidden="true">
+                    <i class="fa fa-arrow-right dir-rtl-hide"></i><i class="fa fa-arrow-left dir-ltr-hide"></i>
+                </span>
+            </a>
+        {{/nexturl}}
+        {{#backtocourseurl}}
+            <a href="{{backtocourseurl}}" class="course-linear-navigation-link rsmax-dock-link rsmax-dock-next rsmax-dock-finish">
+                <span class="rsmax-dock-text">
+                    <span class="rsmax-dock-kicker">{{#str}} dockfinished, theme_rsmax {{/str}}</span>
+                    <span class="rsmax-dock-name">{{#str}} backtocourse, core {{/str}}</span>
+                </span>
+                <span class="rsmax-dock-arrow" aria-hidden="true"><i class="fa fa-flag-checkered"></i></span>
+            </a>
+        {{/backtocourseurl}}
+    </div>
+</div>

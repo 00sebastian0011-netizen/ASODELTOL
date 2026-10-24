@@ -81,3 +81,6 @@ Desktop.ini
 *.tar
 *.tar.gz
 *.tgz
+
+# Configuracion del plugin de tema Moodle rsmax
+!plugins/theme/rsmax/config.php

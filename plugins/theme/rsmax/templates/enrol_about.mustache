@@ -1,0 +1,116 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_rsmax/enrol_about
+
+    What a course is about, what it contains and who teaches it, on its landing page.
+
+    Context variables required for this template:
+    * hassummary, summary - description of the course, as HTML
+    * hassections, sections - list of name, number, count, countlabel, hasactivities, isfirst and activities (name, kind, purpose, icon)
+    * hasteachers, teachers - list of name, role and picture (HTML)
+    * hastags, tags - list of name and url
+
+    Example context (json):
+    {
+        "hassummary": true,
+        "summary": "<p>Learn to plan, run and close a project.</p>",
+        "hassections": true,
+        "sections": [
+            {"name": "Basics", "number": "01", "count": 2, "countlabel": "2 activities", "hasactivities": true, "isfirst": true, "activities": [
+                {"name": "What is a project", "kind": "Page", "purpose": "content", "icon": "#"},
+                {"name": "First quiz", "kind": "Quiz", "purpose": "assessment", "icon": "#"}
+            ]},
+            {"name": "Planning", "number": "02", "count": 4, "countlabel": "4 activities", "hasactivities": false, "isfirst": false, "activities": []}
+        ],
+        "hasteachers": true,
+        "teachers": [{"name": "Ana Lopez", "role": "Teacher", "picture": ""}],
+        "hastags": true,
+        "tags": [{"name": "planning", "url": "#"}]
+    }
+}}
+{{#hassummary}}
+    <section class="rsmax-enrol-block">
+        <h2 class="rsmax-enrol-heading">{{#str}} enrolabout, theme_rsmax {{/str}}</h2>
+        <div class="rsmax-enrol-summary">{{{summary}}}</div>
+        {{#hastags}}
+            <ul class="rsmax-enrol-tags list-unstyled" aria-label="{{#str}} tags, core {{/str}}">
+                {{#tags}}<li><a href="{{url}}">{{{name}}}</a></li>{{/tags}}
+            </ul>
+        {{/hastags}}
+    </section>
+{{/hassummary}}
+{{^hassummary}}{{#hastags}}
+    <section class="rsmax-enrol-block">
+        <ul class="rsmax-enrol-tags list-unstyled" aria-label="{{#str}} tags, core {{/str}}">
+            {{#tags}}<li><a href="{{url}}">{{{name}}}</a></li>{{/tags}}
+        </ul>
+    </section>
+{{/hastags}}{{/hassummary}}
+{{#hassections}}
+    <section class="rsmax-enrol-block">
+        <h2 class="rsmax-enrol-heading">{{#str}} enrolcontentsheading, theme_rsmax {{/str}}</h2>
+        <ol class="rsmax-enrol-sections list-unstyled">
+            {{#sections}}
+                <li class="rsmax-enrol-section">
+                    {{#hasactivities}}
+                        <details{{#isfirst}} open{{/isfirst}}>
+                            <summary>
+                                <span class="rsmax-enrol-number" aria-hidden="true">{{number}}</span>
+                                <span class="rsmax-enrol-sectionname">{{{name}}}</span>
+                                <span class="rsmax-enrol-count">{{countlabel}}</span>
+                                <i class="fa fa-chevron-down rsmax-enrol-chevron" aria-hidden="true"></i>
+                            </summary>
+                            <ul class="rsmax-enrol-activities list-unstyled">
+                                {{#activities}}
+                                    <li>
+                                        <span class="rsmax-enrol-icon rsmax-enrol-icon-{{purpose}}"><img src="{{icon}}" alt=""></span>
+                                        <span class="rsmax-enrol-activityname">{{{name}}}</span>
+                                        <span class="rsmax-enrol-kind">{{kind}}</span>
+                                    </li>
+                                {{/activities}}
+                            </ul>
+                        </details>
+                    {{/hasactivities}}
+                    {{^hasactivities}}
+                        <div class="rsmax-enrol-sectionrow">
+                            <span class="rsmax-enrol-number" aria-hidden="true">{{number}}</span>
+                            <span class="rsmax-enrol-sectionname">{{{name}}}</span>
+                            <span class="rsmax-enrol-count">{{countlabel}}</span>
+                        </div>
+                    {{/hasactivities}}
+                </li>
+            {{/sections}}
+        </ol>
+    </section>
+{{/hassections}}
+{{#hasteachers}}
+    <section class="rsmax-enrol-block">
+        <h2 class="rsmax-enrol-heading">{{#str}} enrolteachers, theme_rsmax {{/str}}</h2>
+        <ul class="rsmax-enrol-teachers list-unstyled">
+            {{#teachers}}
+                <li>
+                    {{{picture}}}
+                    <span>
+                        <b>{{{name}}}</b>
+                        <small>{{{role}}}</small>
+                    </span>
+                </li>
+            {{/teachers}}
+        </ul>
+    </section>
+{{/hasteachers}}
