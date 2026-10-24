@@ -7,3 +7,5 @@
 *.pdf binary
 *.zip binary
 
+# Preserve the approved production overlay byte-for-byte for SHA-256 verification.
+overlays/moodle/5.3/asodeltol-m53-deps-2026.10.22.1/composer.json -text -eol
