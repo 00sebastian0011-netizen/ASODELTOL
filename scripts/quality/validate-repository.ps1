@@ -25,6 +25,9 @@ $requiredFiles = @(
     'docs/OPERACION.md',
     'docs/APROVISIONAMIENTO_AF8.md',
     'plugins/README.md',
+    'plugins/theme/rsmax/config.php',
+    'plugins/theme/rsmax/amd/build/activity.min.js',
+    'overlays/moodle/5.3/asodeltol-m53-deps-2026.10.22.1/MANIFEST.sha256',
     'catalog/af8/catalog.json',
     'catalog/af8/access-control-matrix.json',
     'catalog/schema/af8-catalog.schema.json',
@@ -34,6 +37,34 @@ $requiredFiles = @(
 foreach ($relativePath in $requiredFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $relativePath) -PathType Leaf)) {
         $errors.Add("Falta el archivo requerido: $relativePath")
+    }
+}
+
+$overlayDirectory = Join-Path $repoRoot 'overlays\moodle\5.3\asodeltol-m53-deps-2026.10.22.1'
+$overlayManifest = Join-Path $overlayDirectory 'MANIFEST.sha256'
+if (Test-Path -LiteralPath $overlayManifest -PathType Leaf) {
+    foreach ($line in [System.IO.File]::ReadLines($overlayManifest)) {
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+        if ($line -match '^(SOURCE_MOODLE_COMMIT|COMPOSER_VERSION|COMPOSER_PHAR_SHA256|COMPOSER_IMAGE|PHP_IMAGE|COMPOSER_LOCK_CONTENT_HASH)=[A-Za-z0-9@._:/+-]+$') {
+            continue
+        }
+        if ($line -notmatch '^(?<hash>[A-Fa-f0-9]{64})  (?<name>[A-Za-z0-9._-]+)$') {
+            $errors.Add("Entrada inválida en el manifiesto del overlay: $line")
+            continue
+        }
+
+        $overlayFile = Join-Path $overlayDirectory $Matches.name
+        if (-not (Test-Path -LiteralPath $overlayFile -PathType Leaf)) {
+            $errors.Add("Falta el archivo declarado por el overlay: $($Matches.name)")
+            continue
+        }
+
+        $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $overlayFile).Hash
+        if ($actualHash -cne $Matches.hash.ToUpperInvariant()) {
+            $errors.Add("SHA-256 inválido para el archivo del overlay: $($Matches.name)")
+        }
     }
 }
 
