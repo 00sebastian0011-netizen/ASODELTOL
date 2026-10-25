@@ -1,9 +1,15 @@
-# Despliegue autorizado
+# Despliegue inmediato y controlado
 
-El único despliegue automático permitido es `.github/workflows/deploy-vps.yml`, activado por `main` cuando cambian el plugin autorizado o el propio workflow. Usa el Environment `production`, concurrencia sin cancelación y SSH con `known_hosts` verificado.
+Producción recibe eventos `push` de `main` mediante un webhook GitHub con HMAC SHA-256. El receptor persistente escucha únicamente en `127.0.0.1`, se ejecuta como el usuario sin privilegios `user` y acepta exclusivamente el repositorio, rama y SHA autorizados.
 
-Secretos requeridos en GitHub (Environment `production`): `VPS_HOST`, `VPS_PORT`, `VPS_USER`, `VPS_SSH_KEY` y `VPS_KNOWN_HOSTS`. Sus valores nunca se guardan en el repositorio ni se imprimen. La cuenta debe limitarse a la instalación indicada.
+`deploy-policy.json` separa los cambios por componente:
 
-El workflow empaqueta y verifica SHA-256, respalda el plugin activo, copia solo `plugins/local/asodeltolstaff/` a `public/local/asodeltolstaff`, ejecuta `upgrade.php` y purga cachés. No modifica `config.php`, `moodledata`, la base completa, `theme/rsmax`, logos, favicon, cursos, usuarios, matrículas ni calificaciones. No usa `git pull`, `git reset`, `git clean` ni `rsync --delete`.
+- **fast:** CSS/SCSS, AMD compilado, Mustache, imágenes, fuentes y traducciones;
+- **standard:** PHP sin esquema, versión ni Privacy API;
+- **critical:** esquema, `version.php`, privacidad o infraestructura. No se publican automáticamente.
 
-Sin los secretos y una ejecución real exitosa, el despliegue automático no se considera operativo. La primera vinculación debe validar la clave pública del servidor y probar el workflow con un cambio del plugin en `main`.
+El agente compara cada archivo afectado con el manifiesto de producción. Una modificación directa de Hostinger queda protegida como divergencia: no se sobrescribe y no impide desplegar otro componente independiente. Las publicaciones aceptadas se preparan junto al destino, conservan una copia anterior, sustituyen el componente, purgan la caché y verifican hashes y el login público. Un fallo restaura inmediatamente la copia anterior.
+
+GitHub no almacena credenciales SSH de producción. `.github/workflows/deploy-vps.yml` registra la clasificación fuera de la ruta crítica; la suite de calidad continúa ejecutándose en paralelo.
+
+Archivos de instalación del servicio: `scripts/deploy/vps/`. Los secretos, claves, estado, respaldos y manifiestos activos permanecen exclusivamente en el VPS.

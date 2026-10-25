@@ -1,0 +1,34 @@
+[Unit]
+Description=ASODELTOL signed GitHub deployment receiver
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=user
+Group=user
+EnvironmentFile=/etc/asodeltol-deploy.env
+ExecStart=/usr/bin/python3 /opt/asodeltol-deploy/receiver.py
+Restart=on-failure
+RestartSec=2s
+TimeoutStopSec=15s
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/home/user/.local/state/asodeltol-deploy
+ReadWritePaths=/home/user/.local/share/asodeltol-deploy
+ReadWritePaths=/home/user/htdocs/srv2085040.hstgr.cloud/public/theme
+ReadWritePaths=/home/user/htdocs/srv2085040.hstgr.cloud/public/local
+ReadWritePaths=/home/user/htdocs/moodledata
+
+[Install]
+WantedBy=multi-user.target

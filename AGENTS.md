@@ -90,9 +90,9 @@ Ejemplos: autenticación, autorizaciones, datos personales, calificaciones reale
 
 ### Protección visual y despliegue
 
-Los recursos institucionales se versionan solo con procedencia comprobada en `assets/branding/asodeltol/`; no se aplican automáticamente a Moodle. El despliegue de código está limitado al plugin `public/local/asodeltolstaff` mediante `scripts/deploy/deploy-asodeltol-plugin.ps1`, que requiere `-Apply` y una copia de seguridad explícita y rechaza rutas protegidas, sincronización destructiva y operaciones Git.
+Los recursos institucionales se versionan solo con procedencia comprobada en `assets/branding/asodeltol/`. El agente persistente documentado en `scripts/deploy/` puede publicar desde `main` únicamente `theme_rsmax` y `local_asodeltolstaff`, según la clasificación automática. Protege divergencias hechas directamente en Hostinger, usa respaldos por componente y no toca `config.php` principal, `moodledata`, base de datos, cursos ni archivos ajenos.
 
-El flujo ordinario, una vez configurados los secretos del Environment `production`, es cambiar código, publicar en `main`, validar y dejar que `.github/workflows/deploy-vps.yml` despliegue únicamente el plugin autorizado. Sin una ejecución real con SSH verificado no se considera operativo.
+CSS, recursos compilados, Mustache y traducciones siguen la ruta rápida; PHP sin migraciones sigue la ruta estándar. Esquema, versiones, privacidad, autenticación e infraestructura quedan bloqueados para intervención reforzada. El workflow de GitHub registra la clasificación en paralelo y no contiene credenciales SSH de producción.
 
 | Cambio | Verificación suficiente por defecto |
 | --- | --- |
