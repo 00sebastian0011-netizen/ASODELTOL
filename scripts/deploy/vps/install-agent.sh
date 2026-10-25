@@ -95,6 +95,7 @@ EOF
   chgrp user "$site_root/public/local"
   chmod g+w "$site_root/public/local"
 
+  install -d -m 0755 -o root -g root "$(dirname "$nginx_snippet")"
   install -m 0644 -o root -g root ./nginx-location.conf "$nginx_snippet"
   if ! grep -Fq 'include /etc/nginx/snippets/asodeltol-deploy.conf;' "$nginx_site"; then
     [[ ! -e "$nginx_backup" ]] || { echo "Refusing to replace existing backup: $nginx_backup" >&2; exit 7; }
