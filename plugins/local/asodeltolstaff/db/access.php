@@ -17,6 +17,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
+    'local/asodeltolstaff:publishown' => [
+        'riskbitmask' => RISK_XSS | RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        // Institution roles are deliberately not granted this capability by default.
+        'archetypes' => [],
+    ],
     'local/asodeltolstaff:viewsessions' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,

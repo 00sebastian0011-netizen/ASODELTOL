@@ -649,11 +649,14 @@ function m11_status(): void {
  * Report whether the mounted plugin version is already registered in Moodle.
  */
 function m11_plugin_status(): void {
+    global $CFG;
+    $plugin = new stdClass();
+    require($CFG->dirroot . '/local/asodeltolstaff/version.php');
     $installedversion = get_config('local_asodeltolstaff', 'version');
     echo json_encode([
         'installed' => $installedversion !== false,
         'version' => $installedversion === false ? null : (int) $installedversion,
-        'expected' => 2026102202,
+        'expected' => (int) $plugin->version,
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 

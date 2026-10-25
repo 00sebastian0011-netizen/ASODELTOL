@@ -62,5 +62,22 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2026102202, 'local', 'asodeltolstaff');
     }
 
+    if ($oldversion < 2026102400) {
+        // Reports, calendar integration and help use existing native storage.
+        // No schema, grades, roles or enrollment data are changed by this release.
+        upgrade_plugin_savepoint(true, 2026102400, 'local', 'asodeltolstaff');
+    }
+
+    if ($oldversion < 2026102401) {
+        // publishown is a new, ungranted-by-default capability. Existing content,
+        // role assignments and academic rules remain untouched.
+        upgrade_plugin_savepoint(true, 2026102401, 'local', 'asodeltolstaff');
+    }
+
+    if ($oldversion < 2026102402) {
+        // New native notification providers. Custom fields and support recipient
+        // require an explicit administrator action, never automatic role grants.
+        upgrade_plugin_savepoint(true, 2026102402, 'local', 'asodeltolstaff');
+    }
     return true;
 }

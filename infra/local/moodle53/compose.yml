@@ -60,6 +60,10 @@ services:
         target: /opt/asodeltol/scripts
         read_only: true
       - type: bind
+        source: ${ANEXO14_SCRIPTS:?ANEXO14_SCRIPTS is required}
+        target: /opt/asodeltol/anexo14
+        read_only: true
+      - type: bind
         source: ${ASODELTOL_STAFF_PLUGIN:?ASODELTOL_STAFF_PLUGIN is required}
         target: /var/www/html/public/local/asodeltolstaff
         read_only: true
