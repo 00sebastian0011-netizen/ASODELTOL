@@ -84,5 +84,18 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // Add the pending activity message provider; no role or course data changes.
         upgrade_plugin_savepoint(true, 2026102504, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102506) {
+        $schema = new xmldb_file(__DIR__ . '/install.xml');
+        if (!$schema->loadXMLStructure()) {
+            throw new coding_exception('Support schema could not be loaded');
+        }
+        foreach (['local_asstaff_case', 'local_asstaff_caseevent'] as $name) {
+            $table = $schema->getStructure()->getTable($name);
+            if (!$dbman->table_exists($table)) {
+                $dbman->create_table($table);
+            }
+        }
+        upgrade_plugin_savepoint(true, 2026102506, 'local', 'asodeltolstaff');
+    }
     return true;
 }

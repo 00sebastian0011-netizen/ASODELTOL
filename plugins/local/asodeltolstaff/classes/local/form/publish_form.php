@@ -26,7 +26,9 @@ final class publish_form extends \moodleform {
         $f->addRule('reference', null, 'required');
         $f->addElement('editor', 'body', get_string('content'), null, ['maxfiles' => 0]);
         $f->setType('body', PARAM_RAW);
-        $f->hideIf('body', 'kind', 'notin', ['page', 'assign']);
+        foreach (['url', 'resource', 'video'] as $kind) {
+            $f->hideIf('body', 'kind', 'eq', $kind);
+        }
         $f->addElement('date_time_selector', 'duedate', get_string('duedate', 'assign'), ['optional' => true]);
         $f->hideIf('duedate', 'kind', 'neq', 'assign');
         $f->addElement('url', 'externalurl', get_string('externalurl', 'url'));
@@ -37,7 +39,9 @@ final class publish_form extends \moodleform {
             'accepted_types' => ['.pdf', '.docx', '.xlsx', '.pptx', '.png', '.jpg', '.jpeg', '.mp3', '.mp4', '.vtt'],
         ]);
         $f->setType('asset', PARAM_INT);
-        $f->hideIf('asset', 'kind', 'notin', ['resource', 'video']);
+        foreach (['page', 'url', 'assign'] as $kind) {
+            $f->hideIf('asset', 'kind', 'eq', $kind);
+        }
         $this->add_action_buttons(true, get_string('publishresource', 'local_asodeltolstaff'));
     }
 

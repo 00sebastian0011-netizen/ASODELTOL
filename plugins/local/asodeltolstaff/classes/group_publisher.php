@@ -100,6 +100,11 @@ final class group_publisher {
             $info->assignsubmission_file_maxsizebytes = get_max_upload_file_size($CFG->maxbytes, $course->maxbytes);
             $info->assignsubmission_file_filetypeslist = '*';
             $info->assignsubmission_onlinetext_enabled = 0;
+            // Moodle's assignment view needs a native grade item even for an
+            // ungraded practice. Text feedback creates GRADE_TYPE_TEXT without
+            // inventing numeric grades, scales or a pass mark.
+            $info->assignfeedback_comments_enabled = 1;
+            $info->assignfeedback_comments_commentinline = 0;
             $info->teamsubmission = 0;
             $info->requireallteammemberssubmit = 0;
             $info->attemptreopenmethod = 'none';
