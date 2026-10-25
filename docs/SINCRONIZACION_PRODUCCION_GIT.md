@@ -1,3 +1,5 @@
+> **Inventario histórico (24 de octubre de 2026).** Las afirmaciones sobre versión instalada, cron, tema o ausencia de plugins describen esa captura, **no la producción actual**. Antes de operar el VPS, usar la [política de despliegue](../scripts/deploy/README.md), [AGENTS.md](../AGENTS.md) y verificar el servidor real. No corregir esta línea base retrospectivamente.
+
 # Sincronización de producción con Git
 
 ## Línea base comprobada el 24 de octubre de 2026

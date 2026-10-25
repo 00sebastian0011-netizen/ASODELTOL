@@ -1,3 +1,5 @@
+> **Documento de requisitos y alcance de misiones anteriores.** Los identificadores RF/RNF y las reglas de negocio conservan su trazabilidad. Las restricciones temporales de acceso, push y despliegue (RN-005 y RN-008) reflejan el alcance de aquella misión; para autorizaciones **vigentes**, consultar [AGENTS.md](../AGENTS.md) y la petición actual. Los 82 criterios originales y su evidencia se consultan por separado en [matriz ASODELTOL](anexo14/MATRIZ_ASODELTOL_82.md).
+
 # Requisitos y trazabilidad
 
 ## 1. Convenciones
