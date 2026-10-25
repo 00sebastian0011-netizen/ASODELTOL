@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "title": "ASODELTOL - rutas canónicas por dominio, sin estado de producción implícito",
+  "entrypoint": "AGENTS.md",
+  "domains": [
+    {
+      "id": "academic",
+      "source": "catalog/af8/catalog.json",
+      "secondary": [
+        "docs/DECISIONES_PENDIENTES.md"
+      ],
+      "why": "Inventario AF8 y vacíos; no completar por inferencia"
+    },
+    {
+      "id": "requirements",
+      "source": "docs/anexo14/MATRIZ_ASODELTOL_82.md",
+      "secondary": [
+        "docs/anexo14/TRAZABILIDAD_82_2026-10-25.json"
+      ],
+      "why": "Criterio original y evidencia fechada, no aceptación formal"
+    },
+    {
+      "id": "staff",
+      "source": "plugins/local/asodeltolstaff/version.php",
+      "secondary": [
+        "plugins/local/asodeltolstaff/tests"
+      ],
+      "why": "Versión de fuente Git y tests, no despliegue"
+    },
+    {
+      "id": "theme",
+      "source": "plugins/theme/rsmax/version.php",
+      "secondary": [
+        "docs/PROTECCION_IDENTIDAD_VISUAL.md"
+      ],
+      "why": "Código versionado; tema activo/branding se comprueban en Moodle"
+    },
+    {
+      "id": "deployment",
+      "source": "scripts/deploy/deploy-policy.json",
+      "secondary": [
+        "scripts/deploy/README.md"
+      ],
+      "why": "Lista permitida; confirmar activación y versión reales del VPS"
+    },
+    {
+      "id": "coordination",
+      "source": "docs/coordination/README.md",
+      "secondary": [],
+      "why": "Evitación de conflictos concurrentes"
+    }
+  ],
+  "historical_docs": [
+    "docs/SINCRONIZACION_PRODUCCION_GIT.md",
+    "docs/ROADMAP.md",
+    "docs/coordination/MISSION_12_HANDOFF.md",
+    "docs/anexo14/AVANCE_2026-10-25.md"
+  ],
+  "rule": "No duplicar cifras, versiones, estado de producción o decisiones en este mapa: derivarlas de la fuente correcta."
+}
