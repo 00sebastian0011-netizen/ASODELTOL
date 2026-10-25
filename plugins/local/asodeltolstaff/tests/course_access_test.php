@@ -3,7 +3,15 @@ namespace local_asodeltolstaff;
 
 defined('MOODLE_INTERNAL') || die();
 
+#[\PHPUnit\Framework\Attributes\CoversClass(course_access::class)]
 final class course_access_test extends \advanced_testcase {
+    public function test_site_course_and_guest_are_not_exportable(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $this->assertArrayNotHasKey(SITEID, course_access::exportable_courses());
+        $this->setGuestUser();
+        $this->assertSame([], course_access::exportable_courses());
+    }
     public function test_manager_can_select_course_without_enrolment(): void {
         global $DB;
         $this->resetAfterTest();

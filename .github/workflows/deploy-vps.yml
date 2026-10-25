@@ -18,11 +18,16 @@ permissions:
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     name: Validar y desplegar plugin autorizado
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 20
     steps:
+      - name: Bloqueo de seguridad antes de conexión productiva
+        run: |
+          echo '::error::Despliegue bloqueado: falta implementar y ensayar respaldo consistente de BD, recuperación, verificación funcional y validación segura del artefacto. Ver docs/anexo14/AUDITORIA_DESPLIEGUE_2026-10-25.md.'
+          exit 1
       - name: Obtener commit
         uses: actions/checkout@v4
         with: {persist-credentials: false}

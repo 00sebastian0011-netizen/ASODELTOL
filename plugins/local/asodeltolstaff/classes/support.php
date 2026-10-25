@@ -51,7 +51,7 @@ final class support {
             $message->smallmessage = $subject;
             $message->notification = 1;
             $message->contexturl = (new \moodle_url('/message/index.php', ['id' => $USER->id]))->out(false);
-            $message->contexturlname = get_string('reply');
+            $message->contexturlname = get_string('supportchannel', 'local_asodeltolstaff');
             $id = message_send($message);
             if (!$id) {
                 throw new \moodle_exception('supportfailed', 'local_asodeltolstaff');

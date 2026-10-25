@@ -23,8 +23,10 @@ def command(args, text=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--upgrade', action='store_true', help='Upgrade plugins only inside the verified private runtime')
+    parser.add_argument('--previous-evidence', type=pathlib.Path, default=OUT)
     options = parser.parse_args()
-    previous = max(OUT.glob('*-summary.json'))
+    OUT.mkdir(parents=True, exist_ok=True)
+    previous = max(options.previous_evidence.glob('*-summary.json'))
     report = json.loads(previous.read_text(encoding='utf-8'))
     workspace = report['workspace']
     assert re.fullmatch(r'/tmp/asodeltol-isolated-\d{14}', workspace)
@@ -55,8 +57,8 @@ echo 'ISOLATION_RECHECK_PASS';
     # descriptor path, keeping the configuration secret out of argv/output.
     proof = command(['docker', 'exec', '-i', '--user', 'www-data', WEB, 'php',
                      '/dev/stdin', workspace, report['database'], report['account']], probe)
-    command(['docker', 'exec', WEB, 'cp', '-a', '/var/www/html/public/local/asodeltolstaff/.',
-             workspace + '/code/public/local/asodeltolstaff/'])
+    command(['docker', 'cp', str(ROOT / 'plugins/local/asodeltolstaff') + '/.',
+             WEB + ':' + workspace + '/code/public/local/asodeltolstaff/'])
     command(['docker', 'exec', WEB, 'chown', '-R', 'www-data:www-data',
              workspace + '/code/public/local/asodeltolstaff'])
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d%H%M%S')
