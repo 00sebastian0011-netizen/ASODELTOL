@@ -1,0 +1,47 @@
+{
+  "repository": "00sebastian0011-netizen/ASODELTOL",
+  "branch": "refs/heads/main",
+  "components": [
+    {
+      "id": "theme_rsmax",
+      "source": "plugins/theme/rsmax",
+      "target": "public/theme/rsmax",
+      "excluded": ["tests/"],
+      "critical": ["db/", "version.php"],
+      "fast": [
+        "amd/build/",
+        "amd/src/",
+        "fonts/",
+        "lang/",
+        "pix/",
+        "scss/",
+        "style/",
+        "templates/"
+      ]
+    },
+    {
+      "id": "local_asodeltolstaff",
+      "source": "plugins/local/asodeltolstaff",
+      "target": "public/local/asodeltolstaff",
+      "excluded": ["tests/"],
+      "critical": [
+        "db/",
+        "version.php",
+        "classes/privacy/"
+      ],
+      "fast": [
+        "amd/build/",
+        "amd/src/",
+        "lang/",
+        "pix/",
+        "styles.css",
+        "templates/"
+      ]
+    }
+  ],
+  "criticalRepositoryPaths": [
+    ".github/workflows/deploy-vps.yml",
+    "overlays/",
+    "scripts/deploy/"
+  ]
+}
