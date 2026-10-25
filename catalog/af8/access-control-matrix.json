@@ -79,6 +79,17 @@
         "alter_audit_evidence"
       ],
       "scope_controls": ["read_only", "approved_export_capability_separate"]
+    },
+    {
+      "role_id": "sena",
+      "business_name": "SENA",
+      "moodle_basis": "custom_read_only_role_pending_institutional_approval",
+      "scope": "only_course_and_groups_explicitly_approved_by_institution",
+      "allowed_intents": ["view_only_fields_explicitly_approved_for_sena",
+        "communicate_with_beneficiaries_only_if_explicitly_approved"],
+      "forbidden_intents": ["edit_grades", "edit_users", "edit_course_content",
+        "view_unapproved_personal_data", "export_without_separate_approval", "alter_audit_evidence"],
+      "scope_controls": ["no_capability_grants_until_approval", "course_and_group_scope_required", "read_only_by_default"]
     }
   ],
   "negative_access_tests": [
@@ -151,6 +162,20 @@
       "scenario": "Intentar cambiar una actividad a modo sin grupos cuando el modo del curso está forzado.",
       "expected": "group_mode_remains_forced",
       "data_fixture": "synthetic_trainer"
+    },
+    {
+      "test_id": "NAC-011",
+      "actor_role": "sena",
+      "scenario": "Abrir por URL directa los datos personales y registros de un grupo no aprobado.",
+      "expected": "denied_and_no_personal_data_returned",
+      "data_fixture": "synthetic_two_groups"
+    },
+    {
+      "test_id": "NAC-012",
+      "actor_role": "sena",
+      "scenario": "Intentar editar notas o exportar datos sin aprobación de capacidades separadas.",
+      "expected": "denied_and_records_unchanged",
+      "data_fixture": "synthetic_sena_read_only"
     }
   ],
   "execution_gate": {

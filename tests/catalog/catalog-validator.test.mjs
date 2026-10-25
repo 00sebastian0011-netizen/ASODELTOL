@@ -149,12 +149,12 @@ test('detecta referencias a unidades inexistentes', async () => {
   assert.equal(hasError(result, 'E-UNIT-REFERENCE'), true);
 });
 
-test('la matriz cubre cuatro roles y pruebas negativas', async () => {
+test('la matriz cubre cinco perfiles de negocio y pruebas negativas', async () => {
   const matrix = await readJsonFile(accessMatrixPath);
   const result = validateAccessMatrix(matrix);
 
   assert.equal(result.valid, true, JSON.stringify(result.errors));
-  assert.deepEqual(result.summary, { roles: 4, negative_access_tests: 10 });
+  assert.deepEqual(result.summary, { roles: 5, negative_access_tests: 12 });
   assert.equal(matrix.execution_gate.synthetic_data_only, true);
   assert.equal(matrix.execution_gate.production_authorized, false);
 });

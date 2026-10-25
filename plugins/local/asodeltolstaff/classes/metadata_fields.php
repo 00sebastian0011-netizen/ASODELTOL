@@ -38,7 +38,8 @@ final class metadata_fields {
                     'defaultvalue' => '', 'displaysize' => 12, 'maxlength' => 20, 'ispassword' => 0,
                     'link' => '', 'linktarget' => ''];
                 if ($type === 'select') {
-                    $config['options'] = get_string('available') . "\n" . get_string('notavailable');
+                    $config['options'] = get_string('groupavailableoption', 'local_asodeltolstaff') . "\n"
+                        . get_string('groupunavailableoption', 'local_asodeltolstaff');
                     // Blank until a responsible administrator chooses a state.
                 }
                 $data = (object) ['name' => get_string($label, 'local_asodeltolstaff'), 'shortname' => $shortname,

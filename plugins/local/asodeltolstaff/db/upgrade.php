@@ -79,5 +79,10 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // require an explicit administrator action, never automatic role grants.
         upgrade_plugin_savepoint(true, 2026102402, 'local', 'asodeltolstaff');
     }
+
+    if ($oldversion < 2026102504) {
+        // Add the pending activity message provider; no role or course data changes.
+        upgrade_plugin_savepoint(true, 2026102504, 'local', 'asodeltolstaff');
+    }
     return true;
 }

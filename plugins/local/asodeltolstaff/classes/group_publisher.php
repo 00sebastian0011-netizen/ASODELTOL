@@ -32,8 +32,8 @@ final class group_publisher {
         if (in_array($kind, ['page', 'assign'], true) && html_is_blank($cleanhtml)) {
             throw new \invalid_parameter_exception('Page content required');
         }
-        if ($kind === 'assign' && $duedate <= 0) {
-            throw new \invalid_parameter_exception('An explicit activity due date is required');
+        if ($kind === 'assign' && $duedate <= time()) {
+            throw new \invalid_parameter_exception('A future activity due date is required');
         }
         if ($kind === 'url') {
             $parts = parse_url($url);
@@ -93,6 +93,7 @@ final class group_publisher {
             $info->submissiondrafts = 0;
             $info->requiresubmissionstatement = 0;
             $info->sendnotifications = 0;
+            $info->sendlatenotifications = 0;
             $info->sendstudentnotifications = 0;
             $info->assignsubmission_file_enabled = 1;
             $info->assignsubmission_file_maxfiles = 1;
@@ -100,6 +101,7 @@ final class group_publisher {
             $info->assignsubmission_file_filetypeslist = '*';
             $info->assignsubmission_onlinetext_enabled = 0;
             $info->teamsubmission = 0;
+            $info->requireallteammemberssubmit = 0;
             $info->attemptreopenmethod = 'none';
             $info->maxattempts = 1;
             $info->markingworkflow = 0;
@@ -120,6 +122,38 @@ final class group_publisher {
         // The narrow publishown capability and group checks above are the gate;
         // the current user remains the author in native events. No admin impersonation.
         $saved = add_moduleinfo($info, $course);
+        if ($requestedkind === 'assign') {
+            self::notify_group_activity($courseid, $groupid, (int) $saved->coursemodule, $title);
+        }
         return (int) $saved->coursemodule;
+    }
+
+    /** Notify only active beneficiaries of the selected group about a pending assignment. */
+    private static function notify_group_activity(int $courseid, int $groupid, int $cmid, string $title): void {
+        global $USER;
+        $context = \context_course::instance($courseid);
+        $users = get_enrolled_users($context, 'local/asodeltolstaff:beattended', $groupid, 'u.*', 'u.id', 0, 0, true);
+        foreach ($users as $user) {
+            if ($user->suspended || $user->deleted) {
+                continue;
+            }
+            $message = new \core\message\message();
+            $message->component = 'local_asodeltolstaff';
+            $message->name = 'activitypublished';
+            $message->userfrom = $USER;
+            $message->userto = $user;
+            $message->subject = get_string('activitypublishedsubject', 'local_asodeltolstaff');
+            $message->fullmessage = get_string('activitypublishedbody', 'local_asodeltolstaff', $title);
+            $message->fullmessageformat = FORMAT_PLAIN;
+            $message->fullmessagehtml = '';
+            $message->smallmessage = $message->subject;
+            $message->notification = 1;
+            $message->courseid = $courseid;
+            $message->contexturl = (new \moodle_url('/mod/assign/view.php', ['id' => $cmid]))->out(false);
+            $message->contexturlname = $title;
+            if (!message_send($message)) {
+                throw new \moodle_exception('supportfailed', 'local_asodeltolstaff');
+            }
+        }
     }
 }

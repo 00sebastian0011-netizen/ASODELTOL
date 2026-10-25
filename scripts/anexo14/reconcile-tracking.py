@@ -38,6 +38,21 @@ def main():
         'REQ-22-01': 'observer_scope_test: beneficiarios del propio grupo; residencia/caracterización pendientes',
         'REQ-22-02': 'observer_scope_test: API de progreso por grupo; libro de notas/UI pendientes',
     }
+    technical_evidence = {
+        'REQ-14-02': ('native_academic_fields_test: guarda identidad/descripcion/estado del grupo y metadatos de curso',
+                      ['plugins/local/asodeltolstaff/classes/metadata_fields.php',
+                       'plugins/local/asodeltolstaff/tests/native_academic_fields_test.php']),
+        'REQ-19-03': ('group_activity_notification_test: actividad/materiales visibles solo para el grupo autorizado',
+                      ['plugins/local/asodeltolstaff/classes/group_publisher.php',
+                       'plugins/local/asodeltolstaff/tests/group_activity_notification_test.php']),
+        'REQ-19-05': ('section_release_test: habilita unidad para grupo y conserva restricciones de fecha existentes',
+                      ['plugins/local/asodeltolstaff/classes/group_communication.php',
+                       'plugins/local/asodeltolstaff/tests/section_release_test.php']),
+        'REQ-20-02': ('communication_support_test y group_activity_notification_test: aviso de anuncio y actividad pendiente',
+                      ['plugins/local/asodeltolstaff/classes/group_publisher.php',
+                       'plugins/local/asodeltolstaff/tests/communication_support_test.php',
+                       'plugins/local/asodeltolstaff/tests/group_activity_notification_test.php']),
+    }
     for row in rows:
         state = row['Evidencia local documentada']
         entry = {
@@ -61,6 +76,15 @@ def main():
                          environment='Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados',
                          files=['plugins/local/asodeltolstaff/tests/communication_support_test.php',
                                 'plugins/local/asodeltolstaff/tests/observer_scope_test.php'])
+        if row['ID REQ'] in technical_evidence and unit.get('status') == 'PASS':
+            description, files = technical_evidence[row['ID REQ']]
+            entry.update(implementation=description,
+                         positive_test='PHPUnit 11.5.56 PASS; cubre el flujo técnico indicado, no el criterio integral',
+                         negative_test='Aislamiento por grupo y/o conservación de restricciones validada por el test referido',
+                         observed='Cobertura técnica parcial; estado integral y aceptación oficial conservados',
+                         evidence=str(unitpath.relative_to(ROOT)),
+                         environment='Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados',
+                         files=files)
         loadpath = ROOT / 'build/staging/load50/summary.json'
         if row['ID REQ'] in ('REQ-01-01', 'REQ-01-02') and loadpath.exists():
             load = json.loads(loadpath.read_text())
