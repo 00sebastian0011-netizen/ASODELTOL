@@ -88,6 +88,10 @@ Ejemplos: autenticación, autorizaciones, datos personales, calificaciones reale
 
 ## 7. Verificación eficiente y definición de terminado
 
+### Protección visual y despliegue
+
+Los recursos institucionales se versionan solo con procedencia comprobada en `assets/branding/asodeltol/`; no se aplican automáticamente a Moodle. El despliegue de código está limitado al plugin `public/local/asodeltolstaff` mediante `scripts/deploy/deploy-asodeltol-plugin.ps1`, que requiere `-Apply` y una copia de seguridad explícita y rechaza rutas protegidas, sincronización destructiva y operaciones Git.
+
 | Cambio | Verificación suficiente por defecto |
 | --- | --- |
 | Documentación o textos | Diff, ortografía/enlaces, sin secretos |
