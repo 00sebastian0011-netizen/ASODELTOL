@@ -1,0 +1,94 @@
+name: Despliegue seguro ASODELTOL
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/local/asodeltolstaff/**'
+      - 'scripts/deploy/**'
+      - '.github/workflows/deploy-vps.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: asodeltol-production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Validar y desplegar plugin autorizado
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    steps:
+      - name: Obtener commit
+        uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - name: Ejecutar pruebas y validaciones
+        run: |
+          npm run quality
+          test -f plugins/local/asodeltolstaff/version.php
+          ! find plugins/local/asodeltolstaff -type f \( -name 'config.php' -o -name '.env' -o -name '*.sql' -o -name '*.key' -o -name '*.pem' \) | grep .
+          ! grep -RInE 'rsync[[:space:]].*--delete|git[[:space:]]+(pull|reset|clean)|moodledata|theme/rsmax' scripts/deploy plugins/local/asodeltolstaff
+      - name: Empaquetar y calcular SHA-256
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          tar --sort=name --owner=0 --group=0 --numeric-owner -czf dist/asodeltolstaff.tgz -C plugins/local asodeltolstaff
+          sha256sum dist/asodeltolstaff.tgz | tee dist/asodeltolstaff.tgz.sha256
+          echo "RELEASE_SHA=${GITHUB_SHA}" >> "$GITHUB_ENV"
+      - name: Preparar SSH verificado
+        env:
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$VPS_KNOWN_HOSTS" && test -n "$VPS_SSH_KEY"
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          printf '%s\n' "$VPS_SSH_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+      - name: Respaldo, instalación y actualización Moodle
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          RELEASE_SHA: ${{ env.RELEASE_SHA }}
+        run: |
+          set -euo pipefail
+          test -n "$VPS_HOST" && test -n "$VPS_USER" && test -n "$VPS_PORT"
+          scp -q -P "$VPS_PORT" -i "$HOME/.ssh/deploy_key" dist/asodeltolstaff.tgz dist/asodeltolstaff.tgz.sha256 "$VPS_USER@$VPS_HOST:/tmp/"
+          ssh -q -p "$VPS_PORT" -i "$HOME/.ssh/deploy_key" "$VPS_USER@$VPS_HOST" "RELEASE_SHA='$RELEASE_SHA' bash -s" <<'REMOTE'
+          set -euo pipefail
+          root='/home/user/htdocs/srv2085040.hstgr.cloud'
+          target="$root/public/local/asodeltolstaff"
+          test "$target" = '/home/user/htdocs/srv2085040.hstgr.cloud/public/local/asodeltolstaff'
+          test -d "$root/public" && test -f "$root/config.php"
+          test ! -e "$root/public/theme/rsmax" || test -d "$root/public/theme/rsmax"
+          test ! -e "$root/moodledata" || test -d "$root/moodledata"
+          sha256sum -c /tmp/asodeltolstaff.tgz.sha256
+          available=$(df -Pk "$root" | awk 'NR==2 {print $4}')
+          test "$available" -gt 10240
+          stamp=$(date -u +%Y%m%dT%H%M%SZ)
+          backup="$root/.deploy-backups/asodeltolstaff-$stamp-$RELEASE_SHA"
+          mkdir -p "$backup"
+          test ! -e "$backup/config.php" && test ! -e "$backup/moodledata"
+          if test -d "$target"; then cp -a "$target" "$backup/plugin"; fi
+          tmp=$(mktemp -d "$root/.asodeltolstaff.XXXXXX")
+          trap 'rm -rf "$tmp" /tmp/asodeltolstaff.tgz /tmp/asodeltolstaff.tgz.sha256' EXIT
+          tar -xzf /tmp/asodeltolstaff.tgz -C "$tmp"
+          test -f "$tmp/asodeltolstaff/version.php"
+          cp -a "$tmp/asodeltolstaff/." "$target/"
+          /usr/bin/php8.4 "$root/admin/cli/upgrade.php" --non-interactive
+          /usr/bin/php8.4 "$root/admin/cli/purge_caches.php"
+          test "$(stat -c '%U' "$target/version.php")" = 'user'
+          echo "DEPLOYED_SHA=$RELEASE_SHA BACKUP=$backup"
+          REMOTE
+      - name: Verificar aula pública
+        env: {RELEASE_SHA: ${{ env.RELEASE_SHA }}}
+        run: |
+          set -euo pipefail
+          test "$(curl -fsSL -o /dev/null -w '%{http_code}' https://aulaasodeltol.online/)" = 200
+          echo "Aula verificada para commit $RELEASE_SHA"

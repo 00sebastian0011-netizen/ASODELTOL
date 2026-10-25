@@ -3,12 +3,7 @@
 require_once('../../config.php');
 require_login();
 $courseid = optional_param('courseid', 0, PARAM_INT);
-$courses = [];
-foreach (enrol_get_users_courses($USER->id, true, 'id,fullname,shortname,visible') as $candidate) {
-    if ($candidate->visible && has_capability('local/asodeltolstaff:export', context_course::instance($candidate->id))) {
-        $courses[$candidate->id] = $candidate;
-    }
-}
+$courses = \local_asodeltolstaff\course_access::exportable_courses();
 if (!$courses) {
     throw new moodle_exception('nopermissions', 'error', '', get_string('reportsdownloads', 'local_asodeltolstaff'));
 }

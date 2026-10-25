@@ -1,19 +1,9 @@
-# Puertas de despliegue
+# Despliegue autorizado
 
-Esta carpeta no contiene una conexión ni una orden de despliegue. Sin inventario, rutas, estrategia de backups y aprobación de cambio, automatizar una copia remota sería inseguro.
+El único despliegue automático permitido es `.github/workflows/deploy-vps.yml`, activado por `main` cuando cambian el plugin autorizado o el propio workflow. Usa el Environment `production`, concurrencia sin cancelación y SSH con `known_hosts` verificado.
 
-El control preparado en esta etapa es `verify-release.ps1`, que opera únicamente sobre `build/` y valida:
+Secretos requeridos en GitHub (Environment `production`): `VPS_HOST`, `VPS_PORT`, `VPS_USER`, `VPS_SSH_KEY` y `VPS_KNOWN_HOSTS`. Sus valores nunca se guardan en el repositorio ni se imprimen. La cuenta debe limitarse a la instalación indicada.
 
-- manifiesto generado por el empaquetador;
-- presencia de cada archivo ZIP;
-- checksum SHA-256;
-- un único directorio raíz con el nombre correcto del plugin;
-- ausencia de rutas absolutas o recorridos `..` dentro del ZIP.
+El workflow empaqueta y verifica SHA-256, respalda el plugin activo, copia solo `plugins/local/asodeltolstaff/` a `public/local/asodeltolstaff`, ejecuta `upgrade.php` y purga cachés. No modifica `config.php`, `moodledata`, la base completa, `theme/rsmax`, logos, favicon, cursos, usuarios, matrículas ni calificaciones. No usa `git pull`, `git reset`, `git clean` ni `rsync --delete`.
 
-Uso futuro:
-
-```powershell
-powershell -NoProfile -File scripts/deploy/verify-release.ps1 -ReleaseDirectory build/release-AAAAMMDD-HHMMSS
-```
-
-Después de esta puerta, un operador autorizado debe seguir `docs/OPERACION.md`. Verificar un paquete no autoriza instalarlo.
+Sin los secretos y una ejecución real exitosa, el despliegue automático no se considera operativo. La primera vinculación debe validar la clave pública del servidor y probar el workflow con un cambio del plugin en `main`.
