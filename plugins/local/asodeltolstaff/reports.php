@@ -7,7 +7,10 @@ $courses = \local_asodeltolstaff\course_access::exportable_courses();
 if (!$courses) {
     throw new moodle_exception('nopermissions', 'error', '', get_string('reportsdownloads', 'local_asodeltolstaff'));
 }
-if (!$courseid || !isset($courses[$courseid])) {
+if ($courseid && !isset($courses[$courseid])) {
+    throw new moodle_exception('nopermissions', 'error', '', get_string('reportsdownloads', 'local_asodeltolstaff'));
+}
+if (!$courseid) {
     $PAGE->set_url(new moodle_url('/local/asodeltolstaff/reports.php'));
     $PAGE->set_context(context_system::instance());
     $PAGE->set_title(get_string('reportsdownloads', 'local_asodeltolstaff'));
@@ -16,13 +19,17 @@ if (!$courseid || !isset($courses[$courseid])) {
     echo $OUTPUT->heading(get_string('reportsdownloads', 'local_asodeltolstaff'));
     echo html_writer::tag('p', get_string('reportcourseselect', 'local_asodeltolstaff'));
     echo html_writer::start_tag('form', ['method' => 'get']);
-    echo html_writer::select(array_column($courses, 'fullname', 'id'), 'courseid', '', get_string('choosedots'), ['class' => 'form-select mb-3']);
+    echo html_writer::label(get_string('course'), 'id_reportcourse');
+    $options = array_map(static fn($item) => format_string($item->fullname,
+        true, ['context' => context_course::instance($item->id)]), $courses);
+    echo html_writer::select($options, 'courseid', '', get_string('choosedots'),
+        ['id' => 'id_reportcourse', 'class' => 'form-select mb-3']);
     echo html_writer::empty_tag('input', ['type' => 'submit', 'value' => get_string('continue'), 'class' => 'btn btn-primary']);
     echo html_writer::end_tag('form');
     echo $OUTPUT->footer();
     exit;
 }
-$course = $courses[$courseid];
+$course = get_course($courseid);
 $context = context_course::instance($courseid);
 require_course_login($course);
 require_capability('local/asodeltolstaff:export', $context);
