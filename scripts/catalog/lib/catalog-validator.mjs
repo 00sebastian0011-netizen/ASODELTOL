@@ -39,7 +39,7 @@ const VALID_MOODLE_TYPES = new Set([
   'forum'
 ]);
 
-const REQUIRED_ROLE_IDS = ['administrator', 'trainer', 'student', 'auditor'];
+const REQUIRED_ROLE_IDS = ['administrator', 'trainer', 'student', 'auditor', 'sena'];
 
 export async function readJsonFile(filePath) {
   const raw = await readFile(filePath, 'utf8');
@@ -433,8 +433,8 @@ export function validateAccessMatrix(matrix) {
   }
 
   const roles = asArray(matrix.roles);
-  if (roles.length !== 4) {
-    error(issues, 'E-ROLE-COUNT', '$.roles', `Deben existir exactamente 4 roles de negocio; existen ${roles.length}.`);
+  if (roles.length !== 5) {
+    error(issues, 'E-ROLE-COUNT', '$.roles', `Deben existir exactamente 5 roles de negocio; existen ${roles.length}.`);
   }
   validateUniqueValues(issues, roles, 'role_id', '$.roles', 'E-DUPLICATE-ROLE');
   const roleIds = roles.map((role) => role?.role_id);
@@ -458,7 +458,7 @@ export function validateAccessMatrix(matrix) {
     error(issues, 'E-NEGATIVE-TEST-COUNT', '$.negative_access_tests', 'Se requieren al menos 8 pruebas negativas.');
   }
   const testRoles = new Set(tests.map((test) => test?.actor_role));
-  for (const roleId of ['student', 'trainer', 'auditor']) {
+  for (const roleId of ['student', 'trainer', 'auditor', 'sena']) {
     if (!testRoles.has(roleId)) {
       error(issues, 'E-NEGATIVE-TEST-ROLE', '$.negative_access_tests', `Faltan pruebas negativas para ${roleId}.`);
     }

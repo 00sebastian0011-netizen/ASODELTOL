@@ -85,6 +85,6 @@ final class group_communication {
             $conditions[] = json_decode($section->availability, true, 32, JSON_THROW_ON_ERROR);
         }
         $availability = json_encode(['op' => '&', 'c' => $conditions, 'showc' => array_fill(0, count($conditions), false)]);
-        course_update_section($courseid, $section->section, (object) ['availability' => $availability, 'visible' => 1]);
+        course_update_section($courseid, $section, (object) ['availability' => $availability, 'visible' => 1]);
     }
 }
