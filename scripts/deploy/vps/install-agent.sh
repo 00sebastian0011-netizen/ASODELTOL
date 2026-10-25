@@ -117,7 +117,13 @@ PY
   systemctl daemon-reload
   systemctl enable --now asodeltol-deploy.service
   systemctl reload nginx
-  curl --fail --silent --show-error --max-time 3 http://127.0.0.1:8765/healthz >/dev/null
+  for attempt in {1..10}; do
+    if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:8765/healthz >/dev/null 2>&1; then
+      break
+    fi
+    [[ "$attempt" -lt 10 ]] || { echo 'Deployment receiver did not become healthy.' >&2; exit 8; }
+    sleep 1
+  done
   echo 'AGENT_STATUS=active'
 }
 
