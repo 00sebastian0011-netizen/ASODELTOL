@@ -1,7 +1,7 @@
 {
   "source": "ASODELTOL_Seguimiento_Codex_82_requisitos.xlsx",
   "source_sha256": "471211ab14eebe3c7d465ba7848c32837d98d37ab4187fe00cddb4adb11f3a28",
-  "base_commit": "17638ff34ba08848a4665f79753800a938d18387",
+  "base_commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
   "total": 82,
   "counts": {
     "PENDIENTE": 19,
@@ -852,15 +852,18 @@
       "criterion": "El formulario incluye y guarda: nombre y numeración, descripción, estado disponible / no disponible y acción de formación a la que pertenece.",
       "previous_state": "PENDIENTE",
       "state": "PENDIENTE",
-      "implementation": "Conservar implementación existente; revisión integral todavía abierta",
-      "files": [],
-      "positive_test": "Sin nueva prueba integral acreditada para este criterio",
-      "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Comprobar campos estado disponible/no disponible, descripción y relación con curso; grupos estándar pueden no incluirlos directamente.",
-      "environment": "Histórico local; nueva batería aislada se registra por separado",
-      "commit": "17638ff34ba08848a4665f79753800a938d18387",
-      "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
+      "implementation": "native_academic_fields_test: guarda identidad, descripción y vínculo del grupo; registra disponibilidad administrativa y metadatos descriptivos del curso",
+      "files": [
+        "plugins/local/asodeltolstaff/classes/metadata_fields.php",
+        "plugins/local/asodeltolstaff/tests/native_academic_fields_test.php"
+      ],
+      "positive_test": "PHPUnit 55 casos PASS; cobertura técnica parcial del criterio",
+      "negative_test": "Denegación entre grupos y/o conservación de restricción académica verificada por los tests asociados",
+      "observed": "Evidencia técnica local parcial; se conserva el estado integral y no se acredita aceptación institucional",
+      "evidence": "build\\staging\\anexo14-isolated\\20261025134934-summary.json",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13; base PHPUnit privada y dataroot separado",
+      "commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
+      "production": "NO VERIFICADA; sin despliegue VPS",
       "dependency": "Pruebas técnicas y aprobación",
       "next_action": "Completar/ajustar implementación y ejecutar prueba integral con evidencia.",
       "formal_acceptance": "NO ACREDITADA"
@@ -1089,15 +1092,18 @@
       "criterion": "Un video, un material y una actividad publicados por el capacitador son visibles para el beneficiario.",
       "previous_state": "PENDIENTE",
       "state": "PENDIENTE",
-      "implementation": "Conservar implementación existente; revisión integral todavía abierta",
-      "files": [],
-      "positive_test": "Sin nueva prueba integral acreditada para este criterio",
-      "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Publicación de video URL, PDF y actividad desde perfil capacitador aún sin prueba documentada.",
-      "environment": "Histórico local; nueva batería aislada se registra por separado",
-      "commit": "17638ff34ba08848a4665f79753800a938d18387",
-      "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
+      "implementation": "group_activity_notification_test: publica material y actividad con visibilidad restringida al grupo autorizado",
+      "files": [
+        "plugins/local/asodeltolstaff/classes/group_publisher.php",
+        "plugins/local/asodeltolstaff/tests/group_activity_notification_test.php"
+      ],
+      "positive_test": "PHPUnit 55 casos PASS; cobertura técnica parcial del criterio",
+      "negative_test": "Denegación entre grupos y/o conservación de restricción académica verificada por los tests asociados",
+      "observed": "Evidencia técnica local parcial; se conserva el estado integral y no se acredita aceptación institucional",
+      "evidence": "build\\staging\\anexo14-isolated\\20261025134934-summary.json",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13; base PHPUnit privada y dataroot separado",
+      "commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
+      "production": "NO VERIFICADA; sin despliegue VPS",
       "dependency": "Pruebas técnicas y aprobación",
       "next_action": "Completar/ajustar implementación y ejecutar prueba integral con evidencia.",
       "formal_acceptance": "NO ACREDITADA"
@@ -1125,15 +1131,18 @@
       "criterion": "Un módulo abierto por el capacitador queda disponible para el grupo.",
       "previous_state": "PENDIENTE",
       "state": "PENDIENTE",
-      "implementation": "Conservar implementación existente; revisión integral todavía abierta",
-      "files": [],
-      "positive_test": "Sin nueva prueba integral acreditada para este criterio",
-      "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Apertura secuencial comprobada con reglas sintéticas; requiere criterio oficial y prueba por grupo.",
-      "environment": "Histórico local; nueva batería aislada se registra por separado",
-      "commit": "17638ff34ba08848a4665f79753800a938d18387",
-      "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
+      "implementation": "section_release_test: habilita una unidad para el grupo autorizado y conserva la condición de fecha existente",
+      "files": [
+        "plugins/local/asodeltolstaff/classes/group_communication.php",
+        "plugins/local/asodeltolstaff/tests/section_release_test.php"
+      ],
+      "positive_test": "PHPUnit 55 casos PASS; cobertura técnica parcial del criterio",
+      "negative_test": "Denegación entre grupos y/o conservación de restricción académica verificada por los tests asociados",
+      "observed": "Evidencia técnica local parcial; se conserva el estado integral y no se acredita aceptación institucional",
+      "evidence": "build\\staging\\anexo14-isolated\\20261025134934-summary.json",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13; base PHPUnit privada y dataroot separado",
+      "commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
+      "production": "NO VERIFICADA; sin despliegue VPS",
       "dependency": "Pruebas técnicas y aprobación",
       "next_action": "Completar/ajustar implementación y ejecutar prueba integral con evidencia.",
       "formal_acceptance": "NO ACREDITADA"
@@ -1197,18 +1206,19 @@
       "criterion": "Aparece una notificación por una actividad pendiente y otra por un anuncio nuevo del capacitador.",
       "previous_state": "PENDIENTE",
       "state": "PENDIENTE",
-      "implementation": "communication_support_test: aviso de anuncio; pendiente aviso de actividad",
+      "implementation": "communication_support_test y group_activity_notification_test: prueba aviso de anuncio y notificación de actividad pendiente",
       "files": [
+        "plugins/local/asodeltolstaff/classes/group_publisher.php",
         "plugins/local/asodeltolstaff/tests/communication_support_test.php",
-        "plugins/local/asodeltolstaff/tests/observer_scope_test.php"
+        "plugins/local/asodeltolstaff/tests/group_activity_notification_test.php"
       ],
-      "positive_test": "Batería PHPUnit privada PASS; cobertura parcial del criterio",
-      "negative_test": "Denegación entre grupos / destinatario no configurado según caso",
-      "observed": "Prueba técnica parcial; estado integral conservado",
-      "evidence": "build\\staging\\anexo14-isolated\\20261025054505-summary.json",
-      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
-      "commit": "17638ff34ba08848a4665f79753800a938d18387",
-      "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
+      "positive_test": "PHPUnit 55 casos PASS; cobertura técnica parcial del criterio",
+      "negative_test": "Denegación entre grupos y/o conservación de restricción académica verificada por los tests asociados",
+      "observed": "Evidencia técnica local parcial; se conserva el estado integral y no se acredita aceptación institucional",
+      "evidence": "build\\staging\\anexo14-isolated\\20261025134934-summary.json",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13; base PHPUnit privada y dataroot separado",
+      "commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
+      "production": "NO VERIFICADA; sin despliegue VPS",
       "dependency": "Identidad, caracterización y roles",
       "next_action": "Completar/ajustar implementación y ejecutar prueba integral con evidencia.",
       "formal_acceptance": "NO ACREDITADA"
@@ -1510,5 +1520,6 @@
       "next_action": "Conservar implementación; ampliar regresión y validar en producción con permisos.",
       "formal_acceptance": "NO ACREDITADA"
     }
-  ]
+  ],
+  "evidence_updated_at": "2026-10-25T13:51:56.254103+00:00"
 }
