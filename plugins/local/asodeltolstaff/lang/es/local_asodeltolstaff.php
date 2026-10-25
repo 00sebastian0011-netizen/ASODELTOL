@@ -86,6 +86,9 @@ $string['validation_saved'] = 'Se registró la validación administrativa.';
 $string['validationstatus'] = 'Estado de validación';
 
 $string['additionalreports'] = 'Reportes de matr?cula y finalizaci?n';
+$string['reportsdownloads'] = 'Reportes y descargas';
+$string['reportcourseselect'] = 'Selecciona un curso autorizado para consultar sus reportes y descargas.';
+$string['reportsessions'] = 'Sesiones y asistencia';
 $string['reportmeaning'] = 'El consolidado cuenta una sola vez a cada beneficiario. La finalizaci?n corresponde a la configuraci?n vigente del curso en Moodle; no demuestra asistencia.';
 $string['reportdataset'] = 'Reporte';
 $string['reportparticipants'] = 'Beneficiarios matriculados por grupo';

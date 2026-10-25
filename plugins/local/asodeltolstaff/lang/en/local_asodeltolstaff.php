@@ -86,6 +86,9 @@ $string['validation_saved'] = 'The administrative validation was recorded.';
 $string['validationstatus'] = 'Validation state';
 
 $string['additionalreports'] = 'Enrollment and completion reports';
+$string['reportsdownloads'] = 'Reports and downloads';
+$string['reportcourseselect'] = 'Select an authorised course to view its reports and downloads.';
+$string['reportsessions'] = 'Sessions and attendance';
 $string['reportmeaning'] = 'Enrollment is counted once per learner in the consolidated report. Completion reflects the current Moodle course configuration; it does not prove attendance.';
 $string['reportdataset'] = 'Report';
 $string['reportparticipants'] = 'Enrolled learners by group';

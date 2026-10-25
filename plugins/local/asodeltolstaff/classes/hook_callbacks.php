@@ -15,5 +15,13 @@ final class hook_callbacks {
                 new \moodle_url('/local/asodeltolstaff/support.php'), \navigation_node::TYPE_CUSTOM,
                 null, 'asodeltol_support');
         }
+        foreach (enrol_get_users_courses($GLOBALS['USER']->id, true, 'id,fullname,visible') as $course) {
+            if ($course->visible && has_capability('local/asodeltolstaff:export', \context_course::instance($course->id))) {
+                $hook->get_primaryview()->add(get_string('reportsdownloads', 'local_asodeltolstaff'),
+                    new \moodle_url('/local/asodeltolstaff/reports.php'), \navigation_node::TYPE_CUSTOM,
+                    null, 'asodeltol_reports_downloads');
+                break;
+            }
+        }
     }
 }
