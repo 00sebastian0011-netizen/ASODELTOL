@@ -10,6 +10,7 @@ $runtimeRoot = [System.IO.Path]::GetFullPath((Join-Path $repoRoot 'build\staging
 $moodleSource = Join-Path $runtimeRoot 'moodle'
 $artifactsDirectory = Join-Path $runtimeRoot 'artifacts'
 $bundleDirectory = Join-Path $artifactsDirectory 'bundle'
+$anexo14Scripts = Join-Path $repoRoot 'scripts\anexo14'
 $secretsDirectory = Join-Path $runtimeRoot 'secrets'
 $evidencePath = Join-Path $runtimeRoot 'evidence.json'
 $environmentFile = Join-Path $runtimeRoot 'compose.env'
@@ -101,9 +102,23 @@ if (-not (Test-Path -LiteralPath (Join-Path $moodleSource '.git') -PathType Cont
     }
     New-Item -ItemType Directory -Path $moodleSource | Out-Null
     Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'init')
+    Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'config', 'core.longpaths', 'true')
     Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'remote', 'add', 'origin', $moodleRepository)
     Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'fetch', '--depth', '1', 'origin', $moodleCommit)
     Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'switch', '--detach', $moodleCommit)
+}
+
+Invoke-Checked -Program 'git' -Arguments @('-C', $moodleSource, 'config', 'core.longpaths', 'true')
+$missingMoodleFiles = @(& git -C $moodleSource ls-files --deleted)
+if ($LASTEXITCODE -ne 0) {
+    throw 'No fue posible verificar que el clon Moodle tenga todos sus archivos.'
+}
+if ($missingMoodleFiles.Count -gt 0) {
+    & git -C $moodleSource checkout-index --all
+    $remainingMoodleFiles = @(& git -C $moodleSource ls-files --deleted)
+    if ($LASTEXITCODE -ne 0 -or $remainingMoodleFiles.Count -gt 0) {
+        throw 'El clon Moodle sigue incompleto; no se iniciará el staging.'
+    }
 }
 
 $actualOrigin = (& git -C $moodleSource remote get-url origin).Trim()
@@ -158,6 +173,8 @@ unset($dbpassword);
 
 $CFG->wwwroot = 'http://127.0.0.1:8053';
 $CFG->dataroot = '/var/www/moodledata';
+$CFG->phpunit_prefix = 'phpu_';
+$CFG->phpunit_dataroot = '/tmp/asodeltol-moodle53-phpunitdata';
 $CFG->admin = 'admin';
 $CFG->directorypermissions = 0770;
 $CFG->noemailever = true;
@@ -188,6 +205,7 @@ $environmentLines.Add('MOODLE_PORT=8053')
 $environmentLines.Add('MOODLE_SOURCE=' + (Convert-ToComposePath $moodleSource))
 $environmentLines.Add('STAGING_ARTIFACTS=' + (Convert-ToComposePath $artifactsDirectory))
 $environmentLines.Add('STAGING_SCRIPTS=' + (Convert-ToComposePath $PSScriptRoot))
+$environmentLines.Add('ANEXO14_SCRIPTS=' + (Convert-ToComposePath $anexo14Scripts))
 $environmentLines.Add('ASODELTOL_STAFF_PLUGIN=' + (Convert-ToComposePath (Join-Path $repoRoot 'plugins\local\asodeltolstaff')))
 foreach ($entry in $secretPaths.GetEnumerator()) {
     $environmentLines.Add($entry.Key + '=' + (Convert-ToComposePath $entry.Value))

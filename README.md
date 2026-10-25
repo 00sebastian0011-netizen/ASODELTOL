@@ -4,7 +4,7 @@ Repositorio de ingeniería para extender y operar de forma controlada la instala
 
 ## Estado
 
-El proyecto dispone de Moodle 5.3, el curso AF8, siete grupos, plantilla reutilizable, progresión secuencial y extensiones propias. El código versionado puede validarse en entornos aislados y publicarse o desplegarse mediante un flujo autorizado, trazable y reversible. La presencia de un componente en Git no demuestra por sí sola que esté instalado o activo en producción.
+Las Misiones 01–10 dejaron un Moodle 5.3 local aislado con el curso AF8 piloto, siete grupos, datos exclusivamente sintéticos, plantilla reutilizable y progresión secuencial validada. La Misión 11 incorpora el primer plugin instalable, `local_asodeltolstaff`, para demostrar sesiones, asistencia provisional, tiempos programado/reportado/validado, historial y reportes por grupo. El plugin y sus datos continúan limitados al staging local; no se aplicaron cambios a producción.
 
 Objetivo formal de compatibilidad ([ADR-0004](docs/adr/0004-objetivo-moodle-53-lts-y-documentroot-public.md)): **Moodle 5.3 LTS y PHP 8.4**. La rama previa Moodle 5.0.10+ finalizó su soporte de seguridad el 5 de octubre de 2026. Moodle 5.3 LTS garantiza soporte extendido de parches hasta octubre de 2029. La actualización requiere la reconfiguración del servidor web (NGINX/CloudPanel) para apuntar el DocumentRoot exclusivamente a `/public` (cambio arquitectónico de Moodle 5.1+) y validar la base de datos (MariaDB $\ge$ 11.4 o MySQL $\ge$ 8.4) antes de desplegar código.
 
@@ -30,18 +30,17 @@ Las inconsistencias sobre el número de ítems y recursos se conservan abiertas;
 catalog/       Fuente académica AF8, esquema y matriz de acceso
 config/        Configuración versionada de herramientas, nunca secretos
 docs/          Arquitectura, requisitos, seguridad, operación, ADR y coordinación
-overlays/      Divergencias reproducibles y verificadas respecto de Moodle oficial
 plugins/       Código fuente futuro de plugins propios, separado por tipo Moodle
-scripts/       Validaciones, empaquetado y operaciones controladas
+scripts/       Validaciones y empaquetado local; no despliega a producción
 tests/         Estrategia y activos transversales de prueba
 ```
 
-Los plugins se desarrollan aquí y se prueban primero en una instalación aislada de Moodle 5.3. Su despliegue a producción se realiza únicamente cuando la solicitud vigente lo autoriza, con respaldo, validación y reversión proporcionales al riesgo. No se debe convertir este repositorio en una copia del árbol completo de Moodle.
+Los plugins se desarrollan aquí y se prueban montándolos o copiándolos a una instalación **local o efímera** de Moodle 5.3. No se debe convertir este repositorio en una copia del árbol completo de Moodle.
 
 ## Inicio seguro
 
 1. Leer [AGENTS.md](AGENTS.md), [requisitos](docs/REQUERIMIENTOS.md) y [decisiones pendientes](docs/DECISIONES_PENDIENTES.md).
-2. Revisar la rama y el estado de Git. Usar una rama o `worktree` separado cuando existan cambios concurrentes o riesgo de solapamiento.
+2. Trabajar en una rama o `git worktree` exclusivo y reclamar los archivos según [coordinación](docs/coordination/README.md).
 3. Usar únicamente datos sintéticos en desarrollo y pruebas.
 4. Ejecutar la validación local:
 
@@ -91,9 +90,10 @@ Los paquetes se escriben en `build/`, que está ignorado por Git. El empaquetado
 - [Aprovisionamiento reproducible de AF8](docs/APROVISIONAMIENTO_AF8.md)
 - [Guía de auditoría independiente de la Misión 04](docs/AUDITORIA_MISION_04.md)
 - [Decisiones pendientes](docs/DECISIONES_PENDIENTES.md)
+- [Plan de tareas del Anexo 14 — ASOCODEM-AF1](docs/anexo14/PLAN_TAREAS.md)
+- [Smoke test sintético del Anexo 14](scripts/anexo14/README.md)
 - [Fuentes técnicas](docs/FUENTES.md)
-- [Sincronización de producción con Git](docs/SINCRONIZACION_PRODUCCION_GIT.md)
 
-## Autorizaciones y límites operativos
+## Límites operativos
 
-Git, GitHub, SSH, Hostinger, CloudPanel y los despliegues pueden utilizarse cuando la solicitud vigente los autoriza y existe acceso legítimo. La autorización para publicar o desplegar no permite exponer secretos o datos personales, alterar reglas académicas, ejecutar operaciones destructivas, cambiar servicios con costo ni modificar el núcleo de Moodle sin una autorización específica. Antes de intervenir producción se identifica la versión activa, se protege el punto de recuperación y se conserva una ruta de reversión.
+No se autoriza desde este repositorio: acceso SSH, lectura de credenciales, cambios en el VPS, ejecución contra producción, `push`, despliegues, reinstalación de Moodle ni modificaciones del código fuente del núcleo.

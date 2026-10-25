@@ -38,6 +38,9 @@ final class provider implements
      * @return collection
      */
     public static function get_metadata(collection $collection): collection {
+        $collection->add_subsystem_link('core_calendar', [], 'privacy:metadata:calendar');
+        $collection->add_subsystem_link('core_message', [], 'privacy:metadata:messages');
+        $collection->add_subsystem_link('core_customfield', [], 'privacy:metadata:customfields');
         $collection->add_database_table('local_asstaff_session', [
             'trainerid' => 'privacy:metadata:session:trainerid',
             'createdby' => 'privacy:metadata:session:createdby',

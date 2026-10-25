@@ -459,25 +459,69 @@ final class manager {
         require_capability('local/asodeltolstaff:export', $context);
         $course = get_course($courseid);
         $modinfo = get_fast_modinfo($course);
-        $rows = [];
-        foreach (self::get_accessible_sessions($courseid) as $session) {
-            $group = $DB->get_record('groups', ['id' => $session->groupid], 'id,name', MUST_EXIST);
-            $sectioninfo = $modinfo->get_section_info((int) $session->sectionnum, MUST_EXIST);
-            $trainer = core_user::get_user((int) $session->trainerid, '*', IGNORE_MISSING);
-            $validator = empty($session->validatedby)
-                ? null
-                : core_user::get_user((int) $session->validatedby, '*', IGNORE_MISSING);
-            $attendance = $DB->get_records('local_asstaff_attendance', ['sessionid' => $session->id], 'studentid');
-            if (!$attendance) {
-                $attendance = [(object) ['studentid' => 0, 'status' => '']];
+        $sessions = self::get_accessible_sessions($courseid);
+        if (!$sessions) {
+            return [];
+        }
+
+        $sessionids = array_map(static fn(stdClass $session): int => (int) $session->id, $sessions);
+        $groupids = array_unique(array_map(static fn(stdClass $session): int => (int) $session->groupid, $sessions));
+        $groups = $DB->get_records_list('groups', 'id', $groupids, '', 'id,name');
+        $attendances = $DB->get_records_list(
+            'local_asstaff_attendance',
+            'sessionid',
+            $sessionids,
+            'sessionid, studentid',
+            'id, sessionid, studentid, status'
+        );
+        $attendancebysession = [];
+        $userids = [];
+        foreach ($sessions as $session) {
+            $userids[] = (int) $session->trainerid;
+            if (!empty($session->validatedby)) {
+                $userids[] = (int) $session->validatedby;
             }
-            foreach ($attendance as $entry) {
-                $student = empty($entry->studentid)
-                    ? null
-                    : core_user::get_user((int) $entry->studentid, '*', IGNORE_MISSING);
+        }
+        foreach ($attendances as $attendance) {
+            $attendancebysession[(int) $attendance->sessionid][] = $attendance;
+            if (!empty($attendance->studentid)) {
+                $userids[] = (int) $attendance->studentid;
+            }
+        }
+        $userids = array_values(array_unique($userids));
+        $userfields = \core_user\fields::get_name_fields();
+        $users = $DB->get_records_list(
+            'user',
+            'id',
+            $userids,
+            '',
+            'id,' . implode(',', $userfields)
+        );
+
+        $rows = [];
+        foreach ($sessions as $session) {
+            $group = $groups[$session->groupid] ?? null;
+            if (!$group) {
+                throw new moodle_exception('invalidgroup');
+            }
+            $sectioninfo = $modinfo->get_section_info((int) $session->sectionnum, MUST_EXIST);
+            $trainer = $users[$session->trainerid] ?? null;
+            $validator = empty($session->validatedby) ? null : ($users[$session->validatedby] ?? null);
+            $sessionattendance = $attendancebysession[$session->id] ?? [];
+            if (!$sessionattendance) {
+                $sessionattendance = [(object) ['studentid' => 0, 'status' => '']];
+            }
+            foreach ($sessionattendance as $entry) {
+                $student = empty($entry->studentid) ? null : ($users[$entry->studentid] ?? null);
                 $rows[] = [
                     'sessioncode' => (string) $session->sessioncode,
                     'scheduleddate' => userdate((int) $session->scheduledstart, get_string('strftimedatetimeshort')),
+                    'scheduledstart' => gmdate('Y-m-d\TH:i:s\Z', (int) $session->scheduledstart),
+                    'scheduledend' => gmdate('Y-m-d\TH:i:s\Z', (int) $session->scheduledend),
+                    'reportedstart' => $session->reportedstart === null ? ''
+                        : gmdate('Y-m-d\TH:i:s\Z', (int) $session->reportedstart),
+                    'reportedend' => $session->reportedend === null ? ''
+                        : gmdate('Y-m-d\TH:i:s\Z', (int) $session->reportedend),
                     'section' => 'UT' . (int) $session->sectionnum . ' — ' . get_section_name($course, $sectioninfo),
                     'group' => (string) $group->name,
                     'trainer' => $trainer ? fullname($trainer) : '',
@@ -496,6 +540,8 @@ final class manager {
                         : (int) $session->validatedminutes,
                     'validationstatus' => (string) $session->validationstatus,
                     'validator' => $validator ? fullname($validator) : '',
+                    'trainingactioncode' => (string) ($course->idnumber ?: $course->shortname),
+                    'trainingaction' => (string) $course->fullname,
                 ];
             }
         }

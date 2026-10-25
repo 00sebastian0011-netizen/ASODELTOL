@@ -41,7 +41,25 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('stafftracking', 'local_asodeltolstaff'));
 
 $buttons = [];
+$buttons[] = $OUTPUT->single_button(
+    new moodle_url('/local/asodeltolstaff/progress.php', ['courseid' => $courseid]),
+    get_string('academicprogress', 'local_asodeltolstaff'), 'get'
+);
+if (has_capability('local/asodeltolstaff:publishown', $context)) {
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/communication.php', ['courseid' => $courseid]),
+        get_string('groupcommunication', 'local_asodeltolstaff'), 'get'
+    );
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/publish.php', ['courseid' => $courseid]),
+        get_string('publishresource', 'local_asodeltolstaff'), 'get'
+    );
+}
 if ($canmanage) {
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/officehours.php', ['courseid' => $courseid]),
+        get_string('officehours', 'local_asodeltolstaff'), 'get'
+    );
     $buttons[] = $OUTPUT->single_button(
         new moodle_url('/local/asodeltolstaff/session.php', ['courseid' => $courseid]),
         get_string('newsession', 'local_asodeltolstaff'),
@@ -49,6 +67,10 @@ if ($canmanage) {
     );
 }
 if (has_capability('local/asodeltolstaff:export', $context)) {
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/reports.php', ['courseid' => $courseid]),
+        get_string('additionalreports', 'local_asodeltolstaff'), 'get'
+    );
     $buttons[] = $OUTPUT->single_button(
         new moodle_url('/local/asodeltolstaff/export.php', ['courseid' => $courseid, 'format' => 'excel']),
         get_string('export', 'local_asodeltolstaff') . ' XLSX',
@@ -63,6 +85,8 @@ if (has_capability('local/asodeltolstaff:export', $context)) {
 if ($buttons) {
     echo html_writer::div(implode(' ', $buttons), 'mb-3');
 }
+echo html_writer::link(new moodle_url('/calendar/view.php', ['view' => 'month', 'course' => $courseid]),
+    get_string('calendar'), ['class' => 'btn btn-outline-secondary mb-3']);
 
 $table = new html_table();
 $table->head = [

@@ -260,7 +260,8 @@ try {
         generated_at = (Get-Date).ToUniversalTime().ToString('o')
         scope = 'Moodle 5.3 local aislado; sesiones, cuentas y datos exclusivamente sintéticos'
         policy_definitive = $false
-        plugin = 'local_asodeltolstaff 0.1.2'
+        plugin = 'local_asodeltolstaff'
+        plugin_version = [int]$pluginStatus.version
         service = $serviceEvidence
         controls = $controls
         summary = [ordered]@{
