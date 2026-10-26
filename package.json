@@ -21,7 +21,8 @@
     "qa:production": "node scripts/anexo14/production-validation.mjs --run",
     "qa:validation:executor": "node scripts/diagnostics/vps/validation_executor.mjs --once",
     "qa:policy:public": "node scripts/anexo14/policy-public-probe.mjs",
-    "test:diagnostics": "python -m unittest discover -s tests/diagnostics -v"
+    "test:diagnostics": "python -m unittest discover -s tests/diagnostics -v",
+    "test:policy-preflight": "node --test tests/anexo14/policy-preflight.test.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
