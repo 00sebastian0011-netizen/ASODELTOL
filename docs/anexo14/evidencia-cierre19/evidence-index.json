@@ -1,16 +1,16 @@
 {
-  "snapshot_utc": "2026-10-26T00:52:16.954521+00:00",
-  "note": "Local artifacts only; private/ excluded. Monitor logs keep growing after this snapshot.",
+  "snapshot_utc": "2026-10-26T00:58:03.125657+00:00",
+  "note": "Local artifacts only; private/ excluded. For append-only logs that grew, verify SHA-256 of the first bytes bytes recorded in each entry. Later observations are outside this snapshot.",
   "files": [
     {
       "path": "build/staging/close19/ASODELTOL_82_cierre19.xlsx",
       "bytes": 18619,
-      "sha256": "a399c42aaaae826fa3d71213d4528c377f36af7bb0a438d6ab738ca6b389172f"
+      "sha256": "4caaaf2d269a4e734053426b0bdd2a36cb77436e98693537ec414abd52ef91c1"
     },
     {
       "path": "build/staging/close19/availability.jsonl",
-      "bytes": 2990,
-      "sha256": "fcf9942755c44ff6bceb79e873aaf71871e1b7d5c2a198f5f764d4744a1af91e"
+      "bytes": 3753,
+      "sha256": "4334bf51d733849e05523025b8d99efaabea65d40c591028d1a4dc739072836f"
     },
     {
       "path": "build/staging/close19/browser-2026-10-25T21-01-18-139Z/chromium-desktop.png",
@@ -564,8 +564,8 @@
     },
     {
       "path": "build/staging/close19/monitor-process.log",
-      "bytes": 763,
-      "sha256": "6edf0ef7b5817079c82b973d31ba5a39583c5075a73b49ab3859a8e0b67f25d3"
+      "bytes": 1526,
+      "sha256": "7e0da8a56d821dbbe246de731a26cb9d8ab874bd4e51d90528f2409620a5e069"
     },
     {
       "path": "build/staging/close19/native-evaluation-matrix.json",
@@ -655,7 +655,7 @@
     {
       "path": "build/staging/close19/tracking82.json",
       "bytes": 126858,
-      "sha256": "2d9dad7e7b58ec7329e135103237800372cd52fceba828e729cfa2daba4558a5"
+      "sha256": "a525157d5c636b73a5de5dd47205a2897d4f921b1804ea5119a91e2d7ed7822b"
     },
     {
       "path": "build/staging/close19/unit/20261025T204736.json",
