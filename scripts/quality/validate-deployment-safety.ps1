@@ -38,8 +38,11 @@ foreach ($pattern in @('hmac\.compare_digest', 'X-Hub-Signature-256', 'EXPECTED_
 }
 
 $deployer = Get-Content -Raw -LiteralPath (Join-Path $deploy 'vps/deploy_release.py')
-foreach ($pattern in @('protected production drift', 'rollback\(', 'Post-deploy hash mismatch', 'merge-base', 'changed_paths\(repo, change_base_sha, target_sha', 'target_sha = requested_sha')) {
+foreach ($pattern in @('protected production drift', 'rollback\(', 'Post-deploy hash mismatch', 'merge-base', 'changed_paths\(repo, change_base_sha, target_sha', 'target_sha = requested_sha', 'local_rollback = target\.parent', 'shutil\.copytree\(local_rollback, backup')) {
     if ($deployer -notmatch $pattern) { throw "Deployment safeguard missing: $pattern" }
+}
+if ($deployer -match 'os\.replace\(target, backup\)') {
+    throw 'Production and persistent backups may be on different filesystems.'
 }
 
 $service = Get-Content -Raw -LiteralPath (Join-Path $deploy 'vps/asodeltol-deploy.service')

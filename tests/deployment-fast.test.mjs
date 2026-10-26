@@ -76,6 +76,9 @@ test('receiver validates HMAC and the deployer supports drift and rollback state
   assert.match(deployer, /protected production drift/);
   assert.match(deployer, /rollback\(/);
   assert.match(deployer, /Post-deploy hash mismatch/);
+  assert.match(deployer, /local_rollback = target\.parent/);
+  assert.match(deployer, /shutil\.copytree\(local_rollback, backup/);
+  assert.doesNotMatch(deployer, /os\.replace\(target, backup\)/);
   assert.match(service, /User=user/);
   assert.match(service, /NoNewPrivileges=true/);
   assert.doesNotMatch(service, /User=root/);
