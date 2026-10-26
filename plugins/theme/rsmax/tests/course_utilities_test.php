@@ -44,4 +44,68 @@ final class course_utilities_test extends \advanced_testcase {
             'live' => '/mod/bigbluebuttonbn/view.php?id=15',
         ], \theme_rsmax\local\course_utilities::configured_for_course($config, 17));
     }
+
+    public function test_visual_editor_rejects_cross_course_activity(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $generator = $this->getDataGenerator();
+        $first = $generator->create_course();
+        $second = $generator->create_course();
+        $folderone = $generator->create_module('folder', ['course' => $first->id]);
+        $foldertwo = $generator->create_module('folder', ['course' => $second->id]);
+        $cmone = get_coursemodule_from_instance('folder', $folderone->id, $first->id);
+        $cmtwo = get_coursemodule_from_instance('folder', $foldertwo->id, $second->id);
+
+        $valid = \theme_rsmax\local\course_utilities::validate_choices($first, [
+            'materials' => $cmone->id,
+        ]);
+        $this->assertSame((int) $cmone->id, $valid['materials']);
+
+        $this->expectException(\invalid_parameter_exception::class);
+        \theme_rsmax\local\course_utilities::validate_choices($first, [
+            'materials' => $cmtwo->id,
+        ]);
+    }
+
+    public function test_saved_selection_is_scoped_to_one_course(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $courseone = $this->getDataGenerator()->create_course();
+        $coursetwo = $this->getDataGenerator()->create_course();
+        $folder = $this->getDataGenerator()->create_module('folder', ['course' => $courseone->id]);
+        $cm = get_coursemodule_from_instance('folder', $folder->id, $courseone->id);
+
+        \theme_rsmax\local\course_utilities::save($courseone, [
+            'announcements' => -1,
+            'materials' => $cm->id,
+            'workshops' => 0,
+        ]);
+        $saved = \theme_rsmax\local\course_utilities::choices_for_course((int) $courseone->id);
+        $this->assertSame(-1, $saved['announcements']);
+        $this->assertSame((int) $cm->id, $saved['materials']);
+        $this->assertSame(0, $saved['workshops']);
+        $this->assertNull(\theme_rsmax\local\course_utilities::choices_for_course((int) $coursetwo->id));
+    }
+
+    public function test_student_cannot_save_course_link_settings(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $student = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
+        $this->setUser($student);
+        $this->assertFalse(\theme_rsmax\local\course_utilities::can_manage((int) $course->id));
+
+        $this->expectException(\required_capability_exception::class);
+        \theme_rsmax\local\course_utilities::save($course, ['materials' => 0]);
+    }
+
+    public function test_invalid_stored_selection_fails_closed(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        set_config('coursequicklinks_' . $course->id, '{"materials":"/another/course"}', 'theme_rsmax');
+        $choices = \theme_rsmax\local\course_utilities::choices_for_course((int) $course->id);
+        $this->assertSame(-1, $choices['materials']);
+        $this->assertSame(-1, $choices['announcements']);
+    }
+
 }

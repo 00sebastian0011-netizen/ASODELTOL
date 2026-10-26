@@ -9302,3 +9302,23 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
 @media print {
     .rsmax-courseutilities { display: none; }
 }
+
+
+// Only authorized editing teachers and managers get the visual quick-link editor.
+.rsmax-courseutilities-manage {
+    margin: -.35rem 0 1rem;
+    text-align: right;
+}
+.rsmax-courseutilities-manage .btn {
+    border-radius: .6rem;
+    min-height: 2.5rem;
+    font-weight: 650;
+}
+@media (max-width: 520px) {
+    .rsmax-courseutilities-manage {
+        text-align: center;
+    }
+    .rsmax-courseutilities-manage .btn {
+        width: 100%;
+    }
+}

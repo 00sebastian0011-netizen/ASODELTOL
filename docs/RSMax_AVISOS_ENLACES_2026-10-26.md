@@ -52,3 +52,39 @@ Validación automatizada de este PR: `php -l` de PHP cambiado, pruebas de contra
 5. Verificar que no se despliegue el trabajo no finalizado del PR #18 ni Moodle core. Después de sincronizar exclusivamente RSMax, purgar cachés del tema y comprobar los recorridos en la URL real.
 
 **Esta rama es preparación de código y revisión:** fusionar o hacer despliegue al VPS solo cuando se haya cumplido la verificación local y los controles de publicación. La fusión de un PR no confirma que la nueva versión esté instalada en producción.
+
+## Administrador visual de enlaces rápidos — ampliación
+
+La edición ya no exige copiar `ID_CURSO|clave|/ruta`. En la **página principal de un curso** un administrador o docente con capacidad `moodle/course:manageactivities` ve el botón **Administrar enlaces rápidos**. También puede abrir:
+
+`/theme/rsmax/quicklinks.php?courseid=ID_REAL_DEL_CURSO`
+
+El estudiante no ve este botón y el controlador rechaza cualquier intento suyo de abrirlo o guardar datos. Un rol de capacitador de ASODELTOL que no tenga capacidad nativa de edición no recibe permisos nuevos implícitos: habrá que asignar la capacidad institucional apropiada siguiendo la política de roles.
+
+### Cómo se cargan materiales para que el estudiante los vea
+
+1. Entrar al **curso correspondiente** con permisos de edición.
+2. Hacer clic en **Volver al curso para crear o subir contenido**; activar `Modo de edición` de Moodle.
+3. Usar **Añadir una actividad o recurso**:
+   - **Avisos:** Foro del curso.
+   - **Grabación de sesiones:** Archivo, URL, Página o Carpeta con una grabación real y accesible.
+   - **Material compartido:** Carpeta, Archivo, Página, Libro o URL del curso.
+   - **Talleres:** Tarea, Cuestionario, H5P, Lección, Taller o Foro.
+   - **Sesiones sincrónicas:** BigBlueButton, Zoom o URL aprobada en una actividad del curso.
+   - **Centro de Atención (CAU):** el formulario de soporte ASODELTOL Staff si se ha designado un administrador receptor, o una actividad Página/URL existente.
+4. Guardar la actividad con **visibilidad y restricciones de grupo correctas**.
+5. Regresar a **Administrar enlaces rápidos** y elegir dicha actividad en el selector correspondiente. Guardar cambios.
+6. Abrir el curso como un **beneficiario autorizado** y otro de **grupo no autorizado**; verificar que el enlace solo funcione para quien corresponda.
+
+Los seis selectores ofrecen **Automático** (la lógica previa reconoce actividades nativas), **Sin configurar** (botón inactivo) o una actividad del mismo curso, del tipo permitido. No se guardan URLs arbitrarias, archivos ni datos personales en el tema. Si una actividad se borra, mueve, oculta o queda restringida para un alumno, el botón correspondiente no enlaza a ella.
+
+Cada curso tiene su propia configuración en Moodle (`theme_rsmax/coursequicklinks_ID` con IDs de actividades), independiente de otros cursos; no se alteran los grupos o matrículas. Para roles con edición parcial específica del plugin staff, la publicación de recursos sigue realizándose por ese plugin bajo sus propios permisos; la administración global de enlaces no se entrega automáticamente a esos roles.
+
+### Validaciones pendientes para despliegue
+
+- `php -l` del nuevo controlador `quicklinks.php`, formulario y clase de resolución; pruebas estáticas Node en `tests/theme_rsmax/`.
+- PHPUnit bajo una **instancia real de Moodle de staging**: formulario guardando opciones, curso distinto rechazado, estudiante sin permiso, enlace retirado/oculto y configuración por curso.
+- Navegador en staging: editor, estudiante, capacitador sin edición, administrador, móvil, curso con actividades y sin actividades. Probar también curso con grupos separados. Una prueba de sintaxis o CI no reemplaza estas comprobaciones.
+- Antes de publicar en VPS: respaldar código RSMax y configuraciones del sitio, revisar el despliegue de solo este componente, purgar cachés de Moodle, verificar enlaces reales y disponer de reversión.
+
+La configuración histórica de texto en **RSMax → Cursos** se conserva por compatibilidad cuando un curso aún no ha utilizado el nuevo editor. Una vez guardadas elecciones visuales, estas tienen prioridad sobre el texto anterior.

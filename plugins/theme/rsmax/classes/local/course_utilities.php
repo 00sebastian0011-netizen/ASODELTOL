@@ -11,14 +11,14 @@ namespace theme_rsmax\local;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Course front-page notice and links to actual, permission-filtered Moodle activities.
+ * Course-specific, permission-aware links to actual Moodle content.
  *
- * Display-only code. This class neither records consent nor changes course data.
+ * The editor stores only activity IDs belonging to its course. No uploaded content,
+ * credentials, consent events, or enrolments are stored in the theme.
  *
  * @package theme_rsmax
  */
 final class course_utilities {
-    /** Only these six known categories may be linked from the course panel. */
     private const LINKS = [
         'announcements' => ['coursequickannouncements', 'fa-bell'],
         'recordings' => ['coursequickrecordings', 'fa-video'],
@@ -28,12 +28,117 @@ final class course_utilities {
         'support' => ['coursequicksupport', 'fa-headset'],
     ];
 
+    /** Allowed Moodle module types per quick link. */
+    private const TYPES = [
+        'announcements' => ['forum'],
+        'recordings' => ['url', 'resource', 'page', 'folder'],
+        'materials' => ['folder', 'resource', 'page', 'book', 'url'],
+        'workshops' => ['assign', 'quiz', 'h5pactivity', 'lesson', 'workshop', 'forum'],
+        'live' => ['bigbluebuttonbn', 'zoom', 'url'],
+        'support' => ['url', 'page'],
+    ];
+
+    public static function keys(): array {
+        return array_keys(self::LINKS);
+    }
+
+    public static function can_manage(int $courseid): bool {
+        return isloggedin() && !isguestuser()
+            && has_capability('moodle/course:manageactivities', \context_course::instance($courseid));
+    }
+
+    private static function config_key(int $courseid): string {
+        return 'coursequicklinks_' . $courseid;
+    }
+
     /**
-     * An explicit administrator-supplied override must remain on this Moodle site.
+     * Returns null when this course has never been configured through the visual editor.
      *
-     * @param string $path
-     * @return bool
+     * 0 = detect automatically, -1 = explicitly disable, positive = course module ID.
      */
+    public static function choices_for_course(int $courseid): ?array {
+        $raw = get_config('theme_rsmax', self::config_key($courseid));
+        if ($raw === false || $raw === null || $raw === '') {
+            return null;
+        }
+        $decoded = json_decode((string) $raw, true);
+        if (!is_array($decoded)) {
+            // Invalid stored configuration must fail closed; no untrusted URL fallback.
+            return array_fill_keys(self::keys(), -1);
+        }
+        $out = [];
+        foreach (self::keys() as $key) {
+            $value = $decoded[$key] ?? -1;
+            $out[$key] = is_int($value) ? $value : -1;
+        }
+        return $out;
+    }
+
+    /**
+     * Is this an existing, visible, type-compatible course activity?
+     */
+    private static function eligible_module($cm, string $key): bool {
+        return isset(self::TYPES[$key]) && !empty($cm->url) && !empty($cm->visible)
+            && empty($cm->deletioninprogress)
+            && in_array($cm->modname, self::TYPES[$key], true);
+    }
+
+    /**
+     * Options for native Moodle Forms API; entries are scoped to this course.
+     */
+    public static function options_for_course(\stdClass $course): array {
+        $modinfo = get_fast_modinfo($course);
+        $options = [];
+        foreach (self::LINKS as $key => [$label, $icon]) {
+            $choices = [
+                0 => get_string('coursequickautomatic', 'theme_rsmax'),
+                -1 => get_string('coursequickdisabled', 'theme_rsmax'),
+            ];
+            foreach ($modinfo->cms as $cm) {
+                if (!self::eligible_module($cm, $key) || empty($cm->uservisible)) {
+                    continue;
+                }
+                // Moodle Forms escapes option text; no raw markup or URL is accepted.
+                $choices[(int) $cm->id] = format_string($cm->name);
+            }
+            $options[$key] = $choices;
+        }
+        return $options;
+    }
+
+    /**
+     * Reject changed form values, foreign course modules, hidden or unsuitable modules.
+     */
+    public static function validate_choices(\stdClass $course, array $submitted): array {
+        $modinfo = get_fast_modinfo($course);
+        $out = [];
+        foreach (self::keys() as $key) {
+            $raw = $submitted[$key] ?? 0;
+            if (!is_int($raw) && (!is_string($raw) || !preg_match('/^-?\d+$/D', $raw))) {
+                throw new \invalid_parameter_exception('Invalid link choice: ' . $key);
+            }
+            $id = (int) $raw;
+            if ($id < -1 || ($id > 0 && (!isset($modinfo->cms[$id])
+                    || !self::eligible_module($modinfo->cms[$id], $key)
+                    || empty($modinfo->cms[$id]->uservisible)))) {
+                throw new \invalid_parameter_exception('Activity unavailable in this course: ' . $key);
+            }
+            $out[$key] = $id;
+        }
+        return $out;
+    }
+
+    /**
+     * Persist only the six verified module selections; Moodle has no schema migration.
+     */
+    public static function save(\stdClass $course, array $submitted): void {
+        require_capability('moodle/course:manageactivities', \context_course::instance($course->id));
+        $choices = self::validate_choices($course, $submitted);
+        set_config(self::config_key((int) $course->id),
+            json_encode($choices, JSON_THROW_ON_ERROR), 'theme_rsmax');
+    }
+
+    /** Legacy site-admin URL input remains supported until it is migrated per course. */
     public static function safe_local_path(string $path): bool {
         if ($path === '' || $path[0] !== '/' || str_starts_with($path, '//')
                 || preg_match('/[\x00-\x20\\\\]/', $path)
@@ -46,13 +151,6 @@ final class course_utilities {
             && (bool) preg_match('~^/[a-zA-Z0-9_./%-]+$~', $parts['path']);
     }
 
-    /**
-     * Parse optional per-course link overrides. All links must point within Moodle.
-     *
-     * @param string $lines One entry per line: courseid|key|/local-path
-     * @param int $courseid
-     * @return array<string, string>
-     */
     public static function configured_for_course(string $lines, int $courseid): array {
         $overrides = [];
         foreach (preg_split('/\R/u', $lines) ?: [] as $line) {
@@ -61,30 +159,37 @@ final class course_utilities {
                 continue;
             }
             [$id, $key, $url] = $parts;
-            if (!isset(self::LINKS[$key]) || !self::safe_local_path($url)) {
-                continue;
+            if (isset(self::LINKS[$key]) && self::safe_local_path($url)) {
+                $overrides[$key] = $url;
             }
-            $overrides[$key] = $url;
         }
         return $overrides;
     }
 
+    private static function support_url(): ?string {
+        if (!(int) get_config('local_asodeltolstaff', 'version')
+                || !class_exists('\\local_asodeltolstaff\\support')
+                || !has_capability('moodle/site:sendmessage', \context_system::instance())
+                || !\local_asodeltolstaff\support::recipient()) {
+            return null;
+        }
+        return (new \moodle_url('/local/asodeltolstaff/support.php'))->out(false);
+    }
+
     /**
-     * Return only authorized destinations and transparently disabled placeholders.
-     *
-     * @param \stdClass $course
-     * @return array
+     * Resolve links for the current viewer; activity availability is checked per viewer.
+     * A course editor cannot make a restricted activity visible to another group.
      */
     public static function export(\stdClass $course): array {
         global $CFG, $DB;
-
-        $destinations = [];
         $modinfo = get_fast_modinfo($course);
+        $destinations = [];
+
+        // The default buttons detect the first valid activity of each known category.
         foreach ($modinfo->cms as $cm) {
-            if (empty($cm->uservisible) || empty($cm->url)) {
+            if (empty($cm->uservisible) || empty($cm->visible) || empty($cm->url)) {
                 continue;
             }
-
             $key = null;
             if ($cm->modname === 'forum' && $DB->get_field('forum', 'type', ['id' => $cm->instance]) === 'news') {
                 $key = 'announcements';
@@ -96,27 +201,45 @@ final class course_utilities {
                 $key = 'live';
             } else if ($cm->modname === 'url'
                     && preg_match('/grabaci[oó]n|sesiones grabadas|recordings?/iu', $cm->name)) {
-                // A Moodle URL activity is only a pointer; it does not prove a recording exists.
                 $key = 'recordings';
             }
-
             if ($key !== null && !isset($destinations[$key])) {
                 $destinations[$key] = $cm->url->out(false);
             }
         }
 
-        // Site administrators may nominate an existing Moodle page as a destination. Moodle
-        // remains responsible for the final capability check at that page.
-        foreach (self::configured_for_course((string) get_config('theme_rsmax', 'coursequicklinks'),
-                (int) $course->id) as $key => $path) {
-            $destinations[$key] = (new \moodle_url($path))->out(false);
+        $supporturl = self::support_url();
+        if ($supporturl !== null) {
+            $destinations['support'] = $supporturl;
         }
 
-        if (!isset($destinations['support']) && (int) get_config('local_asodeltolstaff', 'version') > 0
-                && class_exists('\\local_asodeltolstaff\\support')
-                && has_capability('moodle/site:sendmessage', \context_system::instance())
-                && \local_asodeltolstaff\support::recipient()) {
-            $destinations['support'] = (new \moodle_url('/local/asodeltolstaff/support.php'))->out(false);
+        $choices = self::choices_for_course((int) $course->id);
+        if ($choices !== null) {
+            foreach ($choices as $key => $id) {
+                if ($id === -1) {
+                    unset($destinations[$key]);
+                } else if ($id > 0) {
+                    // Fail closed if the selected module is deleted, moved, hidden or restricted.
+                    $cm = $modinfo->cms[$id] ?? null;
+                    if ($cm !== null && self::eligible_module($cm, $key) && !empty($cm->uservisible)) {
+                        $destinations[$key] = $cm->url->out(false);
+                    } else {
+                        unset($destinations[$key]);
+                    }
+                }
+            }
+        } else {
+            // Legacy entries are accepted only if they resolve to a real module in THIS course.
+            foreach (self::configured_for_course((string) get_config('theme_rsmax', 'coursequicklinks'),
+                    (int) $course->id) as $key => $path) {
+                if (!preg_match('~^/mod/[a-z0-9_]+/view\.php\?id=(\d+)$~i', $path, $matches)) {
+                    continue;
+                }
+                $cm = $modinfo->cms[(int) $matches[1]] ?? null;
+                if ($cm !== null && self::eligible_module($cm, $key) && !empty($cm->uservisible)) {
+                    $destinations[$key] = $cm->url->out(false);
+                }
+            }
         }
 
         $items = [];
@@ -129,13 +252,16 @@ final class course_utilities {
             ];
         }
 
-        // Never use a fabricated acceptance URL, or imply that a policy was signed.
+        // The user follows Moodle's published official policy. No fake consent events.
         $haspolicy = ($CFG->sitepolicyhandler ?? '') === 'tool_policy'
             && (int) get_config('tool_policy', 'version') > 0;
         return [
             'items' => $items,
             'policyurl' => $haspolicy
                 ? (new \moodle_url('/admin/tool/policy/user.php'))->out(false)
+                : false,
+            'manageurl' => self::can_manage((int) $course->id)
+                ? (new \moodle_url('/theme/rsmax/quicklinks.php', ['courseid' => $course->id]))->out(false)
                 : false,
         ];
     }
