@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: ASODELTOL VPS Technical Diagnostics (Read Only)
+  version: 0.1.0
+  description: Fixed sanitized VPS read-only probes. No SSH, SQL, logs, credentials or student data.
+servers:
+  - url: https://aulaasodeltol.online/__asodeltol_diag
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Private bearer token stored on the VPS and configured only in ChatGPT's authentication settings.
+paths:
+  /v1/system:
+    get:
+      operationId: asodeltolVpsSystemHealth
+      summary: Read sanitized VPS health
+      responses:
+        '200':
+          description: OS, uptime, storage, memory and fixed services
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /v1/versions:
+    get:
+      operationId: asodeltolMoodleVersions
+      summary: Inspect installed Moodle and plugin version files
+      responses:
+        '200':
+          description: Installed files do not prove Moodle DB migrations
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /v1/uploads:
+    get:
+      operationId: asodeltolUploadConfig
+      summary: Inspect static NGINX/PHP upload-size hints
+      responses:
+        '200':
+          description: Not authenticated end-to-end upload verification
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /v1/deploy:
+    get:
+      operationId: asodeltolDeploymentStatus
+      summary: Inspect sanitized deployment-agent status
+      responses:
+        '200':
+          description: Component SHA and deployment state, no source files
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
