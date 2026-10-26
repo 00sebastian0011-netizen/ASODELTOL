@@ -10,13 +10,15 @@
   "scripts": {
     "catalog:validate": "node scripts/catalog/validate-catalog.mjs",
     "catalog:bundle": "node scripts/catalog/build-provisioning-bundle.mjs",
-    "test": "node --test tests/catalog/*.test.mjs tests/academic/*.test.mjs tests/localization/*.test.mjs tests/deployment-*.test.mjs tests/agents/*.test.mjs",
+    "test": "node --test tests/catalog/*.test.mjs tests/academic/*.test.mjs tests/localization/*.test.mjs tests/deployment-*.test.mjs tests/agents/*.test.mjs tests/anexo14/*.test.mjs",
     "quality": "npm run catalog:validate && npm test",
     "qa:close19": "node scripts/staging/close19/browser.mjs all",
     "qa:close19:workflows": "node scripts/staging/close19/workflows.mjs",
     "qa:close19:links": "node scripts/staging/close19/links.mjs",
     "qa:close19:render50": "node scripts/staging/close19/render50.mjs",
-    "agent:brief": "node scripts/quality/agent-brief.mjs"
+    "agent:brief": "node scripts/quality/agent-brief.mjs",
+    "qa:production:catalog": "node scripts/anexo14/production-validation.mjs --catalog",
+    "qa:production": "node scripts/anexo14/production-validation.mjs --run"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
