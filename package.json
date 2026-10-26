@@ -18,7 +18,8 @@
     "qa:close19:render50": "node scripts/staging/close19/render50.mjs",
     "agent:brief": "node scripts/quality/agent-brief.mjs",
     "qa:anexo14:manifest": "python scripts/anexo14/build-simulation-manifest.py && python scripts/anexo14/validate-scenarios.py",
-    "qa:anexo14:all": "npm run qa:anexo14:manifest && npm run qa:close19:links && npm run qa:close19:workflows"
+    "qa:anexo14:all": "npm run qa:anexo14:manifest && npm run qa:close19:population && npm run qa:close19:links && npm run qa:close19:workflows",
+    "qa:close19:population": "docker cp scripts/staging/close19/bulk350.php asodeltol-close19-webserver-1:/tmp/bulk350.php && docker exec --user www-data asodeltol-close19-webserver-1 php /tmp/bulk350.php"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
