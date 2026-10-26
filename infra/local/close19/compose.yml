@@ -1,0 +1,52 @@
+name: asodeltol-close19
+services:
+  database:
+    image: mysql:8.4@sha256:76f0358884cb92d9a086d24e5671c38048d3fef40f2588703d73eb55392d6b69
+    environment:
+      MYSQL_DATABASE: close19
+      MYSQL_USER: close19
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets: [db_password, db_root_password]
+    volumes: [database:/var/lib/mysql]
+    networks: [private]
+    healthcheck:
+      test: [CMD-SHELL, 'MYSQL_PWD="$$(cat /run/secrets/db_root_password)" mysqladmin ping -h 127.0.0.1 -u root --silent']
+      interval: 3s
+      retries: 60
+  webserver:
+    image: moodlehq/moodle-php-apache:8.4-bookworm@sha256:3e910075c08dc73c8e18732f5e80c8fb9a60ae72eaf52b1ee198bb510e4fd9d6
+    depends_on:
+      database: {condition: service_healthy}
+    ports: [127.0.0.1:8054:80]
+    environment: {APACHE_DOCUMENT_ROOT: /var/www/html/public}
+    secrets: [db_password, phpunit_password, admin_password, synthetic_password]
+    volumes:
+      - code:/var/www/html
+      - data:/var/www/moodledata
+      - unitdata:/var/www/phpunitdata
+      - ${CLOSE19_SCRIPTS:?required}:/opt/close19:ro
+    networks: [private, outbound]
+  monitor:
+    profiles: [monitoring]
+    image: python:3.13-slim@sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962
+    restart: unless-stopped
+    command: [python, -u, /opt/close19/monitor-service.py]
+    volumes:
+      - ${CLOSE19_SCRIPTS:?required}:/opt/close19:ro
+      - ${CLOSE19_EVIDENCE:?required}:/evidence
+    networks: [outbound]
+secrets:
+  db_password: {file: '${CLOSE19_PRIVATE:?required}/db-password.txt'}
+  db_root_password: {file: '${CLOSE19_PRIVATE:?required}/db-root-password.txt'}
+  phpunit_password: {file: '${CLOSE19_PRIVATE:?required}/phpunit-password.txt'}
+  admin_password: {file: '${CLOSE19_PRIVATE:?required}/admin-password.txt'}
+  synthetic_password: {file: '${CLOSE19_PRIVATE:?required}/synthetic-password.txt'}
+volumes:
+  code:
+  database:
+  data:
+  unitdata:
+networks:
+  private: {internal: true}
+  outbound:

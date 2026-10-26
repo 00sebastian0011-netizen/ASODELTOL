@@ -1,0 +1,27 @@
+<?php
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+$CFG->dbtype = 'mysqli';
+$CFG->dblibrary = 'native';
+$CFG->dbhost = 'database';
+$CFG->dbname = 'close19';
+$CFG->dbuser = 'close19';
+$CFG->dbpass = trim(file_get_contents('/run/secrets/db_password'));
+$CFG->prefix = 'mdl_';
+$CFG->dboptions = ['dbcollation' => 'utf8mb4_unicode_ci'];
+$CFG->wwwroot = 'http://127.0.0.1:8054';
+$CFG->dataroot = '/var/www/moodledata';
+$CFG->phpunit_dbname = 'close19_unit';
+$CFG->phpunit_dbuser = 'close19_unit';
+$CFG->phpunit_dbpass = trim(file_get_contents('/run/secrets/phpunit_password'));
+$CFG->phpunit_prefix = 'unit_';
+$CFG->phpunit_dataroot = '/var/www/phpunitdata';
+$CFG->directorypermissions = 0770;
+$CFG->noemailever = true;
+$CFG->disableupdateautodeploy = true;
+$CFG->disableupdatenotifications = true;
+$CFG->sessioncookie = 'ASOCLOSE19';
+$CFG->forcelogin = 1;
+$CFG->cronclionly = true;
+require_once(__DIR__ . '/lib/setup.php');
