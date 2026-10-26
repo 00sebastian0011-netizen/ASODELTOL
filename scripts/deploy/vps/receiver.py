@@ -19,7 +19,7 @@ import time
 MAX_BODY = 1024 * 1024
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 DELIVERY_RE = re.compile(r"^[0-9a-fA-F-]{8,80}$")
-DEPLOY_QUEUE: queue.Queue[tuple[str, str]] = queue.Queue(maxsize=1)
+DEPLOY_QUEUE: queue.Queue[tuple[str, str, str]] = queue.Queue(maxsize=1)
 LAST_DELIVERY = ""
 DELIVERY_LOCK = threading.Lock()
 
@@ -38,29 +38,31 @@ DEPLOY_SCRIPT = os.environ.get("ASODELTOL_DEPLOY_SCRIPT", "/opt/asodeltol-deploy
 DEBOUNCE_SECONDS = float(os.environ.get("ASODELTOL_DEBOUNCE_SECONDS", "1.0"))
 
 
-def enqueue(sha: str, delivery: str) -> None:
+def enqueue(before_sha: str, sha: str, delivery: str) -> None:
+    earliest_before = before_sha
     try:
         while True:
-            DEPLOY_QUEUE.get_nowait()
+            pending_before, _, _ = DEPLOY_QUEUE.get_nowait()
+            earliest_before = pending_before
             DEPLOY_QUEUE.task_done()
     except queue.Empty:
         pass
-    DEPLOY_QUEUE.put_nowait((sha, delivery))
+    DEPLOY_QUEUE.put_nowait((earliest_before, sha, delivery))
 
 
 def worker() -> None:
     while True:
-        sha, delivery = DEPLOY_QUEUE.get()
+        before_sha, sha, delivery = DEPLOY_QUEUE.get()
         time.sleep(DEBOUNCE_SECONDS)
         try:
             while True:
-                sha, delivery = DEPLOY_QUEUE.get_nowait()
+                _, sha, delivery = DEPLOY_QUEUE.get_nowait()
                 DEPLOY_QUEUE.task_done()
         except queue.Empty:
             pass
         started = time.monotonic()
         completed = subprocess.run(
-            ["/usr/bin/python3", DEPLOY_SCRIPT, "--sha", sha],
+            ["/usr/bin/python3", DEPLOY_SCRIPT, "--before", before_sha, "--sha", sha],
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -73,6 +75,7 @@ def worker() -> None:
         print(json.dumps({
             "event": "deployment_finished",
             "delivery": delivery,
+            "before_sha": before_sha,
             "sha": sha,
             "exit_code": completed.returncode,
             "duration_seconds": duration,
@@ -146,7 +149,8 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(202, {"status": "ignored"})
             return
         sha = str(payload.get("after", "")).lower()
-        if not SHA_RE.fullmatch(sha):
+        before_sha = str(payload.get("before", "")).lower()
+        if not SHA_RE.fullmatch(sha) or not SHA_RE.fullmatch(before_sha):
             self.respond(400, {"status": "invalid_sha"})
             return
 
@@ -156,8 +160,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.respond(202, {"status": "duplicate"})
                 return
             LAST_DELIVERY = delivery
-        enqueue(sha, delivery)
-        self.respond(202, {"status": "queued", "sha": sha})
+        enqueue(before_sha, sha, delivery)
+        self.respond(202, {"status": "queued", "before_sha": before_sha, "sha": sha})
 
 
 def main() -> None:

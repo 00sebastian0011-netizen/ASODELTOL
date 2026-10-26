@@ -20,6 +20,7 @@ from typing import Any
 
 
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+ZERO_SHA = "0" * 40
 RISK_ORDER = {"none": 0, "fast": 1, "standard": 2, "critical": 3}
 
 
@@ -224,14 +225,15 @@ def validate_stage(stage: Path, changed: dict[str, str], php_binary: str) -> Non
 
 
 def prepare_component(repo: Path, site: Path, state_root: Path, component: dict[str, Any],
-                      target_sha: str) -> dict[str, Any]:
+                      change_base_sha: str, target_sha: str) -> dict[str, Any]:
     component_id = component["id"]
     component_state = load_component_state(state_root, component_id)
-    base_sha = component_state["base_sha"]
-    changes = changed_paths(repo, base_sha, target_sha, component["source"], component["excluded"])
+    state_base_sha = component_state["base_sha"]
+    changes = changed_paths(repo, change_base_sha, target_sha, component["source"], component["excluded"])
     result: dict[str, Any] = {
         "component": component_id,
-        "base_sha": base_sha,
+        "base_sha": change_base_sha,
+        "state_base_sha": state_base_sha,
         "target_sha": target_sha,
         "files": sorted(changes),
         "status": "unchanged",
@@ -240,7 +242,6 @@ def prepare_component(repo: Path, site: Path, state_root: Path, component: dict[
         "state": component_state,
     }
     if not changes:
-        component_state["base_sha"] = target_sha
         return result
 
     risk, reasons = classify(component, changes)
@@ -279,6 +280,17 @@ def prepare_component(repo: Path, site: Path, state_root: Path, component: dict[
         component_state["protected"] = sorted(protected)
         result["status"] = "conflict"
         result["reasons"].append(f"protected production drift: {conflicts}")
+        return result
+
+    if len(already_applied) == len(changes):
+        result.update({
+            "status": "already_deployed",
+            "changes": changes,
+            "target": production_target,
+            "target_tree": target_tree,
+            "already_applied": already_applied,
+            "protected": protected,
+        })
         return result
 
     parent = production_target.parent
@@ -369,9 +381,10 @@ def purge_and_health(site: Path) -> None:
 
 def commit_state(item: dict[str, Any], state_root: Path) -> None:
     component_state = item["state"]
-    if item["status"] == "unchanged":
-        component_state["base_sha"] = item["target_sha"]
-    elif item["status"] == "deployed":
+    component_state["base_sha"] = item["target_sha"]
+    component_state["last_status"] = item["status"]
+    component_state["last_processed_at"] = utc_now()
+    if item["status"] in {"deployed", "already_deployed"}:
         current, _ = scan_directory(item["target"], [])
         expected: dict[str, str] = component_state.get("expected", {})
         protected = set(item["protected"])
@@ -383,28 +396,37 @@ def commit_state(item: dict[str, Any], state_root: Path) -> None:
             protected.discard(relative)
         component_state["expected"] = expected
         component_state["protected"] = sorted(protected)
-        component_state["base_sha"] = item["target_sha"]
         component_state["deployed_at"] = utc_now()
-    else:
-        return
     atomic_json(state_path(state_root, item["component"]), component_state)
 
 
-def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any], requested_sha: str) -> dict[str, Any]:
-    if not SHA_RE.fullmatch(requested_sha):
+def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any],
+           requested_before: str, requested_sha: str) -> dict[str, Any]:
+    if not SHA_RE.fullmatch(requested_sha) or not SHA_RE.fullmatch(requested_before):
         raise RuntimeError("Invalid requested commit SHA")
     started = time.monotonic()
     started_at = utc_now()
     git(repo, "fetch", "--quiet", "--prune", "origin", "+refs/heads/main:refs/remotes/origin/main")
-    target_sha = str(git(repo, "rev-parse", "refs/remotes/origin/main")).strip()
-    ancestor = run(["git", "merge-base", "--is-ancestor", requested_sha, target_sha], cwd=repo, check=False)
+    current_main = str(git(repo, "rev-parse", "refs/remotes/origin/main")).strip()
+    target_sha = requested_sha
+    ancestor = run(["git", "merge-base", "--is-ancestor", target_sha, current_main], cwd=repo, check=False)
     if ancestor.returncode != 0:
         raise RuntimeError("Webhook commit is not an ancestor of current origin/main")
+
+    if requested_before == ZERO_SHA:
+        requested_before = str(git(repo, "rev-parse", f"{target_sha}^1")).strip()
+    change_ancestor = run(
+        ["git", "merge-base", "--is-ancestor", requested_before, target_sha],
+        cwd=repo,
+        check=False,
+    )
+    if change_ancestor.returncode != 0:
+        raise RuntimeError("Webhook before commit is not an ancestor of its target commit")
 
     prepared: list[dict[str, Any]] = []
     results: list[dict[str, Any]] = []
     for component in policy["components"]:
-        item = prepare_component(repo, site, state_root, component, target_sha)
+        item = prepare_component(repo, site, state_root, component, requested_before, target_sha)
         results.append(item)
         if item["status"] == "prepared":
             prepared.append(item)
@@ -446,6 +468,7 @@ def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any], req
     if any(item["status"] in {"manual_required", "conflict"} for item in results):
         status = "partial" if swapped else "manual_required"
     record = {
+        "before_sha": requested_before,
         "requested_sha": requested_sha,
         "deployed_sha": target_sha,
         "status": status,
@@ -462,6 +485,7 @@ def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any], req
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--initialize", action="store_true")
+    parser.add_argument("--before")
     parser.add_argument("--sha")
     args = parser.parse_args()
 
@@ -478,10 +502,10 @@ def main() -> int:
         if args.initialize:
             commit = str(git(repo, "rev-parse", "refs/remotes/origin/main")).strip()
             result = initialise(repo, site, state_root, policy, commit)
-        elif args.sha:
-            result = deploy(repo, site, state_root, policy, args.sha.lower())
+        elif args.sha and args.before:
+            result = deploy(repo, site, state_root, policy, args.before.lower(), args.sha.lower())
         else:
-            parser.error("--initialize or --sha is required")
+            parser.error("--initialize or both --before and --sha are required")
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
     return 0
 
