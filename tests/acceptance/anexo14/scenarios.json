@@ -440,7 +440,7 @@
       "executed_at": "2026-10-26T01:00:00Z",
       "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
       "evidence_sha256": {
-        "build/staging/close19/links.json": "a68a67389af589f68074ac0bf7e1f0a93e5e532775bb40d21ddabca8e3dfa37d",
+        "build/staging/close19/links.json": "dd4d7fc3bf661b1baab64ca4fb06017ae1826f276c3b175b2f1d1c4e8ecd2c51",
         "build/staging/close19/youtube-link.json": "89ba9436c971b259aba0cf25ae1d597084c0fb63f99dea18fec00e16bf8dd23f",
         "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b"
       }
