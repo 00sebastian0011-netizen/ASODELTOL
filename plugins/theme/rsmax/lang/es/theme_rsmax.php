@@ -343,8 +343,8 @@ $string['video:notice'] = 'El vídeo lo proporciona otro sitio. Solo se carga cu
 $string['video:play'] = 'Reproducir el vídeo';
 $string['yourprogress'] = 'Tu progreso';
 
-$string['courseutilitiesenabled'] = 'Mostrar información y enlaces rápidos en cursos';
-$string['courseutilitiesenabled_desc'] = 'Añade un aviso de gratuidad, información de políticas de datos y accesos a actividades reales en la página principal de cada curso. Los accesos no configurados no serán clicables.';
+$string['courseutilitiesenabled'] = 'Mostrar avisos institucionales y enlaces rápidos';
+$string['courseutilitiesenabled_desc'] = 'Muestra gratuidad y políticas de datos en las páginas de RSMax para usuarios autenticados, y seis enlaces a actividades reales en cada curso. No depende del rol de Interventoría. Los accesos sin actividad visible permanecen inactivos.';
 $string['coursequicklinks'] = 'Destinos específicos para enlaces rápidos de cursos';
 $string['coursequicklinks_desc'] = 'Opcional: una línea por enlace en formato ID_CURSO|clave|/ruta-interna. Claves: announcements, recordings, materials, workshops, live, support. Solo se aceptan rutas internas del sitio. Los destinos deben existir y respetar los permisos de Moodle. Ejemplo: 15|recordings|/mod/url/view.php?id=42. Si se deja vacío, se usan actividades visibles detectadas automáticamente.';
 $string['coursefreeannouncement'] = 'Las acciones de formación ejecutadas en el marco de la convocatoria DNSFT-0001-FCE son gratuitas para los trabajadores beneficiarios';

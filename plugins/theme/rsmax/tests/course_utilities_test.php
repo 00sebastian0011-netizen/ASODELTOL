@@ -108,4 +108,24 @@ final class course_utilities_test extends \advanced_testcase {
         $this->assertSame(-1, $choices['announcements']);
     }
 
+    public function test_student_sees_real_links_in_multiple_enrolled_courses(): void {
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        $first = $generator->create_course();
+        $second = $generator->create_course();
+        $generator->create_module('folder', ['course' => $first->id]);
+        $generator->create_module('folder', ['course' => $second->id]);
+        $student = $generator->create_user();
+        $generator->enrol_user($student->id, $first->id, 'student');
+        $generator->enrol_user($student->id, $second->id, 'student');
+        $this->setUser($student);
+        foreach ([$first, $second] as $course) {
+            $context = \theme_rsmax\local\course_utilities::export($course);
+            $matches = array_values(array_filter($context['items'],
+                static fn(array $item): bool => $item['key'] === 'materials'));
+            $this->assertCount(1, $matches);
+            $this->assertNotEmpty($matches[0]['url']);
+            $this->assertFalse($context['manageurl']);
+        }
+    }
 }

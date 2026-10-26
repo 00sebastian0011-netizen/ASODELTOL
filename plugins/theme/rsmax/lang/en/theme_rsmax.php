@@ -343,8 +343,8 @@ $string['video:notice'] = 'The video is provided by another site. It is loaded o
 $string['video:play'] = 'Play the video';
 $string['yourprogress'] = 'Your progress';
 
-$string['courseutilitiesenabled'] = 'Show course information and quick links';
-$string['courseutilitiesenabled_desc'] = 'Shows the free-training notice, privacy policy information and real course activity links. Unconfigured destinations remain unavailable.';
+$string['courseutilitiesenabled'] = 'Show institutional notices and course quick links';
+$string['courseutilitiesenabled_desc'] = 'Show free-training and privacy notices across RSMax pages for signed-in users, and six links to real activities in each course. Not limited to an auditor role. Missing or inaccessible links remain disabled.';
 $string['coursequicklinks'] = 'Course-specific quick link destinations';
 $string['coursequicklinks_desc'] = 'Optional: one entry per line as COURSE_ID|key|/internal-path. Keys: announcements, recordings, materials, workshops, live, support. Only site-local URLs are supported. Example: 15|recordings|/mod/url/view.php?id=42. Leave empty to use automatically detected visible course activities.';
 $string['coursefreeannouncement'] = 'Training activities carried out as part of the DNSFT-0001-FCE call are free for beneficiary workers';

@@ -180,8 +180,21 @@ final class course_utilities {
      * Resolve links for the current viewer; activity availability is checked per viewer.
      * A course editor cannot make a restricted activity visible to another group.
      */
+    /**
+     * Official Moodle policy link for the current viewer, or false when not active.
+     * A banner is not evidence of accepting any data processing policy.
+     */
+    public static function policy_url(): string|false {
+        global $CFG;
+        $haspolicy = ($CFG->sitepolicyhandler ?? '') === 'tool_policy'
+            && (int) get_config('tool_policy', 'version') > 0;
+        return $haspolicy
+            ? (new \moodle_url('/admin/tool/policy/user.php'))->out(false)
+            : false;
+    }
+
     public static function export(\stdClass $course): array {
-        global $CFG, $DB;
+        global $DB;
         $modinfo = get_fast_modinfo($course);
         $destinations = [];
 
@@ -252,14 +265,10 @@ final class course_utilities {
             ];
         }
 
-        // The user follows Moodle's published official policy. No fake consent events.
-        $haspolicy = ($CFG->sitepolicyhandler ?? '') === 'tool_policy'
-            && (int) get_config('tool_policy', 'version') > 0;
+        // Keep this field for legacy callers; display now belongs to site notice.
         return [
             'items' => $items,
-            'policyurl' => $haspolicy
-                ? (new \moodle_url('/admin/tool/policy/user.php'))->out(false)
-                : false,
+            'policyurl' => self::policy_url(),
             'manageurl' => self::can_manage((int) $course->id)
                 ? (new \moodle_url('/theme/rsmax/quicklinks.php', ['courseid' => $course->id]))->out(false)
                 : false,

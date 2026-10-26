@@ -180,10 +180,16 @@ if ($oncoursehome && !empty($settings->courseheader) && !$PAGE->user_is_editing(
     $extraclasses[] = 'rsmax-hascoursehero';
     $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 }
-// A course-local information panel; do not modify course data or the QA plugin.
+// Institutional notices are transversal, independent of course or audit role.
+$utilitiesenabled = !isset($settings->courseutilitiesenabled) || !empty($settings->courseutilitiesenabled);
+$sitenotices = $utilitiesenabled && isloggedin() && !isguestuser()
+    ? ['policyurl' => \theme_rsmax\local\course_utilities::policy_url()]
+    : false;
+
+// Activity destinations must remain within the viewer's current course.
 $courseutilities = false;
-if ($oncoursehome && isloggedin() && !isguestuser() && !$PAGE->user_is_editing()
-        && (!isset($settings->courseutilitiesenabled) || !empty($settings->courseutilitiesenabled))) {
+if ($incourse && in_array($PAGE->pagelayout, ['course', 'incourse'], true)
+        && $utilitiesenabled && isloggedin() && !isguestuser() && !$PAGE->user_is_editing()) {
     $courseutilities = \theme_rsmax\local\course_utilities::export($PAGE->course);
 }
 
@@ -388,6 +394,7 @@ $templatecontext = [
     'dashboard' => $dashboard,
     'coursehero' => $coursehero,
     'courseutilities' => $courseutilities,
+    'sitenotices' => $sitenotices,
     'assistantholder' => $assistantholder,
     'homehero' => $homehero,
 ];
