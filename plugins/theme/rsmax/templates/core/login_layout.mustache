@@ -1,0 +1,20 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    @template core/login_layout
+    Theme RSMax override of the Boost split login layout. The login form is untouched.
+}}
+<div id="page-content" class="min-vh-100 row g-0">
+    <aside class="login-layout-left col-lg-6 d-none d-lg-flex">
+        {{> core/login_panel }}
+    </aside>
+    <div id="region-main" class="login-layout-right col-12 col-lg-6">
+        <div id="region-main-box" class="login-layout-right-content">
+            <p class="rsmax-login-free-notice" role="status">
+                Las acciones de formación ejecutadas en el marco de la convocatoria DNSFT-0001-FCE son gratuitas para los trabajadores beneficiarios
+            </p>
+            <div class="login-container">
+                {{{ output.main_content }}}
+            </div>
+        </div>
+    </div>
+</div>

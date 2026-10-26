@@ -1,0 +1,33 @@
+name: QA interfaz institucional RSMax
+
+on:
+  pull_request:
+    paths:
+      - 'plugins/theme/rsmax/**'
+      - 'tests/theme_rsmax/**'
+      - '.github/workflows/quality-rsmax-ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rsmax-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxis PHP
+        run: |
+          php -l plugins/theme/rsmax/classes/local/course_utilities.php
+          php -l plugins/theme/rsmax/tests/course_utilities_test.php
+          php -l plugins/theme/rsmax/layout/drawers.php
+          php -l plugins/theme/rsmax/settings.php
+          php -l plugins/theme/rsmax/lang/es/theme_rsmax.php
+          php -l plugins/theme/rsmax/lang/en/theme_rsmax.php
+      - name: Contratos de UI y seguridad
+        run: node --test tests/theme_rsmax/*.test.mjs
