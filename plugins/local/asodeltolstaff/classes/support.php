@@ -1,7 +1,7 @@
 <?php
 namespace local_asodeltolstaff;
 
-/** Internal support notification; no invented SLA or external recipient. */
+/** Private support cases and native notifications; no invented SLA or external recipient. */
 final class support {
     public static function recipient(): ?\stdClass {
         $id = (int) get_config('local_asodeltolstaff', 'supportuserid');
@@ -26,7 +26,7 @@ final class support {
             throw new \moodle_exception('supportunconfigured', 'local_asodeltolstaff');
         }
         // A native per-user lock prevents duplicate concurrent submissions. The
-        // native notification history is also the bounded rate-limit source.
+        // durable case history is also the bounded rate-limit source.
         $factory = \core\lock\lock_config::get_lock_factory('local_asodeltolstaff');
         $lock = $factory->get_lock('support_' . $USER->id, 2);
         if (!$lock) {
@@ -34,11 +34,14 @@ final class support {
         }
         try {
             global $DB;
-            if ($DB->record_exists_select('notifications',
-                    'component = :component AND eventtype = :type AND useridfrom = :userid AND timecreated > :cutoff',
-                    ['component' => 'local_asodeltolstaff', 'type' => 'supportrequest', 'userid' => $USER->id, 'cutoff' => time() - 60])) {
+            if ($DB->record_exists_select('local_asstaff_case', 'requesterid = :userid AND timecreated > :cutoff',
+                    ['userid' => $USER->id, 'cutoff' => time() - 60])) {
                 throw new \moodle_exception('supportwait', 'local_asodeltolstaff');
             }
+            $transaction = $DB->start_delegated_transaction();
+            $caseid = $DB->insert_record('local_asstaff_case', (object)[
+                'requesterid' => $USER->id, 'recipientid' => $recipient->id, 'subject' => $subject,
+                'body' => $body, 'status' => 'open', 'timecreated' => time(), 'timemodified' => time()]);
             $message = new \core\message\message();
             $message->component = 'local_asodeltolstaff';
             $message->name = 'supportrequest';
@@ -50,13 +53,112 @@ final class support {
             $message->fullmessagehtml = '';
             $message->smallmessage = $subject;
             $message->notification = 1;
-            $message->contexturl = (new \moodle_url('/message/index.php', ['id' => $USER->id]))->out(false);
+            $message->contexturl = (new \moodle_url('/local/asodeltolstaff/support.php', ['caseid' => $caseid]))->out(false);
             $message->contexturlname = get_string('supportchannel', 'local_asodeltolstaff');
             $id = message_send($message);
             if (!$id) {
                 throw new \moodle_exception('supportfailed', 'local_asodeltolstaff');
             }
-            return (int) $id;
+            $DB->set_field('local_asstaff_case', 'notificationid', $id, ['id' => $caseid]);
+            $transaction->allow_commit();
+            return (int) $caseid;
+        } catch (\Throwable $error) {
+            if (isset($transaction)) {
+                $transaction->rollback($error);
+            }
+            throw $error;
+        } finally {
+            $lock->release();
+        }
+    }
+
+    /** A support case is visible only to its requester or its assigned administrator. */
+    public static function get_case(int $id): \stdClass {
+        global $DB, $USER;
+        require_login();
+        \core_user::require_active_user($USER);
+        $scope = 'id = :caseid AND (requesterid = :requester';
+        $params = ['caseid' => $id, 'requester' => $USER->id];
+        if (is_siteadmin($USER->id)) {
+            $scope .= ' OR recipientid = :recipient';
+            $params['recipient'] = $USER->id;
+        }
+        $case = $DB->get_record_select('local_asstaff_case', $scope . ')', $params);
+        if (!$case) {
+            throw new \required_capability_exception(\context_system::instance(), 'moodle/site:config', 'nopermissions', '');
+        }
+        return $case;
+    }
+
+    public static function can_reply(\stdClass $case): bool {
+        global $USER;
+        return (int)$case->recipientid === (int)$USER->id && is_siteadmin($USER->id);
+    }
+
+    public static function visible_cases(): array {
+        global $DB, $USER;
+        require_login();
+        $sql = 'requesterid = :requester';
+        $params = ['requester' => $USER->id];
+        if (is_siteadmin($USER->id)) {
+            $sql .= ' OR recipientid = :recipient';
+            $params['recipient'] = $USER->id;
+        }
+        return $DB->get_records_select('local_asstaff_case', $sql, $params, 'id DESC', '*', 0, 50);
+    }
+
+    /** Reply and optional resolution are explicit actions; no institutional SLA is inferred. */
+    public static function respond(int $caseid, string $body, bool $resolved = false): void {
+        global $DB, $USER;
+        $case = self::get_case($caseid);
+        if (!self::can_reply($case)) {
+            throw new \required_capability_exception(\context_system::instance(), 'moodle/site:config', 'nopermissions', '');
+        }
+        $body = trim(clean_param($body, PARAM_TEXT));
+        if ($body === '' || \core_text::strlen($body) > 4000) {
+            throw new \invalid_parameter_exception('Support reply invalid');
+        }
+        $lock = \core\lock\lock_config::get_lock_factory('local_asodeltolstaff')->get_lock('supportcase_' . $caseid, 2);
+        if (!$lock) {
+            throw new \moodle_exception('supportwait', 'local_asodeltolstaff');
+        }
+        try {
+            $case = self::get_case($caseid);
+            if ($case->status === 'resolved') {
+                throw new \moodle_exception('supportclosed', 'local_asodeltolstaff');
+            }
+            $recent = $DB->get_records('local_asstaff_caseevent', ['caseid' => $caseid, 'actorid' => $USER->id],
+                'id DESC', '*', 0, 1);
+            if ($recent && ($last = reset($recent))->body === $body && $last->timecreated > time() - 60) {
+                throw new \moodle_exception('supportwait', 'local_asodeltolstaff');
+            }
+            $transaction = $DB->start_delegated_transaction();
+            $DB->insert_record('local_asstaff_caseevent', (object)['caseid' => $caseid, 'actorid' => $USER->id,
+                'action' => $resolved ? 'resolved' : 'replied', 'body' => $body, 'timecreated' => time()]);
+            $DB->update_record('local_asstaff_case', (object)['id' => $caseid,
+                'status' => $resolved ? 'resolved' : 'replied', 'timemodified' => time()]);
+            $message = new \core\message\message();
+            $message->component = 'local_asodeltolstaff';
+            $message->name = 'supportreply';
+            $message->userfrom = $USER;
+            $message->userto = \core_user::get_user($case->requesterid, '*', MUST_EXIST);
+            $message->subject = get_string('supportresponse', 'local_asodeltolstaff', $caseid);
+            $message->fullmessage = $body;
+            $message->fullmessageformat = FORMAT_PLAIN;
+            $message->fullmessagehtml = '';
+            $message->smallmessage = $message->subject;
+            $message->notification = 1;
+            $message->contexturl = (new \moodle_url('/local/asodeltolstaff/support.php', ['caseid' => $caseid]))->out(false);
+            $message->contexturlname = get_string('supportchannel', 'local_asodeltolstaff');
+            if (!message_send($message)) {
+                throw new \moodle_exception('supportfailed', 'local_asodeltolstaff');
+            }
+            $transaction->allow_commit();
+        } catch (\Throwable $error) {
+            if (isset($transaction)) {
+                $transaction->rollback($error);
+            }
+            throw $error;
         } finally {
             $lock->release();
         }

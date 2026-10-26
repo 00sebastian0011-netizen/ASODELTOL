@@ -1,0 +1,292 @@
+{
+  "environment": {
+    "plugin_version": "2026102506",
+    "theme_version": "2026102500",
+    "moodle": "5.3+ (Build: 20261021)",
+    "php": "8.4.27",
+    "mysql": "8.4.13",
+    "hidden_fixtures": [
+      {
+        "id": "2",
+        "visible": "0",
+        "categoryvisible": "0"
+      },
+      {
+        "id": "3",
+        "visible": "0",
+        "categoryvisible": "0"
+      },
+      {
+        "id": "4",
+        "visible": "0",
+        "categoryvisible": "0"
+      },
+      {
+        "id": "5",
+        "visible": "0",
+        "categoryvisible": "0"
+      }
+    ]
+  },
+  "requirements82": {
+    "VERIFICADO LOCAL": 34,
+    "PENDIENTE": 2,
+    "BLOQUEADO": 46
+  },
+  "closure19": {
+    "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING": 14,
+    "PENDIENTE DE PRUEBA ADICIONAL": 1,
+    "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA": 3,
+    "IMPLEMENTADO CON EVIDENCIA PARCIAL": 1
+  },
+  "formal_acceptances": 0,
+  "phpunit_distinct": {
+    "tests": 62,
+    "assertions": 257,
+    "failures": 0,
+    "plugin": {
+      "status": "PASS",
+      "exit_code": 0,
+      "tests": 60,
+      "assertions": 252,
+      "errors": 0,
+      "failures": 0,
+      "plugin_version": "2026102506",
+      "isolation": "ISOLATION_PASS: separate server, DB, restricted account, prefix and dataroot; mdl_course read denied",
+      "environment": "private close19_unit DB and data volume"
+    },
+    "theme": "2 tests, 5 assertions"
+  },
+  "node_tests": 45,
+  "browser_final": {
+    "pass": 52,
+    "fail": 0,
+    "unexpected_errors": 0,
+    "engines": [
+      {
+        "name": "chromium",
+        "version": "156.0.8078.4",
+        "hostOS": "win32",
+        "realDevice": false
+      },
+      {
+        "name": "edge",
+        "version": "156.0.4314.42",
+        "hostOS": "win32",
+        "realDevice": false
+      },
+      {
+        "name": "firefox",
+        "version": "157.0",
+        "hostOS": "win32",
+        "realDevice": false
+      },
+      {
+        "name": "webkit",
+        "version": "27.2",
+        "hostOS": "linux",
+        "realDevice": false
+      }
+    ],
+    "evidence": [
+      "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+      "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+    ]
+  },
+  "workflows": {
+    "pass": 11,
+    "fail": 0,
+    "evidence": [
+      "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+      "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/results.json"
+    ]
+  },
+  "http50": {
+    "requests": 550,
+    "status": "PASS",
+    "phases": {
+      "login": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 1.6003,
+        "p95_seconds": 1.92,
+        "p99_seconds": 1.937,
+        "max_seconds": 1.937
+      },
+      "home": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.3571,
+        "p95_seconds": 0.5756,
+        "p99_seconds": 0.5997,
+        "max_seconds": 0.5997
+      },
+      "course": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.8817,
+        "p95_seconds": 1.3224,
+        "p99_seconds": 1.3427,
+        "max_seconds": 1.3427
+      },
+      "unit": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.4699,
+        "p95_seconds": 0.7526,
+        "p99_seconds": 0.7691,
+        "max_seconds": 0.7691
+      },
+      "page": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.4115,
+        "p95_seconds": 0.6877,
+        "p99_seconds": 0.7031,
+        "max_seconds": 0.7031
+      },
+      "assignment": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.4717,
+        "p95_seconds": 0.6972,
+        "p99_seconds": 0.7019,
+        "max_seconds": 0.7019
+      },
+      "quiz": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.3654,
+        "p95_seconds": 0.5386,
+        "p99_seconds": 0.5507,
+        "max_seconds": 0.5507
+      },
+      "grades": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.3914,
+        "p95_seconds": 0.6284,
+        "p99_seconds": 0.6437,
+        "max_seconds": 0.6437
+      },
+      "file": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.1459,
+        "p95_seconds": 0.1888,
+        "p99_seconds": 0.1934,
+        "max_seconds": 0.1934
+      },
+      "video": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 5.1609,
+        "p95_seconds": 5.9335,
+        "p99_seconds": 5.9482,
+        "max_seconds": 5.9482
+      },
+      "audio": {
+        "requests": 50,
+        "failed": 0,
+        "p50_seconds": 0.1628,
+        "p95_seconds": 0.2115,
+        "p99_seconds": 0.2146,
+        "max_seconds": 0.2146
+      }
+    }
+  },
+  "render50": {
+    "checks": 400,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": "login",
+        "maxSeconds": 6.319160899999999,
+        "failed": 0
+      },
+      {
+        "phase": "home",
+        "maxSeconds": 35.5759998,
+        "failed": 0
+      },
+      {
+        "phase": "course",
+        "maxSeconds": 29.300808800000006,
+        "failed": 0
+      },
+      {
+        "phase": "unit",
+        "maxSeconds": 11.443603600000003,
+        "failed": 0
+      },
+      {
+        "phase": "page",
+        "maxSeconds": 8.014652099999992,
+        "failed": 0
+      },
+      {
+        "phase": "grades",
+        "maxSeconds": 8.140395300000003,
+        "failed": 0
+      },
+      {
+        "phase": "full-file-download",
+        "maxSeconds": 0.27852369999999066,
+        "failed": 0
+      },
+      {
+        "phase": "video-and-mp3-start",
+        "maxSeconds": 40.10195630000002,
+        "failed": 0
+      }
+    ]
+  },
+  "links": {
+    "checked": 98,
+    "status": "PASS",
+    "menu": [
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "action": "native More dropdown opened"
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "action": "native mobile drawer opened; authorized reports link visible"
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "action": "native mobile drawer closed"
+      }
+    ]
+  },
+  "youtube": {
+    "test": "native-YouTube-link-playback",
+    "sample": "M7lc1UVf-VE",
+    "status": "PASS",
+    "courseLink": "https://www.youtube.com/watch?v=M7lc1UVf-VE",
+    "navigation": "Native Moodle URL redirect followed",
+    "currentTime": 0.506753,
+    "finalURL": "https://www.youtube.com/watch?v=M7lc1UVf-VE"
+  },
+  "candidate": {
+    "evidence": "build/staging/close19/candidate.json",
+    "lint_checks": 67,
+    "status": "PASS"
+  },
+  "boundaries": [
+    "No VPS access, deployment or formal acceptance.",
+    "Windows and Linux only; no macOS or physical device proof.",
+    "Earlier failed trials are retained, including resource contention and WebKit/Windows media decoding.",
+    "Accessibility scan found color-contrast and region violations; no WCAG certification.",
+    "Monitoring period, official evaluation matrix and five-component definition remain unaccredited."
+  ]
+}

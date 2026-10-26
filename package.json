@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "Herramientas locales sin dependencias para validar y preparar el catálogo AF8.",
+  "description": "Herramientas para validar el catálogo AF8 y ejecutar QA local reproducible.",
   "engines": {
     "node": ">=20"
   },
@@ -12,6 +12,14 @@
     "catalog:bundle": "node scripts/catalog/build-provisioning-bundle.mjs",
     "test": "node --test tests/catalog/*.test.mjs tests/academic/*.test.mjs tests/localization/*.test.mjs tests/deployment-*.test.mjs tests/agents/*.test.mjs",
     "quality": "npm run catalog:validate && npm test",
+    "qa:close19": "node scripts/staging/close19/browser.mjs all",
+    "qa:close19:workflows": "node scripts/staging/close19/workflows.mjs",
+    "qa:close19:links": "node scripts/staging/close19/links.mjs",
+    "qa:close19:render50": "node scripts/staging/close19/render50.mjs",
     "agent:brief": "node scripts/quality/agent-brief.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
+    "playwright": "1.64.1"
   }
 }

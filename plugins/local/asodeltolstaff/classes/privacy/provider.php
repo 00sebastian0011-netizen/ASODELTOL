@@ -38,6 +38,18 @@ final class provider implements
      * @return collection
      */
     public static function get_metadata(collection $collection): collection {
+        $collection->add_database_table('local_asstaff_case', [
+            'requesterid' => 'privacy:metadata:support:userid', 'recipientid' => 'privacy:metadata:support:userid',
+            'subject' => 'privacy:metadata:support:content', 'body' => 'privacy:metadata:support:content',
+            'status' => 'privacy:metadata:support:content',
+            'notificationid' => 'privacy:metadata:support:reference',
+            'timecreated' => 'privacy:metadata:support:time', 'timemodified' => 'privacy:metadata:support:time',
+        ], 'privacy:metadata:support');
+        $collection->add_database_table('local_asstaff_caseevent', [
+            'actorid' => 'privacy:metadata:support:userid', 'body' => 'privacy:metadata:support:content',
+            'action' => 'privacy:metadata:support:content',
+            'caseid' => 'privacy:metadata:support:reference', 'timecreated' => 'privacy:metadata:support:time',
+        ], 'privacy:metadata:support');
         $collection->add_subsystem_link('core_calendar', [], 'privacy:metadata:calendar');
         $collection->add_subsystem_link('core_message', [], 'privacy:metadata:messages');
         $collection->add_subsystem_link('core_customfield', [], 'privacy:metadata:customfields');
@@ -68,6 +80,9 @@ final class provider implements
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
+        if (support_data::cases($userid)) {
+            $contextlist->add_system_context();
+        }
         $sql = "SELECT DISTINCT ctx.id
                   FROM {context} ctx
                   JOIN {local_asstaff_session} s ON s.courseid = ctx.instanceid
@@ -104,6 +119,10 @@ final class provider implements
 
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
+            if ($context instanceof \context_system) {
+                support_data::export((int)$userid);
+                continue;
+            }
             if (!$context instanceof context_course) {
                 continue;
             }
@@ -155,6 +174,14 @@ final class provider implements
     public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB;
 
+        if ($context instanceof \context_system) {
+            $transaction = $DB->start_delegated_transaction();
+            $DB->delete_records('local_asstaff_caseevent');
+            $DB->delete_records('local_asstaff_case');
+            $transaction->allow_commit();
+            return;
+        }
+
         if (!$context instanceof context_course) {
             return;
         }
@@ -177,6 +204,9 @@ final class provider implements
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         $userid = (int) $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
+            if ($context instanceof \context_system) {
+                support_data::delete_user($userid);
+            }
             if ($context instanceof context_course) {
                 self::delete_user_in_course($userid, (int) $context->instanceid);
             }
@@ -190,6 +220,12 @@ final class provider implements
      */
     public static function get_users_in_context(userlist $userlist): void {
         $context = $userlist->get_context();
+        if ($context instanceof \context_system) {
+            $userlist->add_from_sql('userid', 'SELECT requesterid AS userid FROM {local_asstaff_case} WHERE requesterid > 0
+                UNION SELECT recipientid FROM {local_asstaff_case} WHERE recipientid > 0
+                UNION SELECT actorid FROM {local_asstaff_caseevent} WHERE actorid > 0', []);
+            return;
+        }
         if (!$context instanceof context_course) {
             return;
         }
@@ -222,6 +258,12 @@ final class provider implements
      */
     public static function delete_data_for_users(approved_userlist $userlist): void {
         $context = $userlist->get_context();
+        if ($context instanceof \context_system) {
+            foreach ($userlist->get_userids() as $userid) {
+                support_data::delete_user((int)$userid);
+            }
+            return;
+        }
         if (!$context instanceof context_course) {
             return;
         }

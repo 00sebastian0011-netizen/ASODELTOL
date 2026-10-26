@@ -1,0 +1,459 @@
+{
+  "status": "PASS",
+  "plugin_version": "2026102506",
+  "source_matches_runtime": true,
+  "source_sha256": {
+    "attendance.php": "f2801ae510ffd5cf39dd794b35452f9764b33161cc472c9ca44fa4ad3986c27f",
+    "communication.php": "73abd8f6aaceb77f159e582c758c2fc794cf4895005c21b0817e7767818bdacd",
+    "export.php": "3d5dba8c8643828aee0a638e673ce283c7fc6838f9cbedae2a8bb719c37995f9",
+    "help.php": "42c6170e331760fc530859bb80c04380db6a9f633c9a654abad3bdfc5defeeff",
+    "history.php": "bd3810e93dda2568d09981f17c572c1daa07ed744f6749f0d192d1c062d51de3",
+    "index.php": "cf8ea889390bf31d81e2e69391849e5addddca770c950b19d1618ed43bc724fb",
+    "lib.php": "b1a1ff4321f9abc562f5f0801b859af8602ed45dbbd01a775a34e04e9a537ec9",
+    "metadata.php": "808d8dee34e7e712e71873a0ee9dc41242dbbd627b75858eb8501eee7ab9369a",
+    "officehours.php": "2be0d38431c6bcfcd8582b5894ab04692d0ebb9137a315f9d119e67cd1008e4f",
+    "progress.php": "93b42a2b49b6306adf71196191eec684d1eeee4829549ef26decf16e4239a749",
+    "publish.php": "0b68b48b11e839ae1199319dd5d46bb8cc5f77794f098a30c09e271254c641de",
+    "README.md": "b971bfa708de25d26244c5569c75b9fbed62fc08ee56d0c278535d66aef8b3c4",
+    "reports.php": "98772ffedc7a70f2124f93f4ebfc1e557e19b738034068b6e3ec1cdc9b57cdcb",
+    "session.php": "2419b0278793588daa4eec67cc0aa47e621b04750e79f9b60bd4685b32b92b45",
+    "settings.php": "7ae5371192b9c31ac7cb4b47758e26a6212911ac314e1b3e47a6ee49733c9c66",
+    "styles.css": "23cebe992a7f036faceb288afedd4a37d569fde995fd07d01ddaea3146b8b55d",
+    "support.php": "da97ce2f73c108ac2cb488407078d86452f37dd17945956259294d1d3d1424f5",
+    "validate.php": "5dcb0ac221655f1f5fb44176a754c88e797bce254f562c68a117c12021a9843a",
+    "version.php": "0f8fc486f21be6112c73ed496d0fa86818fb512930a8b812a5dcabe14645a4a9",
+    "classes/access_report.php": "ccd86d76f3548586c8a232a160aeccaaa4b1328e77fba80cb3117e0303090579",
+    "classes/course_access.php": "8c37e37ae9244921f91ed3f149f449c1b2c682b3dd2aaa102b76fb447b451fdc",
+    "classes/group_communication.php": "f57bd351e19d60a3c1b5e121d0dee6008a9b604f003646c457d02d15004cf9fa",
+    "classes/group_publisher.php": "fff269ffdf28fc063a4ab62b225efbf1e98ece743b4e0b65b5b1d59de3f816ad",
+    "classes/hook_callbacks.php": "e8dda10e13ae8e8b47098a280fc55792cade51d327d8df9397c9b70bb8dfa29e",
+    "classes/manager.php": "3e2ad74863e503d30b72eb651342bab88ce1b32080fa89651b7121230f53fd03",
+    "classes/metadata_fields.php": "6351fbee296dc81b70c1b043c2e179cbb390cf74b251dec5bd9f411c8e45b2d6",
+    "classes/office_hours.php": "40a4481dcdd28acdde9d8688573d1ce77fd56bf578a80c721a8fae74b1556a8a",
+    "classes/progress_report.php": "d1fd0fa4c99b675e891571be1dc92ec9318c3d61841e6bd17792ef3a65c5c756",
+    "classes/report_manager.php": "524610a8cb174d9eeba3cf48365952afb49759bbf32c1652db3c87c63ca857d5",
+    "classes/support.php": "d54d32bf105a249b116592cbd82e4794b2b885b10e1783a2fdd90c9a4d78415e",
+    "db/access.php": "a42d9d4b1e63b57ac85c2dbdc274be3c3b54bfab0c39642c8ec38ef9f26a63c9",
+    "db/hooks.php": "e929b9bee6d5a8871e1a5184eec83799b097228e8d57df0a5fe53e06bce2dae0",
+    "db/install.xml": "786577166f12727a773a5b0eac9466e77ada16599091d5fff9862d23586a2ba4",
+    "db/messages.php": "14cdd3265c4c084c523a893afdde438cc3bfc5af983b6942a7e40b79501cfac1",
+    "db/upgrade.php": "b381555f9fc5a86fb279ba78057571f311f5548809e3175128873a17dd71b62a",
+    "tests/access_report_test.php": "c1b6f542d39d1f1a80ac68478acafe500dbe006f62fec1c219c49987dce3cb28",
+    "tests/anexo14_native_test.php": "ee1acf01ac1548f1d24de0aede60233bbf0e02c35ffc7e7ade76cde9568da3d7",
+    "tests/communication_support_test.php": "ccc15ca60a8d8675f2cd59e4dd093fc1cfa090817aed7a73ec719291a78522d2",
+    "tests/course_access_test.php": "c5f3492b09960798584121a91f05cde526952779fc9c8d68468a5ea2872c5d06",
+    "tests/group_activity_notification_test.php": "9a5170c847a275a47c8c6bb76a05e01d400ce6ff6bf134e6d2c7fdc0a47a3596",
+    "tests/group_publisher_test.php": "a1109ccf7bf5d4d5755641fbe9437c4a034b012722b077558d80f336c4c45872",
+    "tests/manager_test.php": "08f91e19bbac5c26464af84453b9eb364c5e3aa9419b56b77c15bb33f10015af",
+    "tests/native_academic_fields_test.php": "544c56af92e4e7b69d7d8f01cde3fb611b2183e8e59019a75ef8c2fdae730c60",
+    "tests/observer_scope_test.php": "af9ba2a58d20abcc6851390ed6ec5a715cc5b7d5a8914c1557c9180db7ae1ee0",
+    "tests/office_hours_test.php": "ab414605de2f15705479e7c8def7f7f9189aa90d3683bc2b44a533fb46c799ef",
+    "tests/progress_report_test.php": "d95ee458008123556059f79a0fcac796926da1cf9b324c8319ec3161b2a75b0c",
+    "tests/report_manager_test.php": "3bc55dee0c84dc18b7cec1baa52934f765e42cea3105a8eb42fed9efb98d315f",
+    "tests/section_release_test.php": "bb5cd34dc072a7e5b4cf3e4d26c3cc21a8e7facdedb4145992a3f238637c18ff",
+    "tests/support_case_test.php": "8072fb32ecb6d6173ee2df1d51552b89a6cc468d37367acf2316ee2c67c85fd1",
+    "lang/en/local_asodeltolstaff.php": "49911af8663884adb178e4ae2cb04c7ea21eb4c8615b624198c340f40da90d34",
+    "lang/es/local_asodeltolstaff.php": "ff879ca78c4ef80c8857eba1e6785756f47f0ee09aad7a88bed1b4e921713dd0",
+    "classes/event/record_changed.php": "4a0432e739284d4a8966d3c97199bd1bff0f927a48703c8c616e1af6b7625f49",
+    "classes/privacy/provider.php": "26b4adc29531e47ba5fc906f1f298d69570f39d9b2565c240fcdc2a12296bce2",
+    "classes/privacy/support_data.php": "ddf46209c1beba204a90d8a15924bf7b72f9d3b31b802f67ca9c903787ac7a98",
+    "classes/local/form/attendance_form.php": "8ffd4da55f62c8611013bf3f8a34ea129c72c21aa3eec2a6c498e2487e061c01",
+    "classes/local/form/communication_form.php": "1463a34206c92c28ddd0e037e9ba45f0bd725268c86e7f87cd2b290e76bcc6c2",
+    "classes/local/form/office_hours_form.php": "cda9b3c66c93810679a59f9735eef561782a50b52df2825690b16eb11a56cd5d",
+    "classes/local/form/publish_form.php": "cf81cbab5194230bb9dabaa29ae6fe5a5f2a75b22fc00308672208c786b53754",
+    "classes/local/form/session_form.php": "3df422cf526f8c77e76ed25956b4dec90a1c1687e6176111286782af7820b833",
+    "classes/local/form/support_form.php": "89234480c93fda488a979a188226c621fd04581a30e2181bb167f154981ee2ab",
+    "classes/local/form/support_reply_form.php": "3c2fe6ee0d0bcdf3b6b307b51715a86da420533eadd75b60a63635de43e66c4d",
+    "classes/local/form/validation_form.php": "7180c2becf5780e2de587c2daf344e889a6dfdea9c630fd1b2aa20ceadceee0b"
+  },
+  "theme_version": "2026102500",
+  "theme_source_sha256": {
+    "banners.php": "11b65550ea46d6b44cfb8e8e183521554b6c104b122c2c7d1a2b6d9a4c1ff4c7",
+    "config.php": "f162483729f2153967927cd52eb218e39debe48d81328e1f702e8ba06d1e303b",
+    "lib.php": "c79b123c4a19be755e137801fcda7d1a517c1be325e3b5e0540b5cc7b9d2c190",
+    "LICENSE": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "README.md": "275e3ef75c2ff5e8f2be1b7aa3b3bb4d9bf3efd22c937e10572dfa2aae4c2f89",
+    "settings.php": "c811a64739d53da360a4375d1bce42533488815974836168294e10885b0730e3",
+    "thirdpartylibs.xml": "a88f981e778e528c6fd1180d1f4fdddc0d376d6e8287a053b7ae05835b5dcf05",
+    "version.php": "f9e0612cf48ed8355874415ee6ee6fc911254412f4dd914b48e434fa01a58f78",
+    "classes/hook_listener.php": "7548a2157755741eb2bea78233e1786e463eb958d46ee5b4a666a470e6379733",
+    "cli/setup_dashboard.php": "d97c077439c9503fc58dfadb8b75f61b7f40e8e6352b8dd2e13dd9b310df5c12",
+    "db/caches.php": "1a2a425bad81f521f04863ba66063b62c5dbd53810eab1e05fb787f5a58c7d56",
+    "db/events.php": "d9813476d5eebad0dbb256290893b7f9c4aaea5cc77d1287bde3e997a10891e8",
+    "db/hooks.php": "87010f1cbfc55c28c0b81039713f2ac4ee02c3557dd39d642890d40eba9f6ef4",
+    "db/install.php": "83d73cc5d009e0dc7a4784590a1acc9a84b576cc6062b8c1957dfdcbf5e2592e",
+    "db/install.xml": "3d43d7f66144f8c53394e013f5a2cc5351e96a3ffdbf09b580fbf13f2f5d20e9",
+    "db/upgrade.php": "42890420958ff394a30bd459e4a08d2dde71ca5b28063f9c456adfd9bb33fd49",
+    "fonts/Inter-LICENSE.txt": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+    "fonts/InterVariable.woff2": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3",
+    "layout/drawers.php": "7ac817e7b953a112a8d326d36659b934d9d9b446cf4c4e22e9ba5f54d9f89e80",
+    "pix/screenshot.jpg": "2e5292fdb52d4747437d5779ecf7ec2100d4dd6ec021614139750f10d2e55f78",
+    "pix/tick.svg": "b4e1c775315f8e06d5c0668d870a4ba11e2758130d20a991094e9da3f15af39f",
+    "scss/post.scss": "57e26fb3b6c8c667e9cdeda457e49970a788a7e956578d104959ff53fd852ff4",
+    "scss/pre.scss": "0dff24487532183116d735b2c1947320bebbacb98c04342549cf4444a292b0c5",
+    "style/custom-login.css": "59affee480faf12614bf05f7e40cb60144ae8b86381c5a97724398af70e7f9d2",
+    "templates/activity_stage_route.mustache": "942e86e9066878b15cc205f3bf141f3ee706601eebe7f4eaa3db1f2f651b7661",
+    "templates/activity_stage_top.mustache": "682ef49695af69b3515765c90eac10bddee769eefc57ecc4007443acab939b7d",
+    "templates/banners.mustache": "8a69d2987a07e4ddf556e2f185160ab6420d5e821a496c6202075bdbd68e75ef",
+    "templates/block_carousel_controls.mustache": "8a0170c327dd3ea27d98581d422ff347f9d9d19d77a95c4b60ee9f12d0fac692",
+    "templates/block_carousel_js.mustache": "3a15d5a156b32051b27735e380c448e5d089593455fd7d83a33ab0a9a3b3ec64",
+    "templates/block_embed.mustache": "078ec6bd4b4af1704914308c8ebe5a16eb530a06525e33aaeda6a184880b3d0a",
+    "templates/block_heading.mustache": "58789a401222165ba1a6cbb0959c0267d763fd986fb9b42c568eb5c6c5eb122f",
+    "templates/block_top.mustache": "fd3220df6ed10a662ff7d44534e8f880e63ce79b21e57bd9891657cd864bca36",
+    "templates/block_video.mustache": "52a24ec50c4e7bb646fcaaa67cebaa0b66182975e27b897dc1072cbaa217866e",
+    "templates/course_card.mustache": "eb616f12bca63e3f82b09c5aded6f7fd80c4e89f39ff651cb5f2dbec133582a2",
+    "templates/course_hero.mustache": "ff554c833931bb87f9f49e1d5f56b6b12f15b7d341d16c731b222713b2b5ebf2",
+    "templates/course_progress.mustache": "5a62915a45942d9e95740ab4296d83531f4e4a2d41ab437a3338a6b3a0936a0e",
+    "templates/dashboard.mustache": "c3b43ff939918d6e429faed0c4ec725901ce2dcf2c34ea776fb7cb47bf263998",
+    "templates/drawers.mustache": "29a6173732feee6cb73b899f7b9f0198fb2514c48a35e3574807b04055577c08",
+    "templates/enrol_about.mustache": "5b1be7d8806ed5e0c993b7cf63ae8250538be85c7e9df7bd6145a0951c75b142",
+    "templates/enrol_hero.mustache": "5c3f6fae1eb11c8d0c00bd650f270a1464387f37904e8afc28884f2ad6113260",
+    "templates/footer.mustache": "e8e8aaac53a3e02ccce946f5e6bcbebb774477c76c3a0571d51d1f4fcb904742",
+    "templates/grade_overview.mustache": "5d7f95250c58a2537db0cb1d9f9db1b146e39ec950a147e2f8cbdbf655b9a078",
+    "templates/home_hero.mustache": "e6f87715e05b8938d3ccdd6aa10c5ea1a208e69db4ca148fb6a923263073c059",
+    "templates/navbar.mustache": "34f9bcef35af529c94f62aa54a22889d7d0d4f971b99ef77e4ca895cc4171bf3",
+    "templates/navbar_search.mustache": "4e777a8afe08f2d5492a5b1ee43f4ffc98484d2a8ecb9a7da54938bba5f4b4fd",
+    "templates/region.mustache": "2876452d5560f6d57b6895153d54716583dd5ca0eceaeba444009c0610ac128c",
+    "templates/section_stage_route.mustache": "9d58d96a9f59d205e3a6a3d52068a8dd052d11797b2e2311b9b875ddd06622b8",
+    "templates/section_stage_top.mustache": "83201a255e17fb6e6571eed4dc5e3f9306bb18686a8199dde9905f138118defa",
+    "tests/favicon_test.php": "72b7f45bc779b5db0f90e7719ddd8908d818f34f35dee284dd2b3054ee863a87",
+    "tests/palette_test.php": "d4ea84124a2d33cd4388925bbc2b85960aceeca2baa2d872721a1244b2e14d08",
+    "tests/behat/course.feature": "a25a3e3f65cd01413acd9736a816c542eb6d0cdd54532a4ebb43b4389a941266",
+    "tests/behat/site.feature": "bd422d9fb3f88159e2fb519d8c855fafe2049155fc077b47d45b626e15871748",
+    "tests/local/activity_stage_test.php": "b0cc1114fb5a53006030a567eb517570fb38da6f42e90a0af47d43fc867d37c7",
+    "tests/local/assistant_test.php": "d712e4aeeb48a0aec8ed37c5abb2faa5b3c10a44ee1fa4a3e41a7e0140336e4b",
+    "tests/local/banner_test.php": "1392700b822c27bb050cfb7c4ccb9857993e810c0ab1c82319f162af8cd9d182",
+    "tests/local/course_card_test.php": "5f2c4ac7570c3b402d42f83e8c262982029dc57a21dba2c5c5693e144d87bb84",
+    "tests/local/course_progress_test.php": "65940633143125f26c58b216393340fd35729c8f2dbb1f69903789ed666a1c29",
+    "tests/local/dashboard_test.php": "2c9e1c717c5c135d24b96df01beb5d0b894de75371a265cc4f3194bff040a62a",
+    "tests/local/enrol_landing_test.php": "7445e0dcf945fa3225dc6e8409b7bc312dd9e86e4a098290836ec4c4550816ea",
+    "tests/local/grade_overview_test.php": "1c8f9459b8c937aee347a6ed40b80d52b25486167486f29b404f3969604c4218",
+    "tests/local/home_hero_test.php": "04c0e6c1066edf565ac864d41f73bfbfd591e1d66024021cea86b2694a3b7483",
+    "tests/local/linear_nav_test.php": "6cd8b3487090ab2480be2f295f181574efb9fc53da62d4f4a182130db99a3334",
+    "tests/local/video_test.php": "888809b40ddb216475f9a57efb1175ae16977a08eb76b6c2ccd72f2edce690f6",
+    "templates/block_myoverview/progress-bar.mustache": "67e789a2b0ec10ff340665abd04abfa8db5a0685174a8d63a5403c502716b3d7",
+    "templates/core_courseformat/local/linearnavigation/footer_content.mustache": "9c0a477d8671a46f575b1efc42f5c1b1367e676ab038983b63799900cb714073",
+    "lang/en/theme_rsmax.php": "0909a5f154039f8f54b6d6316e088449dc4495f553f380eb39720ca6e5c19ab1",
+    "lang/es/theme_rsmax.php": "9807fc08b1e0bb9844f27196507fda1456c4e9c31d9df0659225f913b9384195",
+    "classes/block/items_block.php": "84caba5ffec7a8c18cb0cbcbe8b71ea096707007fda84de2abe42a645decc7db",
+    "classes/block/items_edit_form.php": "59fd8bf84757093f1a88e267857b09bda3a8c77789ba59b973c15870a5935db4",
+    "classes/block/landing_block.php": "3e573fde9b172a0b0612ad31ac4b3c9fb54082355e80897498c3568bcc248154",
+    "classes/block/landing_edit_form.php": "26d63c0bd6e94a33e760e72a6c972252c8b66a578f8b0c3d74da665acc39a635",
+    "classes/form/banner_form.php": "f7c43a7e72d5da8a9c6e10e200715e7849affa92de458ec54aba5bddc3a2c174",
+    "classes/local/activity_stage.php": "47769dac6e155efc77bc78d7e0b1728ee4f3eaf81fa800fd954fbff6add21504",
+    "classes/local/assistant.php": "5bf5702d7cdb99124918721aba425a945d1c0a0e387400e1a3d09a25424b8517",
+    "classes/local/banner.php": "0b61c8015fa394975786e1b92f4f0dac100e4df846c48428f0cd09cbd8d765c9",
+    "classes/local/clean.php": "3e01d11a6e8434e7cf7efac0e5ca8e4aeb8e59c6368d229ebe6a2b8c67913062",
+    "classes/local/course_blocks.php": "5331622da4cf8c999ddc2d292c1fa59cb503adca5d9a993d9a988227da44bedc",
+    "classes/local/course_card.php": "de33dfe61c0d59bddbfcd092bb56f98062a412ec701e2907ebe2abdb55dd7b94",
+    "classes/local/course_header.php": "43624f29dedaa001c034cf1403d292ba4d709d7e4520e5176fa1ac95f4973947",
+    "classes/local/course_progress.php": "1d8f05df9a812e577c7174381454b3facaa375ac50f0b335ec7e45d3b4dcad6f",
+    "classes/local/dashboard.php": "0fa1883bbd53245c7a46db2651c67ccfb5f51f41a0c59ed812f3fdc159b6f608",
+    "classes/local/dashboard_setup.php": "9d9efd34061074df79fd66430f5015141db9a49b5bece5d06d2e488a8602f5ee",
+    "classes/local/enrol_landing.php": "cd28549aebe99b48c14e93e361d944119703b052231854682064b42244dfac80",
+    "classes/local/grade_overview.php": "6b60333b46772473666f257c743e18a6e54ae3282de800ed7d9058608e443bff",
+    "classes/local/home_hero.php": "b1a45bd1cd07b9ccad8e6f36670916cca55d4a9dc4e2dbb10440fb0ad072c32b",
+    "classes/local/linear_nav.php": "737f12547128c0212464541d2d7cb8da7179966538b845df57f642e71e9ba495",
+    "classes/local/section_stage.php": "4af4c759f287e2843bbe6e49ed7747ae08470391c34f28e4cc7a59e4e5ca6639",
+    "classes/local/video.php": "a9710704f84d59e5557c15220d00924c044be530386ffc637fed215edd63a68e",
+    "classes/output/core_renderer.php": "1f364fb0028b1305b8d3d98d83f526168ee84a7e5b56cfddca1d30a8d4247dcb",
+    "classes/privacy/provider.php": "2250960014a18177cf031660c35b26833f945b06faac29206afe0818db0a8d5e",
+    "classes/output/core/course_renderer.php": "2ed6d1a80b3bfc3446838f0d6c4ca9e62f9efae69a739b0a88be72792d145525",
+    "backup/moodle2/backup_theme_rsmax_plugin.class.php": "ee5d3b70f183901a58f99ca8c50d3fba6b9e4153015a674b0f3e09a8326cd9b6",
+    "backup/moodle2/restore_theme_rsmax_plugin.class.php": "2f00f22dfbdf2748376cb6c79d2e6ec65cc26f622195031754bd16ee09434421",
+    "amd/build/activity.min.js": "9089baef442153bfa96f364ff2e57d377c704b78254ae3fdeb1bd148fe96d42e",
+    "amd/build/activity.min.js.map": "74bbe42fbdcb2ba526669a892fa89958be6723883b234c65fbe1ce3517a64d3d",
+    "amd/build/assistant.min.js": "aee094e45d79965fbeeb372d5df191fbfc57b49b22ab0c65ba8b413f88023740",
+    "amd/build/assistant.min.js.map": "4458574d430c6867af7f7265aecc060d05dfdaa008347bde0ebc74ca43a4be4c",
+    "amd/build/carousel.min.js": "cd2aaca9c3bf44141fe0fe20f791ba16f5c68bb7ea50ef9249d442ee9d75c593",
+    "amd/build/carousel.min.js.map": "c8a86124f994914fb6de7db9e30973e9d6788878334ee43eca9dfff57cc602f7",
+    "amd/build/course.min.js": "1e4ca5bb49d8c9d9140f0c96987009d1a1924b7fb8c68db15336b819e6aac87d",
+    "amd/build/course.min.js.map": "18ef989d54eea36f20cd6e5615ac9bdd550f75405a820d01f26d9f58e4431b23",
+    "amd/build/drawers.min.js": "34d92da6c022a97bf1674a241fa410756cb36d39c1f7c9378f55a96fe4e6020c",
+    "amd/build/drawers.min.js.map": "8fefd3b0a6e0dc60f049324640d995b5a1cfac258c6356aeed4b5b1e9ed343ca",
+    "amd/build/embed.min.js": "a8c69225243fa46e821a47f092e8e9c5e9dcfc775f03a082caf467ef269301fb",
+    "amd/build/embed.min.js.map": "d824026ebc5a5664939b147bc3aae42ec33dab97a35e4ea34827d9c3b350a63b",
+    "amd/build/filter.min.js": "423fc426818dca57e7349c4185776c2a6b8a5f3f483e8dfb3a14341fdbae3d68",
+    "amd/build/filter.min.js.map": "5e484b8e2160abc4246f31c712bcee8b296da1c5ae5cf4254665b85f6bce4424",
+    "amd/build/grades.min.js": "fb34bee092b9345c8ce5a9e173d1226f69499a187823fa54d3b71fa1281b7b8e",
+    "amd/build/grades.min.js.map": "d3007a75d0ee760d39a55712d9c6bfcb9fcba407eb657857cf74ae4d54d54516",
+    "amd/src/activity.js": "b4bd8b7f1e3ede63d62c1ffe1ca5d9a1e2b6ca865a3d75eec0f6a331f1695d3c",
+    "amd/src/assistant.js": "cea83ad5b492701ce81acd25209a24d508cedb819828776234a4b698ee357d4d",
+    "amd/src/carousel.js": "b33829ab73690c938f97da2b498be688adef011c2e34034535eef15ef8896768",
+    "amd/src/course.js": "ba1b7ed6c72fbd9240376237f7c3d458b8ae9387c3f1185f853e53b8a39769ef",
+    "amd/src/drawers.js": "46d7cc9a3e2aba2cef9cd0c07c5f6490343f321ea0c017f7bde413e1baa9b6c2",
+    "amd/src/embed.js": "24589af5f426d8c214abdf81a2ea65a930d432a65c44da32c26c107a22e241fe",
+    "amd/src/filter.js": "3eaebb645b1bfee50190e1e96eda5d2a02ab8bcdcfa7efd6de352c581c682597",
+    "amd/src/grades.js": "7f57f58f16dea398980e4dfb3f380c30f60c31c193c51c05c406c3eb67a4a876"
+  },
+  "lint": [
+    {
+      "file": "attendance.php",
+      "status": "PASS"
+    },
+    {
+      "file": "communication.php",
+      "status": "PASS"
+    },
+    {
+      "file": "export.php",
+      "status": "PASS"
+    },
+    {
+      "file": "help.php",
+      "status": "PASS"
+    },
+    {
+      "file": "history.php",
+      "status": "PASS"
+    },
+    {
+      "file": "index.php",
+      "status": "PASS"
+    },
+    {
+      "file": "lib.php",
+      "status": "PASS"
+    },
+    {
+      "file": "metadata.php",
+      "status": "PASS"
+    },
+    {
+      "file": "officehours.php",
+      "status": "PASS"
+    },
+    {
+      "file": "progress.php",
+      "status": "PASS"
+    },
+    {
+      "file": "publish.php",
+      "status": "PASS"
+    },
+    {
+      "file": "reports.php",
+      "status": "PASS"
+    },
+    {
+      "file": "session.php",
+      "status": "PASS"
+    },
+    {
+      "file": "settings.php",
+      "status": "PASS"
+    },
+    {
+      "file": "support.php",
+      "status": "PASS"
+    },
+    {
+      "file": "validate.php",
+      "status": "PASS"
+    },
+    {
+      "file": "version.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/access_report.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/course_access.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/group_communication.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/group_publisher.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/hook_callbacks.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/manager.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/metadata_fields.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/office_hours.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/progress_report.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/report_manager.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/support.php",
+      "status": "PASS"
+    },
+    {
+      "file": "db/access.php",
+      "status": "PASS"
+    },
+    {
+      "file": "db/hooks.php",
+      "status": "PASS"
+    },
+    {
+      "file": "db/messages.php",
+      "status": "PASS"
+    },
+    {
+      "file": "db/upgrade.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/access_report_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/anexo14_native_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/communication_support_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/course_access_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/group_activity_notification_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/group_publisher_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/manager_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/native_academic_fields_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/observer_scope_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/office_hours_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/progress_report_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/report_manager_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/section_release_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/support_case_test.php",
+      "status": "PASS"
+    },
+    {
+      "file": "lang/en/local_asodeltolstaff.php",
+      "status": "PASS"
+    },
+    {
+      "file": "lang/es/local_asodeltolstaff.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/event/record_changed.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/privacy/provider.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/privacy/support_data.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/attendance_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/communication_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/office_hours_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/publish_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/session_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/support_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/support_reply_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "classes/local/form/validation_form.php",
+      "status": "PASS"
+    },
+    {
+      "file": "scripts/staging/close19/candidate.php",
+      "status": "PASS"
+    },
+    {
+      "file": "scripts/staging/close19/context.php",
+      "status": "PASS"
+    },
+    {
+      "file": "scripts/staging/close19/fixture.php",
+      "status": "PASS"
+    },
+    {
+      "file": "scripts/staging/close19/install.php",
+      "status": "PASS"
+    },
+    {
+      "file": "scripts/staging/close19/isolation.php",
+      "status": "PASS"
+    },
+    {
+      "file": "plugins/theme/rsmax/classes/output/core_renderer.php",
+      "status": "PASS"
+    },
+    {
+      "file": "plugins/theme/rsmax/version.php",
+      "status": "PASS"
+    },
+    {
+      "file": "plugins/theme/rsmax/tests/favicon_test.php",
+      "status": "PASS"
+    }
+  ]
+}

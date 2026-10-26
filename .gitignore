@@ -88,3 +88,7 @@ Desktop.ini
 !plugins/theme/rsmax/config.php
 !plugins/theme/rsmax/amd/build/
 !plugins/theme/rsmax/amd/build/**
+
+# Cachés de las herramientas Python locales.
+__pycache__/
+*.py[cod]

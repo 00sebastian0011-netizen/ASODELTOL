@@ -27,6 +27,16 @@ use core\url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class core_renderer extends \theme_boost\output\core_renderer {
+    /** Keep configured institutional favicons; use the parent asset when no custom icon exists. */
+    public function favicon() {
+        if (during_initial_install() || get_config('core_admin', 'favicon')
+                || is_file(__DIR__ . '/../../pix/favicon.ico')) {
+            return parent::favicon();
+        }
+        // Moodle intentionally does not inherit the special "theme/favicon" image.
+        return \theme_config::load('boost')->image_url('favicon', 'theme');
+    }
+
     /**
      * Returns the search form shown in the navigation bar.
      *

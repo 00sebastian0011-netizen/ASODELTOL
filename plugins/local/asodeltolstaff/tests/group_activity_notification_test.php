@@ -36,6 +36,11 @@ final class group_activity_notification_test extends \advanced_testcase {
         $instance = $DB->get_record('assign', ['id' => get_coursemodule_from_id('assign', $cmid)->instance], '*', MUST_EXIST);
         $this->assertSame(0, (int) $instance->grade);
         $this->assertGreaterThan(time(), (int) $instance->duedate);
+        require_once($GLOBALS['CFG']->dirroot . '/mod/assign/locallib.php');
+        $cm = get_coursemodule_from_id('assign', $cmid);
+        $assignment = new \assign(\context_module::instance($cmid), $cm, $course);
+        $this->assertSame(GRADE_TYPE_TEXT, (int)$assignment->get_grade_item()->gradetype);
+        $this->assertSame(0, $DB->count_records('grade_grades', ['itemid' => $assignment->get_grade_item()->id]));
 
         $draft = file_get_unused_draft_itemid();
         get_file_storage()->create_file_from_string(['contextid' => \context_user::instance($trainer->id)->id,
