@@ -65,6 +65,8 @@ phpunitdata/
 *.temp
 *.swp
 *.swo
+__pycache__/
+*.pyc
 /tmp/
 /temp/
 /cache/
