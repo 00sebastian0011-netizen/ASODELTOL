@@ -1,0 +1,1735 @@
+{
+  "schema_version": "1.0",
+  "source": "docs/anexo14/TRAZABILIDAD_82_2026-10-25.json",
+  "environment": "staging-local-close19",
+  "scenarios": [
+    {
+      "id": "REQ-01-01",
+      "description": "Inicio, curso, módulo y calificaciones cargan completos en menos de 60 s; un archivo de prueba se descarga y un video empieza a reproducirse en menos de 60 s.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json",
+        "build/staging/close19/load-20261025T210318.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Aceptación y nueva medición en el entorno institucional autorizado.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json": "e87750d00a942ce29f063c8c33365c0f75a52e8798b973c4f7be3686c2df2459",
+        "build/staging/close19/load-20261025T210318.json": "d24d438bdca5dd845f2a8cf91efa647dfd830355d63ba1801801c66463f945f5"
+      }
+    },
+    {
+      "id": "REQ-01-02",
+      "description": "Con N sesiones simultáneas (N = beneficiarios del grupo más grande) el tiempo de respuesta sigue por debajo de 60 s.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/load-20261025T210318.json",
+        "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Perfil probado caliente y controlado; repetir en infraestructura final y en arranque frío.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/load-20261025T210318.json": "d24d438bdca5dd845f2a8cf91efa647dfd830355d63ba1801801c66463f945f5",
+        "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json": "e87750d00a942ce29f063c8c33365c0f75a52e8798b973c4f7be3686c2df2459"
+      }
+    },
+    {
+      "id": "REQ-02-01",
+      "description": "El inicio de sesión y el recorrido básico se completan sin errores en los tres sistemas operativos.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "NOT_EXECUTED",
+      "evidence": [
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "QA debe ejecutar el recorrido en macOS; emulación no lo sustituye.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "PENDIENTE DE PRUEBA ADICIONAL",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+      }
+    },
+    {
+      "id": "REQ-02-02",
+      "description": "El recorrido del curso se completa sin errores visuales ni funcionales en los cuatro navegadores (Safari se prueba con WebKit).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Aceptación institucional; WebKit no equivale a Safari en un Mac físico.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+      }
+    },
+    {
+      "id": "REQ-02-03",
+      "description": "En pantallas de escritorio, celular y tablet no hay elementos cortados ni scroll horizontal, y se puede entregar una actividad y enviar un mensaje.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Revisión institucional y dispositivos físicos para la aceptación final.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+      }
+    },
+    {
+      "id": "REQ-02-04",
+      "description": "Durante todas las pruebas no aparecen respuestas HTTP 4xx/5xx ni errores en la consola del navegador.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json",
+        "build/staging/close19/theme-favicon-final.txt"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Repetir con contenido definitivo; hallazgos de accesibilidad no se declaran subsanados.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324",
+        "build/staging/close19/theme-favicon-final.txt": "86bf1ce085b850df7d916fd483c088d0977c3883839b8b29aabb1dead099d1ff"
+      }
+    },
+    {
+      "id": "REQ-03-01",
+      "description": "Todos los chequeos horarios del periodo evaluado devuelven HTTP 200 y la página de inicio de sesión carga.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "build/staging/close19/availability.jsonl",
+        "build/staging/close19/monitor/availability.jsonl"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Interventoría/operación deben fijar periodo, disponibilidad y continuidad del servicio; acumular la ventana completa.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/availability.jsonl": "4334bf51d733849e05523025b8d99efaabea65d40c591028d1a4dc739072836f",
+        "build/staging/close19/monitor/availability.jsonl": "cc79d7a9e7081457fb45d53b2dd770592866f20a2b4b93a44b6f6895c984e1a8"
+      }
+    },
+    {
+      "id": "REQ-04-01",
+      "description": "Un archivo de prueba de cada tipo (.docx, .xlsx, .pptx, .pdf, .jpg/.png) se visualiza o descarga sin error.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Publicar y abrir PDF, PPTX, DOCX, XLSX, imágenes, video YouTube y MP3 reales/de prueba."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-04-02",
+      "description": "Un video embebido, un enlace de YouTube y un audio mp3 inician reproducción (el tiempo de reproducción avanza).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json",
+        "build/staging/close19/youtube-link.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Probar nuevamente los materiales académicos definitivos, sin atribuir licencia institucional al ejemplo.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324",
+        "build/staging/close19/youtube-link.json": "89ba9436c971b259aba0cf25ae1d597084c0fb63f99dea18fec00e16bf8dd23f"
+      }
+    },
+    {
+      "id": "REQ-05-01",
+      "description": "Existe declaración del conviniente. Si NO usa IA, marcar todos los requisitos del ítem como N/A.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Declaración oficial del uso o no uso de IA y verificar que ninguna función automatiza calificaciones."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-05-02",
+      "description": "Ninguna función de IA dicta la formación ni asigna notas; todas las calificaciones las registra un capacitador.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Declaración oficial del uso o no uso de IA y verificar que ninguna función automatiza calificaciones."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-05-03",
+      "description": "El presupuesto del proyecto no incluye rubros de IA.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Declaración oficial del uso o no uso de IA y verificar que ninguna función automatiza calificaciones."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-06-01",
+      "description": "Ningún recurso es un escaneo y cada módulo tiene al menos un recurso visual o audiovisual.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Verificar que el material real no sea documento escaneado y tenga contenido multimedia usable."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-06-02",
+      "description": "Cada video tiene altura de 720 o 1080 píxeles y audio con códec AAC.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Subir video y demostrar calidad técnica y audio; URL de YouTube no la certifica."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-06-03",
+      "description": "Cada video tiene pista de subtítulos en español o muestra un intérprete de lengua de señas.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Validar subtítulos o lengua de señas sobre el video definitivo."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-06-04",
+      "description": "Cada infografía declara un objetivo de aprendizaje, sigue un orden lógico, tiene información vigente y es legible.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Revisar legibilidad/resolución y calidad de infografías reales."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-06-05",
+      "description": "Hay al menos una actividad interactiva (selección múltiple, arrastrar y soltar, falso/verdadero, etc.) que se ejecuta sin salir de la plataforma y no aparece en el libro de calificaciones.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Agregar y probar recurso interactivo H5P o Lección sin nota, en el curso."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-07-01",
+      "description": "El análisis de similitud da 70 % o más de contenido original (máximo 30 % referenciado).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Documento de originalidad con evidencia de al menos 70% del contenido académico."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-07-02",
+      "description": "Cada referencia proviene de una base de datos con licencia o de un recurso abierto (Creative Commons) y sigue un estilo de citación consistente (APA u otro).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Inventario bibliográfico/licencias y citas de todos los recursos."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-01",
+      "description": "Todos los enlaces del menú y del curso abren sin error (cero enlaces rotos).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/links.json",
+        "build/staging/close19/youtube-link.json",
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Repetir tras la carga del contenido oficial; alcance actual: curso sintético y rutas ensayadas.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/links.json": "dd4d7fc3bf661b1baab64ca4fb06017ae1826f276c3b175b2f1d1c4e8ecd2c51",
+        "build/staging/close19/youtube-link.json": "89ba9436c971b259aba0cf25ae1d597084c0fb63f99dea18fec00e16bf8dd23f",
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b"
+      }
+    },
+    {
+      "id": "REQ-08-02",
+      "description": "Un enlace de ayuda visible abre un recurso con contenido.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Abrir el enlace de ayuda real del curso o sitio y verificar contenido."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-03",
+      "description": "Se ven: nombre de la formación o evento, objetivos, duración en horas, introducción, resultados de aprendizaje e índice de contenido.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Completar y contrastar objetivos, resultados, introducción e índice de cada curso oficial."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-04",
+      "description": "El video está publicado y su transcripción menciona formación, experiencia y temáticas del capacitador.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Falta evidencia de presentación y transcripción del capacitador."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-05",
+      "description": "Los cinco componentes están presentes en cada módulo.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "build/staging/close19/context-final.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Dirección académica debe identificar los cinco componentes del Anexo 14, resolver 50/80 y 4/9 y aportar contenido.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/context-final.json": "1a4f456c483434a2330e013383f339c1497080190ccc7544b80358386211bdbc"
+      }
+    },
+    {
+      "id": "REQ-08-06",
+      "description": "Cada una de esas secciones que el curso use existe y abre. Si el curso no usa ninguna, N/A.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar si se usan secciones de material complementario; si se usan verificar navegación."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-07",
+      "description": "Entre la apertura y el cierre de cada módulo hay 8 días hábiles o menos (sin contar fines de semana ni festivos de Colombia).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Ocho días hábiles con festivos: plugin asodeltolwindow solo diseño, decisión DP-004 a DP-006 abierta."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-08",
+      "description": "Un beneficiario de prueba que no ha completado el módulo 1 no puede abrir el módulo 2.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Progresión aprobada/no aprobada probada en Moodle de staging; requiere reglas oficiales y prueba productiva."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-08-09",
+      "description": "Cada acción de formación tiene registrada al menos una hora sincrónica de atención de dudas.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Evidencia de hora sincrónica de atención de dudas por acción."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-09-01",
+      "description": "La duración registrada de cada sesión es de 60 minutos o más.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Aplicaría a sesiones de la modalidad; comprobar registros de duración >=60 minutos."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-09-02",
+      "description": "Cada sesión del reporte tiene grabación y el beneficiario de prueba la puede abrir.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Grabación disponible y autorizada para cada sesión; proveedor aún pendiente."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-01",
+      "description": "La transmisión o su grabación tiene resolución de 720p o más y audio AAC.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-02",
+      "description": "La transmisión tiene subtítulos en español o muestra un intérprete.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-03",
+      "description": "Con perfiles de escritorio, celular y tablet se llega a la transmisión en pocos pasos y sin errores.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-04",
+      "description": "El reporte de conexión muestra transmisión en vivo continua durante toda la duración programada.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-05",
+      "description": "El reporte de conexión del evento se descarga correctamente.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-10-06",
+      "description": "Existen invitaciones enviadas antes del evento y los formatos de registro y asistencia están 100 % diligenciados (Anexo 12, num. 2.14) con el porcentaje de asistencia exigido (num. 3.4.6).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Si existe modalidad híbrida, comparar convocatoria y asistencia con Anexo 12 (numeral 2.14)."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-11-01",
+      "description": "Con perfiles de escritorio, celular y tablet se llega a la transmisión en pocos pasos y sin errores.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar modalidad PAT; si aplica, comprobar transmisión, informes y evidencias."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-11-02",
+      "description": "El reporte de conexión muestra transmisión en vivo continua durante toda la duración programada.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar modalidad PAT; si aplica, comprobar transmisión, informes y evidencias."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-11-03",
+      "description": "El reporte de conexión se descarga correctamente.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Confirmar modalidad PAT; si aplica, comprobar transmisión, informes y evidencias."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-11-04",
+      "description": "Existen invitaciones previas y los formatos de registro y asistencia están 100 % diligenciados, cumpliendo el Anexo 12, num. 2.15.2.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Si existe modalidad PAT, evidencias y formato Anexo 12 (numeral 2.15.2)."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Académico, licencia, modalidad o proveedor",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-12-01",
+      "description": "Desde la plataforma se ve un canal de soporte (formulario, chat, correo o mesa de ayuda).",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/unit/20261025T211335.json",
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Designar responsable institucional; no implica SLA ni SMTP externo.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6",
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+      }
+    },
+    {
+      "id": "REQ-12-02",
+      "description": "Un ticket de prueba recibe respuesta y solución dentro del tiempo comprometido por el conviniente, y hay evidencia del servicio de soporte y mantenimiento.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Institución debe designar atención, canal/remitente oficial, SLA y evidencia del servicio; SMTP debe validarse por separado.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c",
+        "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+      }
+    },
+    {
+      "id": "REQ-13-01",
+      "description": "Se crea, edita, consulta y elimina una acción de formación de prueba sin errores.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Crear/editar/eliminar formación de prueba; comparar campos contractuales y estado disponible/no disponible."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-13-02",
+      "description": "El formulario incluye y guarda: código, nombre, descripción, estado (disponible / no disponible), fecha de inicio, fecha de terminación, idioma, identificador de rol administrador e identificador de rol interventoría.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/context-final.json",
+        "build/staging/close19/unit/20261025T211335.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identificadores definitivos y aceptación institucional; los valores de QA no son roles oficiales.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/context-final.json": "1a4f456c483434a2330e013383f339c1497080190ccc7544b80358386211bdbc",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+      }
+    },
+    {
+      "id": "REQ-13-03",
+      "description": "Existe un glosario que el administrador y el capacitador pueden editar. Es opcional: si no existe, N/A.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Crear/editar/eliminar formación de prueba; comparar campos contractuales y estado disponible/no disponible. Aplicabilidad condicional/opcional según el Anexo."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-14-01",
+      "description": "Se crea, edita, consulta y elimina un grupo de prueba, y se le pueden agregar miembros.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Grupos, cupos y segregación probados en staging; faltan formularios/campos específicos y prueba productiva."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-14-02",
+      "description": "El formulario incluye y guarda: nombre y numeración, descripción, estado disponible / no disponible y acción de formación a la que pertenece.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/context-final.json",
+        "build/staging/close19/unit/20261025T211335.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Los metadatos de disponibilidad no suspenden matrículas ni reemplazan restricciones académicas.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/context-final.json": "1a4f456c483434a2330e013383f339c1497080190ccc7544b80358386211bdbc",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+      }
+    },
+    {
+      "id": "REQ-14-03",
+      "description": "El grupo tiene una matriz de evaluación (actividades, exámenes, foros y encuestas) y un libro de calificaciones.",
+      "evidence_level": "C",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PARTIAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/results.json",
+        "build/staging/close19/native-evaluation-matrix.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Dirección académica/tercero deben aportar matriz oficial, actividades e instrumentos y reglas aprobadas; no inventar pesos o notas.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO CON EVIDENCIA PARCIAL",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/results.json": "38bdf9251b76d8649bbb880f0159b725f8f86e56a8e7a8bc9446907a8740f9d5",
+        "build/staging/close19/native-evaluation-matrix.json": "acfe9becb07a228d90b0018dfc905d85bbc1e899397204cebcc9140245981775"
+      }
+    },
+    {
+      "id": "REQ-14-04",
+      "description": "El grupo tiene al menos un medio de comunicación activo: chat, correo, foros o intercambio de archivos.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Grupos, cupos y segregación probados en staging; faltan formularios/campos específicos y prueba productiva."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-15-01",
+      "description": "Se crea, edita, consulta y elimina un usuario de prueba sin errores.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Moodle gestiona usuarios, pero comprobar flujos de alta, edición, consulta, baja autorizada."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-15-02",
+      "description": "El formulario incluye y guarda: tipo y número de documento, nombre(s), apellido(s), correo electrónico, rol, contraseña, lugar de residencia y caracterización o pertenencia a grupo o comunidad.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Campos de identidad, tipo y número de documento, residencia y caracterización aún no acreditados."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-16-01",
+      "description": "Un beneficiario de prueba se asigna individualmente a un grupo y aparece en él.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Matrícula grupal piloto; probar 50 usuarios y reimportación idempotente con bloqueo por documento."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-16-02",
+      "description": "Un archivo o selección con varios beneficiarios queda asignado completo al grupo.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Matrícula grupal piloto; probar 50 usuarios y reimportación idempotente con bloqueo por documento."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-16-03",
+      "description": "Registrar o asignar de nuevo un documento ya existente es rechazado.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Exigir unicidad por documento verificada en importación y asignación, no solo por email de Moodle."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-17-01",
+      "description": "En la gestión de roles existen Administrador, Capacitador, Beneficiario, Interventoría y SENA.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "El criterio pide cinco roles; catálogo actual contiene cuatro, no SENA."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-17-02",
+      "description": "Se crea un rol de prueba con nombre, descripción, código y permisos por funcionalidad.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Probar creación de rol personalizado con nombre, código y permisos efectivos."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-18-01",
+      "description": "Con la acción en estado no disponible, el beneficiario de prueba no puede entrar a ella.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Curso AF8 oculto en producción inicialmente; probar denegación cuando no disponible con beneficiario."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-19-01",
+      "description": "El capacitador de prueba no ve grupos que no le fueron asignados.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-19-02",
+      "description": "Un anuncio y un cronograma publicados por el capacitador son visibles para el beneficiario.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Publicar el cronograma institucional aprobado en su fase autorizada.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b"
+      }
+    },
+    {
+      "id": "REQ-19-03",
+      "description": "Un video, un material y una actividad publicados por el capacitador son visibles para el beneficiario.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/unit/20261025T211335.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Cargar material académico autorizado y definir sus reglas de evaluación.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+      }
+    },
+    {
+      "id": "REQ-19-04",
+      "description": "Una nota registrada por el capacitador aparece en el libro del beneficiario.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-19-05",
+      "description": "Un módulo abierto por el capacitador queda disponible para el grupo.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/unit/20261025T211335.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Aplicar únicamente el calendario y las autorizaciones institucionales definitivas.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+      }
+    },
+    {
+      "id": "REQ-19-06",
+      "description": "Se muestra el % de avance de cada beneficiario por módulo y por acción.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-19-07",
+      "description": "El capacitador crea una sesión sincrónica que el grupo puede ver. N/A si la acción no tiene sesiones sincrónicas.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones. Aplicabilidad condicional/opcional según el Anexo."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Pruebas técnicas y aprobación",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-20-01",
+      "description": "Se sube y se descarga un archivo de prueba en perfil de escritorio y de celular.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Probar subir y descargar archivos desde usuario estudiante, escritorio y móvil."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-20-02",
+      "description": "Aparece una notificación por una actividad pendiente y otra por un anuncio nuevo del capacitador.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+        "build/staging/close19/unit/20261025T211335.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "No equivale a entrega SMTP ni a una aprobación institucional.",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "IMPLEMENTADO Y VERIFICADO INTEGRALMENTE EN STAGING",
+      "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
+      "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {
+        "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b",
+        "build/staging/close19/unit/20261025T211335.json": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+      }
+    },
+    {
+      "id": "REQ-20-03",
+      "description": "El beneficiario ve sus notas y su % de avance por módulo y por acción.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Usuario beneficiario debe subir archivo, recibir avisos, ver notas, chatear y caracterizarse."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-20-04",
+      "description": "Un mensaje del beneficiario llega al capacitador o a la interventoría.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Usuario beneficiario debe subir archivo, recibir avisos, ver notas, chatear y caracterizarse."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-20-05",
+      "description": "El beneficiario diligencia y guarda su caracterización o pertenencia a grupo o comunidad.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Formulario de caracterización guardando el dato y controles de privacidad."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Identidad, caracterización y roles",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-21-01",
+      "description": "Ve el listado de beneficiarios por grupo con su estado activo/inactivo, lugar de residencia y caracterización.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Interventoría debe ver estado, residencia y caracterización autorizados por grupo."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-21-02",
+      "description": "Ve las calificaciones de los beneficiarios y su % de avance por módulo y por acción.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "build\\staging\\anexo14-isolated\\20261025054505-summary.json"
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-21-03",
+      "description": "Un mensaje del beneficiario llega a Interventoría y su respuesta llega al beneficiario.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Interventoría con mensajería bidireccional pendiente de prueba real."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-22-01",
+      "description": "Ve el listado de beneficiarios por grupo con su estado activo/inactivo, lugar de residencia y caracterización.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "build\\staging\\anexo14-isolated\\20261025054505-summary.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-22-02",
+      "description": "Ve las calificaciones de los beneficiarios y su % de avance por módulo y por acción.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "build\\staging\\anexo14-isolated\\20261025054505-summary.json"
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-22-03",
+      "description": "Un mensaje del beneficiario llega a SENA y su respuesta llega al beneficiario.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Rol SENA y mensajería bidireccional no probados."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Roles, datos personales y permisos",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-23-01",
+      "description": "La sesión de prueba queda grabada, la publica el capacitador y la pueden abrir beneficiario, interventoría y SENA.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "No hay flujo de grabación y difusión validado en producción."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-23-02",
+      "description": "Beneficiario y capacitador intercambian mensajes de chat y el beneficiario puede activar micrófono y cámara.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Chat, micrófono y cámara necesitan proveedor integrado y prueba."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-23-03",
+      "description": "Tras la sesión de prueba, quedan registrados los asistentes y las actividades realizadas.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Asistencia contractual pendiente; prototipo staff no instalado en producción."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-24-01",
+      "description": "El reporte se descarga en .xlsx o .xls y trae todas las columnas del Anexo 12, num. 2.14.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Reporte beneficiarios requiere columnas exactas de Anexo 12, numeral 2.14."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-24-02",
+      "description": "El reporte se descarga en .xlsx o .xls y trae por acción: grupos, beneficiarios registrados y beneficiarios que culminaron con éxito.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Consolidado final requiere inscritos, grupos y culminación aprobada."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-24-03",
+      "description": "El reporte se descarga en .xlsx o .xls con asistencia por sesión, grupo y acción. Si la plataforma no lo genera, debe integrar otra que sí lo haga.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "Reporte sesiones y asistencia no puede cerrarse sin asistencia válida."
+      ],
+      "service_class": "NO_APLICA",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "BLOQUEADO",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": null,
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    },
+    {
+      "id": "REQ-24-04",
+      "description": "El reporte se descarga en .xlsx o .xls con: inicio y cierre de sesión (fecha y hora), inicio y fin de cada acción de formación, y hora de disponibilidad para dudas.",
+      "evidence_level": "A/B",
+      "command": "npm run qa:anexo14:manifest",
+      "data": "datos sintéticos aislados de close19; contenido oficial excluido",
+      "result": "PASS_REAL_LOCAL",
+      "evidence": [
+        "Tiempos de capacitador requieren evidencia independiente de login y sesión de dudas."
+      ],
+      "service_class": "SERVICIO_REAL_DE_PRUEBAS",
+      "limitation": "Asistencia, proveedor o Anexo 12",
+      "institutional_status": "PENDIENTE_DE_APROBACION",
+      "technical_status": "VERIFICADO LOCAL",
+      "commit": "17638ff34ba08848a4665f79753800a938d18387",
+      "environment": "Histórico local; nueva batería aislada se registra por separado",
+      "executed_at": "2026-10-26T01:00:00Z",
+      "candidate_version": "local_asodeltolstaff 0.5.0 / RSMax 1.2.4",
+      "evidence_sha256": {}
+    }
+  ]
+}

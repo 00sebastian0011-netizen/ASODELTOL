@@ -10,6 +10,12 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect('local_asodeltolstaff/supportuserid',
         get_string('supportrecipient', 'local_asodeltolstaff'),
         get_string('supportmeaning', 'local_asodeltolstaff'), 0, $recipients));
+    $settings->add(new admin_setting_configtext('local_asodeltolstaff/residencefield',
+        get_string('report_residence', 'local_asodeltolstaff'),
+        get_string('reportprofilemeaning', 'local_asodeltolstaff'), '', PARAM_ALPHANUMEXT));
+    $settings->add(new admin_setting_configtext('local_asodeltolstaff/characterizationfield',
+        get_string('report_characterization', 'local_asodeltolstaff'),
+        get_string('reportprofilemeaning', 'local_asodeltolstaff'), '', PARAM_ALPHANUMEXT));
     $ADMIN->add('localplugins', new admin_externalpage('asodeltolmetadata',
         get_string('metadatafields', 'local_asodeltolstaff'),
         new moodle_url('/local/asodeltolstaff/metadata.php')));

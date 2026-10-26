@@ -70,6 +70,32 @@ final class report_manager_test extends \advanced_testcase {
         $this->assertSame(1, $summary['groupcount']);
     }
 
+    public function test_opt_in_profile_fields_respect_group_scope(): void {
+        global $DB;
+        [$course, $a, $b, $first, $second, $trainer] = $this->fixture();
+        $fieldids = [];
+        foreach (['qa_residence' => 'residencefield', 'qa_character' => 'characterizationfield'] as $short => $setting) {
+            $fieldids[$setting] = $DB->insert_record('user_info_field', (object) [
+                'shortname' => $short, 'name' => $short, 'datatype' => 'text', 'categoryid' => 0,
+                'required' => 0, 'locked' => 0, 'visible' => PROFILE_VISIBLE_PRIVATE,
+                'forceunique' => 0, 'signup' => 0,
+            ]);
+            set_config($setting, $short, 'local_asodeltolstaff');
+            foreach ([$first, $second] as $user) {
+                $DB->insert_record('user_info_data', (object) [
+                    'userid' => $user->id, 'fieldid' => $fieldids[$setting],
+                    'data' => $user->username . '-' . $short, 'dataformat' => FORMAT_PLAIN,
+                ]);
+            }
+        }
+        $this->setUser($trainer);
+        $rows = report_manager::rows($course->id, 'participants');
+        $this->assertCount(1, $rows);
+        $this->assertSame($first->username . '-qa_residence', $rows[0]['residence']);
+        $this->assertSame($first->username . '-qa_character', $rows[0]['characterization']);
+        $this->assertSame($first->username, $rows[0]['username']);
+    }
+
     public function test_student_cannot_export_enrollment_data(): void {
         [$course, $a, $b, $student] = $this->fixture();
         $this->setUser($student);
