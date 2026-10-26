@@ -70,9 +70,9 @@ class TestSanitizedProbes(unittest.TestCase):
         self.assertNotIn("config.php", json.dumps(result))
 
     def test_four_allowlisted_tools(self):
-        self.assertEqual(set(probes.TOOLS), {
+        self.assertTrue({
             "vps_system_health", "moodle_versions", "upload_limits", "deployment_status",
-        })
+        } <= set(probes.TOOLS))
 
 
 class TestRpc(unittest.TestCase):
@@ -81,11 +81,17 @@ class TestRpc(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(data["result"]["protocolVersion"], "2025-06-18")
         status, data = mcp_server.handle_rpc({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
-        self.assertEqual(len(data["result"]["tools"]), 4)
-        for tool in data["result"]["tools"]:
+        self.assertEqual(len(data["result"]["tools"]), 9)
+        names = {tool["name"] for tool in data["result"]["tools"]}
+        self.assertTrue({"vps_system_health", "moodle_versions", "upload_limits", "deployment_status"} <= names)
+        self.assertTrue({"validation_catalog", "run_validation", "validation_status", "validation_results", "validation_evidence"} <= names)
+        for tool in [item for item in data["result"]["tools"] if item["name"] in probes.TOOLS]:
             self.assertTrue(tool["annotations"]["readOnlyHint"])
             self.assertFalse(tool["annotations"]["destructiveHint"])
             self.assertEqual(tool["inputSchema"]["properties"], {})
+        for tool in [item for item in data["result"]["tools"] if item["name"].startswith("validation_") or item["name"] == "run_validation"]:
+            self.assertFalse(tool["annotations"]["destructiveHint"])
+            self.assertFalse(tool["inputSchema"].get("additionalProperties", True))
 
     def test_rejects_arbitrary_commands_paths_and_methods(self):
         for name, args in [
