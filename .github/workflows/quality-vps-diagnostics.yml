@@ -1,0 +1,29 @@
+name: QA diagnóstico VPS solo lectura
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/diagnostics/**'
+      - 'tests/diagnostics/**'
+      - 'docs/CONEXION_CHATGPT_VPS_SOLO_LECTURA.md'
+      - '.github/workflows/quality-vps-diagnostics.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readonly-diagnostics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validar sintaxis Python y Bash
+        run: |
+          bash -n scripts/diagnostics/vps/install-diagnostics.sh
+          python -m py_compile scripts/diagnostics/vps/probes.py scripts/diagnostics/vps/mcp_server.py
+      - name: Probar casos positivos y negativos
+        run: python -m unittest discover -s tests/diagnostics -v
