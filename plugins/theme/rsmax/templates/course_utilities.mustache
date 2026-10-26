@@ -26,6 +26,14 @@
         <h2 class="rsmax-courseutilities-linkstitle" id="rsmax-course-quicktitle">
             {{#str}}coursequicktitle, theme_rsmax{{/str}}
         </h2>
+        {{#manageurl}}
+            <div class="rsmax-courseutilities-manage">
+                <a class="btn btn-outline-primary btn-sm" href="{{manageurl}}">
+                    <i class="fa fa-gear" aria-hidden="true"></i>
+                    {{#str}}coursequickadmin, theme_rsmax{{/str}}
+                </a>
+            </div>
+        {{/manageurl}}
         <div class="rsmax-courseutilities-grid">
             {{#items}}
                 <div class="rsmax-courseutilities-item">

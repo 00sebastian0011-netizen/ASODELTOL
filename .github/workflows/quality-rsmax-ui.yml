@@ -24,6 +24,8 @@ jobs:
       - name: Sintaxis PHP
         run: |
           php -l plugins/theme/rsmax/classes/local/course_utilities.php
+          php -l plugins/theme/rsmax/quicklinks.php
+          php -l plugins/theme/rsmax/classes/form/course_quicklinks_form.php
           php -l plugins/theme/rsmax/tests/course_utilities_test.php
           php -l plugins/theme/rsmax/layout/drawers.php
           php -l plugins/theme/rsmax/settings.php
