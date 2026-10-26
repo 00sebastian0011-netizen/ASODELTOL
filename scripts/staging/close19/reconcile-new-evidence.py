@@ -21,6 +21,7 @@ evidence = {
     'roles': latest('roles-browser-*/results.json'),
     'roles_xlsx': latest('roles-browser-*/xlsx-validation.json'),
     'roles_db': BASE / 'private/roles-check.json',
+    'message': latest('message-browser-*/results.json'),
     'content': latest('content-browser-*/results.json'),
     'content_db': BASE / 'private/content-check.json',
     'media': BASE / 'media350-validation.json',
@@ -48,6 +49,7 @@ full = {
     'REQ-20-05': ['identity', 'identity_db'],
     'REQ-21-01': ['roles', 'roles_xlsx'],
     'REQ-22-01': ['roles', 'roles_xlsx'],
+    'REQ-22-03': ['message', 'roles_db'],
     'REQ-24-03': ['session', 'session_xlsx'],
 }
 simulated = {'REQ-24-03'}  # Real Moodle XLSX and permissions, provisional synthetic attendance.
@@ -113,9 +115,10 @@ matrix = ROOT / 'docs/anexo14/MATRIZ_ASODELTOL_82.md'
 lines = matrix.read_text(encoding='utf-8').splitlines()
 byid = {row['id']: row for row in trace['rows']}
 for index, line in enumerate(lines):
-    if line.startswith('**34 verificados locales**') or line.startswith('**43 verificados locales**'):
-        lines[index] = '**43 verificados locales, 2 pendientes, 37 bloqueados, 0 aceptaciones oficiales.** ' + \
-            'De los 46 bloqueos originales, esta misión verificó técnicamente 8 de forma local y 1 con asistencia sintética; ' + \
+    if line.startswith('**34 verificados locales**') or line.startswith('**43 verificados locales**') or \
+            line.startswith('**44 verificados locales**'):
+        lines[index] = '**44 verificados locales, 2 pendientes, 36 bloqueados, 0 aceptaciones oficiales.** ' + \
+            'De los 46 bloqueos originales, esta misión verificó técnicamente 9 de forma local y 1 con asistencia sintética; ' + \
             '15 tienen sólo subpruebas. Ningún estado certifica producción.'
     if not line.startswith('| REQ-'):
         continue

@@ -4,9 +4,9 @@
   "base_commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
   "total": 82,
   "counts": {
-    "VERIFICADO LOCAL": 43,
+    "VERIFICADO LOCAL": 44,
     "PENDIENTE": 2,
-    "BLOQUEADO": 37
+    "BLOQUEADO": 36
   },
   "formal_acceptances": 0,
   "rows": [
@@ -2400,13 +2400,17 @@
       "id": "REQ-22-03",
       "criterion": "Un mensaje del beneficiario llega a SENA y su respuesta llega al beneficiario.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Rol SENA y mensajería bidireccional no probados.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Rol SENA y mensajería bidireccional no probados.",
+        "build/staging/close19/message-browser-2026-10-26T14-18-17-274Z/results.json",
+        "build/staging/close19/private/roles-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
@@ -2414,11 +2418,22 @@
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
       "formal_acceptance": "NO ACREDITADA",
       "close19_20261026": {
-        "status": "NOT_EXECUTED",
-        "evidence": [],
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/message-browser-2026-10-26T14-18-17-274Z/results.json",
+            "sha256": "b1f6f6a426fc128432155930c7d06acd905ff91efac28903ebad7b777ae7c21e"
+          },
+          {
+            "path": "build/staging/close19/private/roles-check.json",
+            "sha256": "9b15225f564afa3b6994fc271eb1170e97bd2b14f6eac5bf8493716982239b28"
+          }
+        ],
         "environment": "http://127.0.0.1:8054, isolated local Docker",
         "formal_acceptance": "NO ACREDITADA"
-      }
+      },
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-23-01",
@@ -2645,15 +2660,15 @@
     "scope": "14 nuevos verificados en staging; 20 verificados históricos conservados, no recertificados hoy."
   },
   "close19_assessment": {
-    "assessed_at": "2026-10-26T14:15:38.269976+00:00",
+    "assessed_at": "2026-10-26T14:18:37.999712+00:00",
     "originally_blocked": 46,
     "statuses": {
-      "PASS_REAL_LOCAL": 8,
+      "PASS_REAL_LOCAL": 9,
       "PASS_SIMULATED": 1,
       "PARTIAL": 15,
       "FAIL": 0,
       "BLOCKED_EXTERNAL": 6,
-      "NOT_EXECUTED": 16
+      "NOT_EXECUTED": 15
     },
     "official_acceptances": 0,
     "note": "A passing subtest never changes an integral criterion from BLOQUEADO."
