@@ -9,7 +9,7 @@ npm.cmd run qa:production:catalog
 node scripts/anexo14/production-validation.mjs --run --ids=TC-FILE-DOWNLOAD-SHA256,TC-FILE-UPLOAD-READONLY,TC-VIDEO-PLAYBACK,TC-NAVIGATION-MODULES,TC-ACTIVITIES-BLOCKS --out=production-preflight.json
 ```
 
-El comando anterior no ejecuta una sesión sin `ASODELTOL_PROD_BASE_URL=https://aulas.prospectiva.edu.co` y una `ASODELTOL_PROD_STORAGE_STATE` fuera del repositorio. El hash esperado y las rutas se suministran por variables de entorno, no se versionan.
+El comando anterior no ejecuta una sesión sin `ASODELTOL_PROD_BASE_URL=https://aulaasodeltol.online` y una `ASODELTOL_PROD_STORAGE_STATE` fuera del repositorio. El hash esperado, tipo MIME, nombre esperado y rutas se suministran por variables de entorno, no se versionan.
 
 Entradas JSON: `ASODELTOL_PROD_MODULE_PATHS`, `ASODELTOL_PROD_QUICKLINK_URLS` (exactamente seis), `ASODELTOL_PROD_ACTIVITY_PATHS`, `ASODELTOL_PROD_BLOCK_SELECTORS`, `ASODELTOL_PROD_NEGATIVE_PATHS` y `ASODELTOL_PROD_RESPONSIVE_PATHS`.
 

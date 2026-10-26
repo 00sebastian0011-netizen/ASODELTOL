@@ -20,6 +20,9 @@ Cliente MCP
 
 El MCP no abre shell, SQL, PHP, navegador ni sesión. Solo acepta `case_id` de
 `production-test-catalog.json`, con un máximo de cinco casos por solicitud.
+`run_validation` exige además una referencia de autorización específica que el
+VPS valida contra un archivo privado con expiración y casos permitidos; el
+Bearer ordinario de diagnóstico no concede por sí solo permiso de ejecución.
 `run_validation` crea una solicitud local; el ejecutor reclama el trabajo y
 actualiza el resultado. El ejecutor genera la sesión Playwright temporalmente
 en el VPS mediante una bóveda de cuentas sintéticas protegida; no recibe ni

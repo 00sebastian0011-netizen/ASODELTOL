@@ -20,6 +20,8 @@ from typing import Any
 MAX_CASES = 5
 MAX_RESULTS = 5
 DEDUPE_SECONDS = 300
+RUN_WINDOW_SECONDS = 60
+MAX_RUNS_PER_WINDOW = 3
 ID_RE = re.compile(r"^[A-Z0-9][A-Z0-9._-]{1,63}$")
 VALIDATION_ID_RE = re.compile(r"^val-[a-f0-9]{16}$")
 VALIDATION_TOOLS = {
@@ -39,10 +41,11 @@ VALIDATION_TOOLS = {
         "description": "Queue up to five registered read-only validation cases for the separate QA executor.",
         "inputSchema": {
             "type": "object",
-            "required": ["case_ids"],
+                "required": ["case_ids", "authorization_ref"],
             "properties": {
                 "case_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": MAX_CASES},
                 "mode": {"type": "string", "enum": ["read_only"]},
+                "authorization_ref": {"type": "string", "pattern": "^ASO-VAL-[A-Z0-9-]{6,48}$"},
             },
             "additionalProperties": False,
         },
@@ -131,6 +134,8 @@ class ValidationService:
         self.state_dir = Path(state_value) if state_value else Path(__file__).resolve().parents[3] / "build/anexo14/validation-state"
         self.jobs_dir = self.state_dir / "jobs"
         self.audit_file = self.state_dir / "audit.jsonl"
+        self.run_authorization_file = Path(os.environ.get("ASODELTOL_VALIDATION_RUN_AUTH_FILE", "")) if os.environ.get("ASODELTOL_VALIDATION_RUN_AUTH_FILE") else None
+        self._run_times: list[float] = []
         self._lock = threading.RLock()
         self._catalog: dict[str, Any] | None = None
 
@@ -229,15 +234,27 @@ class ValidationService:
         return {"schema_version": data["schema_version"], "count": len(selected), "cases": [self._case_summary(case) for case in selected]}
 
     def run(self, args: dict[str, Any]) -> dict[str, Any]:
-        if set(args) - {"case_ids", "mode"}:
+        if set(args) - {"case_ids", "mode", "authorization_ref"}:
             raise ValidationInputError("Unsupported run_validation parameters")
         case_ids = _ids(args.get("case_ids"), "case_ids")
+        authorization_ref = args.get("authorization_ref")
+        if not isinstance(authorization_ref, str) or not re.fullmatch(r"ASO-VAL-[A-Z0-9-]{6,48}", authorization_ref):
+            raise ValidationInputError("Invalid authorization_ref")
         if args.get("mode", "read_only") != "read_only":
             raise ValidationInputError("Only read_only mode is supported")
         catalog = self._load_catalog()["cases"]
         unknown = [case_id for case_id in case_ids if case_id not in catalog]
         if unknown:
             raise ValidationInputError("Unknown case_id")
+        with self._lock:
+            now = time.time()
+            self._run_times = [stamp for stamp in self._run_times if now - stamp < RUN_WINDOW_SECONDS]
+            if len(self._run_times) >= MAX_RUNS_PER_WINDOW:
+                return {"validation_id": None, "status": "BLOCKED", "reason": "validation_rate_limit", "retry_after_seconds": max(1, int(RUN_WINDOW_SECONDS - (now - self._run_times[0])))}
+            if not self._authorized_run(authorization_ref, case_ids):
+                self._audit("authorization_denied", case_ids=case_ids, status="BLOCKED", reason="validation_authorization_unavailable")
+                return {"validation_id": None, "status": "BLOCKED", "reason": "validation_authorization_unavailable"}
+            self._run_times.append(now)
         signature = hashlib.sha256(_safe_json(sorted(case_ids)).encode()).hexdigest()
         now = time.time()
         with self._lock:
@@ -271,6 +288,17 @@ class ValidationService:
             self._write_job(job)
             self._audit("requested", validation_id=validation_id, case_ids=case_ids, status=status)
             return self._compact_status(job)
+
+    def _authorized_run(self, authorization_ref: str, case_ids: list[str]) -> bool:
+        if self.run_authorization_file is None:
+            return False
+        try:
+            approval = json.loads(self.run_authorization_file.read_text(encoding="utf-8"))
+            expires = datetime.fromisoformat(str(approval.get("expires_at", "")).replace("Z", "+00:00"))
+            allowed = approval.get("allowed_case_ids", [])
+            return approval.get("reference") == authorization_ref and approval.get("purpose") == "production_validation_read_only" and expires > datetime.now(timezone.utc) and (allowed == ["*"] or all(case_id in allowed for case_id in case_ids))
+        except (OSError, ValueError, TypeError):
+            return False
 
     def _compact_status(self, job: dict[str, Any]) -> dict[str, Any]:
         return {

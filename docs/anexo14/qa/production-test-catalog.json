@@ -19,7 +19,7 @@
       "requirements": ["REQ-01-01", "REQ-06-01"],
       "kind": "download_sha256",
       "authorized_action": "GET autenticado y hash SHA-256 en memoria",
-      "inputs": ["ASODELTOL_PROD_DOWNLOAD_URL", "ASODELTOL_PROD_DOWNLOAD_SHA256", "ASODELTOL_PROD_STORAGE_STATE"]
+      "inputs": ["ASODELTOL_PROD_DOWNLOAD_URL", "ASODELTOL_PROD_DOWNLOAD_SHA256", "ASODELTOL_PROD_DOWNLOAD_CONTENT_TYPE", "ASODELTOL_PROD_DOWNLOAD_FILENAME", "ASODELTOL_PROD_STORAGE_STATE"]
     },
     {
       "case_id": "TC-FILE-UPLOAD-READONLY",

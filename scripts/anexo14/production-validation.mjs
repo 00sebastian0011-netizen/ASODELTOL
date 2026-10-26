@@ -2,12 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
+import {activitiesComplete, downloadIdentity, PRODUCTION_ORIGIN, safeProductionUrl} from './validation-guards.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const catalogPath = path.join(root, 'docs/anexo14/qa/production-test-catalog.json');
 const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
 const outRoot = path.join(root, 'build/anexo14/production');
-const productionHost = 'aulas.prospectiva.edu.co';
 const env = process.env;
 
 function arg(name) {
@@ -21,16 +21,7 @@ function jsonEnv(name) {
 }
 
 function safeUrl(value, base) {
-  try {
-    const url = new URL(value, base);
-    if (url.protocol !== 'https:') return null;
-    url.username = '';
-    url.password = '';
-    for (const key of [...url.searchParams.keys()]) {
-      if (/token|sesskey|password|secret|key/i.test(key)) url.searchParams.set(key, '[REDACTED]');
-    }
-    return url;
-  } catch { return null; }
+  return safeProductionUrl(value, base);
 }
 
 function displayUrl(value, base) {
@@ -58,7 +49,7 @@ function fail(testCase, reason, details = {}) {
 function validateBase() {
   const base = env.ASODELTOL_PROD_BASE_URL;
   const url = safeUrl(base || '', base || 'https://invalid.local');
-  if (!url || url.hostname !== productionHost) return {base: null, reason: `ASODELTOL_PROD_BASE_URL debe ser https://${productionHost}`};
+  if (!url || url.origin !== PRODUCTION_ORIGIN) return {base: null, reason: `ASODELTOL_PROD_BASE_URL debe ser ${PRODUCTION_ORIGIN}`};
   return {base: url.origin, reason: null};
 }
 
@@ -100,9 +91,11 @@ async function main() {
           const url = safeUrl(value, baseCheck.base);
           if (!url) throw new Error('URL no válida o no HTTPS.');
           const response = await page.goto(url.toString(), {waitUntil: 'domcontentloaded'});
+          const finalUrl = safeUrl(page.url(), baseCheck.base);
+          if (!finalUrl) throw new Error('unauthorized_redirect');
           const body = await page.locator('body').innerText().catch(() => '');
           const login = page.locator('#loginbtn').count ? await page.locator('#loginbtn').count() : 0;
-          return {url: displayUrl(url, baseCheck.base), status: response?.status() ?? 0, bytes: body.length, loginRequired: login > 0, errorPage: /errorcode|exception/i.test(body)};
+          return {url: displayUrl(finalUrl, baseCheck.base), status: response?.status() ?? 0, bytes: body.length, loginRequired: login > 0, errorPage: /errorcode|exception/i.test(body)};
         };
         for (const item of selected) {
           try {
@@ -110,11 +103,14 @@ async function main() {
             if (item.kind === 'download_sha256') {
               const target = safeUrl(env.ASODELTOL_PROD_DOWNLOAD_URL, baseCheck.base);
               const expected = String(env.ASODELTOL_PROD_DOWNLOAD_SHA256 || '').toLowerCase();
-              if (!target || !/^[a-f0-9]{64}$/.test(expected)) { results.push(blocked(item, 'Falta URL de descarga HTTPS y hash SHA-256 esperado de 64 hex')); continue; }
+              const expectedContentType = String(env.ASODELTOL_PROD_DOWNLOAD_CONTENT_TYPE || '').toLowerCase();
+              const expectedFilename = String(env.ASODELTOL_PROD_DOWNLOAD_FILENAME || '');
+              if (!target || !/^[a-f0-9]{64}$/.test(expected) || !expectedContentType || !expectedFilename) { results.push(blocked(item, 'Faltan URL, hash, tipo MIME y nombre esperado del recurso')); continue; }
               const response = await context.request.get(target.toString());
               const bytes = await response.body();
               const observed = crypto.createHash('sha256').update(bytes).digest('hex');
-              results.push(observed === expected ? pass(item, {url: displayUrl(target, baseCheck.base), http_status: response.status(), bytes: bytes.length, sha256: observed}) : fail(item, 'SHA-256 observado no coincide con el esperado', {url: displayUrl(target, baseCheck.base), http_status: response.status(), bytes: bytes.length, sha256: observed, expected_sha256: expected}));
+              const identity = downloadIdentity({status: response.status(), url: response.url(), headers: response.headers(), expectedSha256: expected, expectedContentType, expectedFilename, bytes: observed});
+              results.push(identity.ok ? pass(item, {url: displayUrl(response.url(), baseCheck.base), http_status: response.status(), bytes: bytes.length, sha256: observed, method: 'authenticated_get+sha256+identity'}) : fail(item, identity.reason, {url: displayUrl(response.url(), baseCheck.base), http_status: response.status(), bytes: bytes.length, sha256: observed, expected_sha256: expected, expected_content_type: expectedContentType, expected_filename: expectedFilename, method: 'authenticated_get+sha256+identity'}));
             } else if (item.kind === 'video_playback') {
               if (!env.ASODELTOL_PROD_VIDEO_PATH) { results.push(blocked(item, 'Falta ASODELTOL_PROD_VIDEO_PATH')); continue; }
               const observed = await visit(env.ASODELTOL_PROD_VIDEO_PATH);
@@ -141,7 +137,7 @@ async function main() {
               const paths = jsonEnv('ASODELTOL_PROD_ACTIVITY_PATHS'); const selectors = jsonEnv('ASODELTOL_PROD_BLOCK_SELECTORS');
               if (!Array.isArray(paths) || !paths.length || !Array.isArray(selectors) || !selectors.length) { results.push(blocked(item, 'Faltan rutas de actividades y selectores de bloques configurados')); continue; }
               const checks = []; for (const value of paths) { const observed = await visit(value); const matches = {}; for (const selector of selectors) matches[selector] = await page.locator(selector).count(); checks.push({...observed, matches}); }
-              results.push(checks.every(check => check.status === 200 && !check.loginRequired && !check.errorPage) ? pass(item, {checks}) : fail(item, 'Una página de actividad/bloque no cargó', {checks}));
+              results.push(activitiesComplete(checks, selectors) ? pass(item, {checks}) : fail(item, 'Una página no cargó o faltan uno o más selectores esperados', {checks}));
             } else if (item.kind === 'negative_permissions') {
               const paths = jsonEnv('ASODELTOL_PROD_NEGATIVE_PATHS');
               if (!Array.isArray(paths) || !paths.length) { results.push(blocked(item, 'Faltan rutas negativas configuradas para el actor autorizado')); continue; }

@@ -33,7 +33,7 @@ function safeText(value, max = 240) { return typeof value === 'string' ? value.s
 function validBase(value) {
   try {
     const url = new URL(value);
-    return url.protocol === 'https:' && url.hostname === 'aulas.prospectiva.edu.co' && !url.username && !url.password;
+    return url.protocol === 'https:' && url.origin === 'https://aulaasodeltol.online' && !url.username && !url.password;
   } catch { return false; }
 }
 function safeEvidenceId(validationId, caseId) {
@@ -110,7 +110,7 @@ async function runJob(job) {
   try {
     const out = `executor-${job.validation_id}.json`;
     const childEnv = {...process.env, ASODELTOL_PROD_BASE_URL: config.base_url, ASODELTOL_PROD_STORAGE_STATE: session.statePath};
-    const mapping = {download_url: 'ASODELTOL_PROD_DOWNLOAD_URL', download_sha256: 'ASODELTOL_PROD_DOWNLOAD_SHA256', video_path: 'ASODELTOL_PROD_VIDEO_PATH', course_path: 'ASODELTOL_PROD_COURSE_PATH', module_paths: 'ASODELTOL_PROD_MODULE_PATHS', quicklink_urls: 'ASODELTOL_PROD_QUICKLINK_URLS', activity_paths: 'ASODELTOL_PROD_ACTIVITY_PATHS', block_selectors: 'ASODELTOL_PROD_BLOCK_SELECTORS', negative_paths: 'ASODELTOL_PROD_NEGATIVE_PATHS', responsive_paths: 'ASODELTOL_PROD_RESPONSIVE_PATHS'};
+    const mapping = {download_url: 'ASODELTOL_PROD_DOWNLOAD_URL', download_sha256: 'ASODELTOL_PROD_DOWNLOAD_SHA256', download_content_type: 'ASODELTOL_PROD_DOWNLOAD_CONTENT_TYPE', download_filename: 'ASODELTOL_PROD_DOWNLOAD_FILENAME', video_path: 'ASODELTOL_PROD_VIDEO_PATH', course_path: 'ASODELTOL_PROD_COURSE_PATH', module_paths: 'ASODELTOL_PROD_MODULE_PATHS', quicklink_urls: 'ASODELTOL_PROD_QUICKLINK_URLS', activity_paths: 'ASODELTOL_PROD_ACTIVITY_PATHS', block_selectors: 'ASODELTOL_PROD_BLOCK_SELECTORS', negative_paths: 'ASODELTOL_PROD_NEGATIVE_PATHS', responsive_paths: 'ASODELTOL_PROD_RESPONSIVE_PATHS'};
     for (const [key, envName] of Object.entries(mapping)) if (config[key] !== undefined) childEnv[envName] = typeof config[key] === 'string' ? config[key] : JSON.stringify(config[key]);
     const timeoutMs = Math.min(maxTimeoutMs, Math.max(30000, Number(process.env.ASODELTOL_QA_EXECUTOR_TIMEOUT_MS || 90000)));
     await execFileAsync(process.execPath, [path.join(root, 'scripts/anexo14/production-validation.mjs'), '--run', `--ids=${runnable.join(',')}`, `--out=${out}`], {cwd: root, env: childEnv, timeout: timeoutMs, maxBuffer: 256 * 1024, shell: false});
