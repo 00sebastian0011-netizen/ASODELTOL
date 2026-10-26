@@ -70,6 +70,25 @@ No se instala ni activa en esta entrega. En una ventana aprobada:
 5. Activar el ejecutor por separado y verificar `tools/list`, `run_validation`,
    `validation_status` y `validation_results` con un lote de lectura.
 
+El instalador prepara `/opt/asodeltol-diagnostics` para el MCP original y
+`/opt/asodeltol-validation-worker` para el ejecutor Node/Playwright. La cola y
+la evidencia sanitizada quedan en `/var/lib/asodeltol-validation`; las cuentas,
+la configuración y la autorización con expiración quedan en
+`/home/user/.config/asodeltol-validation` con permisos `user:user:600`.
+El worker usa `asodeltol-validation-worker.service` más su timer independiente;
+no se añade Playwright al servicio MCP de 128 MB/16 tareas.
+
+El flujo local verificable es:
+
+```bash
+bash scripts/diagnostics/vps/install-diagnostics.sh validate
+bash scripts/diagnostics/vps/install-diagnostics.sh prepare
+```
+
+`prepare` crea un manifiesto root-owned bajo `/var/lib/asodeltol-diagnostics`
+antes de copiar archivos. La activación del MCP y del timer son pasos separados
+y el ejecutor exige bóveda, configuración y autorización privada presentes.
+
 ## Reversión
 
 Detener el ejecutor, revocar o retirar sus archivos de cuenta, conservar la

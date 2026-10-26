@@ -1,0 +1,11 @@
+[Unit]
+Description=Run one bounded ASODELTOL QA validation job
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=30s
+Persistent=true
+Unit=asodeltol-validation-worker.service
+
+[Install]
+WantedBy=timers.target

@@ -15,10 +15,12 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 
 const execFileAsync = promisify(execFile);
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const root = path.resolve(process.env.ASODELTOL_QA_REPO_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..'));
 const stateDir = path.resolve(process.env.ASODELTOL_VALIDATION_STATE_DIR || path.join(root, 'build/anexo14/validation-state'));
 const jobsDir = path.join(stateDir, 'jobs');
 const catalogFile = path.resolve(process.env.ASODELTOL_VALIDATION_CATALOG_FILE || path.join(root, 'docs/anexo14/qa/production-test-catalog.json'));
+const runnerFile = path.resolve(process.env.ASODELTOL_QA_RUNNER || path.join(root, 'scripts/anexo14/production-validation.mjs'));
+const reportRoot = path.resolve(process.env.ASODELTOL_QA_REPORT_ROOT || path.join(root, 'build/anexo14/production'));
 const maxCases = 5;
 const maxTimeoutMs = 120000;
 
@@ -113,8 +115,8 @@ async function runJob(job) {
     const mapping = {download_url: 'ASODELTOL_PROD_DOWNLOAD_URL', download_sha256: 'ASODELTOL_PROD_DOWNLOAD_SHA256', download_content_type: 'ASODELTOL_PROD_DOWNLOAD_CONTENT_TYPE', download_filename: 'ASODELTOL_PROD_DOWNLOAD_FILENAME', video_path: 'ASODELTOL_PROD_VIDEO_PATH', course_path: 'ASODELTOL_PROD_COURSE_PATH', module_paths: 'ASODELTOL_PROD_MODULE_PATHS', quicklink_urls: 'ASODELTOL_PROD_QUICKLINK_URLS', activity_paths: 'ASODELTOL_PROD_ACTIVITY_PATHS', block_selectors: 'ASODELTOL_PROD_BLOCK_SELECTORS', negative_paths: 'ASODELTOL_PROD_NEGATIVE_PATHS', responsive_paths: 'ASODELTOL_PROD_RESPONSIVE_PATHS'};
     for (const [key, envName] of Object.entries(mapping)) if (config[key] !== undefined) childEnv[envName] = typeof config[key] === 'string' ? config[key] : JSON.stringify(config[key]);
     const timeoutMs = Math.min(maxTimeoutMs, Math.max(30000, Number(process.env.ASODELTOL_QA_EXECUTOR_TIMEOUT_MS || 90000)));
-    await execFileAsync(process.execPath, [path.join(root, 'scripts/anexo14/production-validation.mjs'), '--run', `--ids=${runnable.join(',')}`, `--out=${out}`], {cwd: root, env: childEnv, timeout: timeoutMs, maxBuffer: 256 * 1024, shell: false});
-    const report = readJson(path.join(root, 'build/anexo14/production', out));
+    await execFileAsync(process.execPath, [runnerFile, '--run', `--ids=${runnable.join(',')}`, `--out=${out}`], {cwd: root, env: childEnv, timeout: timeoutMs, maxBuffer: 256 * 1024, shell: false});
+    const report = readJson(path.join(reportRoot, out));
     const reportResults = new Map((report.results || []).map(result => [result.case_id, compactResult(result)]));
     for (const caseId of runnable) results.push(reportResults.get(caseId) || {case_id: caseId, requirements: cases.get(caseId).requirements, status: 'BLOCKED', reason: 'Executor did not return a case result', method: 'executor'});
     return {results, evidence: results.map(resultEvidence => reportEvidence(job.validation_id, resultEvidence)), executor: {method: 'playwright+registered-runner', version: '1.0'}};

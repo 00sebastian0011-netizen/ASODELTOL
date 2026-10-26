@@ -4,10 +4,10 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {activitiesComplete, downloadIdentity, PRODUCTION_ORIGIN, safeProductionUrl} from './validation-guards.mjs';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const catalogPath = path.join(root, 'docs/anexo14/qa/production-test-catalog.json');
+const root = path.resolve(process.env.ASODELTOL_QA_REPO_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..'));
+const catalogPath = path.resolve(process.env.ASODELTOL_PROD_CATALOG_FILE || path.join(root, 'docs/anexo14/qa/production-test-catalog.json'));
 const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-const outRoot = path.join(root, 'build/anexo14/production');
+const outRoot = path.resolve(process.env.ASODELTOL_QA_REPORT_ROOT || path.join(root, 'build/anexo14/production'));
 const env = process.env;
 
 function arg(name) {
