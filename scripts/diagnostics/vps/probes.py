@@ -82,7 +82,7 @@ def _disk(path: Path) -> dict[str, Any]:
         return {"available": True,
                 "free_bytes": stats.f_bavail * stats.f_frsize,
                 "total_bytes": stats.f_blocks * stats.f_frsize}
-    except OSError:
+    except (AttributeError, OSError):
         return {"available": False}
 
 

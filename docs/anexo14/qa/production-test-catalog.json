@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "title": "ASODELTOL Anexo 14 — casos autorizados de validación productiva",
+  "scope": "read_only_production",
+  "prohibited": [
+    "upload",
+    "create",
+    "update",
+    "delete",
+    "bulk_load",
+    "stress",
+    "sql",
+    "arbitrary_shell",
+    "secrets"
+  ],
+  "cases": [
+    {
+      "case_id": "TC-FILE-DOWNLOAD-SHA256",
+      "requirements": ["REQ-01-01", "REQ-06-01"],
+      "kind": "download_sha256",
+      "authorized_action": "GET autenticado y hash SHA-256 en memoria",
+      "inputs": ["ASODELTOL_PROD_DOWNLOAD_URL", "ASODELTOL_PROD_DOWNLOAD_SHA256", "ASODELTOL_PROD_DOWNLOAD_CONTENT_TYPE", "ASODELTOL_PROD_DOWNLOAD_FILENAME", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-FILE-UPLOAD-READONLY",
+      "requirements": ["REQ-01-01"],
+      "kind": "upload",
+      "authorized_action": "Ninguna: requiere autorización específica, aislamiento y recuperación",
+      "inputs": []
+    },
+    {
+      "case_id": "TC-VIDEO-PLAYBACK",
+      "requirements": ["REQ-06-02", "REQ-06-03"],
+      "kind": "video_playback",
+      "authorized_action": "Abrir página y avanzar el reloj del elemento video sin sonido",
+      "inputs": ["ASODELTOL_PROD_VIDEO_PATH", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-NAVIGATION-MODULES",
+      "requirements": ["REQ-08-05", "REQ-08-06"],
+      "kind": "navigation",
+      "authorized_action": "GET autenticado de curso y módulos configurados",
+      "inputs": ["ASODELTOL_PROD_COURSE_PATH", "ASODELTOL_PROD_MODULE_PATHS", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-QUICKLINKS-SIX",
+      "requirements": ["REQ-08-03", "REQ-08-06"],
+      "kind": "quicklinks",
+      "authorized_action": "GET de seis enlaces rápidos, sin formularios ni mutaciones",
+      "inputs": ["ASODELTOL_PROD_QUICKLINK_URLS", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-ACTIVITIES-BLOCKS",
+      "requirements": ["REQ-06-05", "REQ-08-05", "REQ-14-03"],
+      "kind": "activities_blocks",
+      "authorized_action": "Inspección DOM de recursos/actividades/bloques en páginas configuradas",
+      "inputs": ["ASODELTOL_PROD_ACTIVITY_PATHS", "ASODELTOL_PROD_BLOCK_SELECTORS", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-ROLES-GROUPS-NEGATIVE",
+      "requirements": ["REQ-17-01", "REQ-19-07", "REQ-22-01", "REQ-22-02"],
+      "kind": "negative_permissions",
+      "authorized_action": "GET de rutas protegidas con actor autorizado de prueba y resultado denegado esperado",
+      "inputs": ["ASODELTOL_PROD_NEGATIVE_PATHS", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-DESKTOP-MOBILE",
+      "requirements": ["REQ-02-01", "REQ-10-03", "REQ-11-01"],
+      "kind": "responsive",
+      "authorized_action": "Navegación GET en viewport escritorio y móvil; sin overflow horizontal",
+      "inputs": ["ASODELTOL_PROD_RESPONSIVE_PATHS", "ASODELTOL_PROD_STORAGE_STATE"]
+    },
+    {
+      "case_id": "TC-POLICY-NEW-ACCEPT",
+      "requirements": ["POLICY-01"],
+      "kind": "policy_acceptance",
+      "risk": "synthetic_write_requires_authorization",
+      "authorized_action": "Usuario sintético acepta la política nativa publicada y se comprueba versión, fecha y actor",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-NEW-REJECT",
+      "requirements": ["POLICY-02"],
+      "kind": "policy_rejection",
+      "risk": "synthetic_write_requires_authorization",
+      "authorized_action": "Usuario sintético rechaza cuando la política y la decisión institucional permiten rechazo",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-NO-RESPONSE",
+      "requirements": ["POLICY-03"],
+      "kind": "policy_pending",
+      "risk": "non_destructive",
+      "authorized_action": "Consultar estado de usuario sintético sin respuesta; no crear acuerdo",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-CONSULT-DECISION",
+      "requirements": ["POLICY-04"],
+      "kind": "policy_history",
+      "risk": "non_destructive",
+      "authorized_action": "Usuario sintético consulta su decisión previa y la versión aplicable",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-VERSION-CHANGE",
+      "requirements": ["POLICY-05"],
+      "kind": "policy_version",
+      "risk": "synthetic_write_requires_authorization",
+      "authorized_action": "Verificar comportamiento ante una nueva versión preparada en staging, nunca cambiar producción",
+      "inputs": ["ASODELTOL_QA_POLICY_CONFIG", "ASODELTOL_QA_STAGING_ONLY"]
+    },
+    {
+      "case_id": "TC-POLICY-REQUIRED-ACCESS",
+      "requirements": ["POLICY-06"],
+      "kind": "policy_required_access",
+      "risk": "non_destructive",
+      "authorized_action": "Usuario sintético sin requisito obligatorio intenta acceder a página protegida",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-ADMIN-EVIDENCE",
+      "requirements": ["POLICY-07"],
+      "kind": "policy_admin_evidence",
+      "risk": "non_destructive",
+      "authorized_action": "Administrador autorizado consulta evidencia agregada sin exportar datos personales reales",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    },
+    {
+      "case_id": "TC-POLICY-REVOCATION",
+      "requirements": ["POLICY-08"],
+      "kind": "policy_revocation",
+      "risk": "synthetic_write_requires_authorization",
+      "authorized_action": "Usuario sintético inicia el procedimiento institucional de revocación, si procede",
+      "inputs": ["ASODELTOL_QA_ACCOUNT_FILE", "ASODELTOL_QA_POLICY_CONFIG"]
+    }
+  ]
+}

@@ -11,6 +11,7 @@ import threading
 from typing import Any
 
 from probes import TOOLS
+from validation_service import VALIDATION_TOOLS, ValidationInputError, ValidationService, ValidationUnavailable
 
 MCP_VERSION = "2025-06-18"
 MAX_BODY = 16_384
@@ -39,6 +40,13 @@ TOOL_DEFS = [
      "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False}}
     for name, (description, _) in TOOLS.items()
 ]
+VALIDATION_SERVICE = ValidationService()
+VALIDATION_TOOL_DEFS = [
+    {"name": name, "description": definition["description"], "inputSchema": definition["inputSchema"],
+     "annotations": {"readOnlyHint": name != "run_validation", "destructiveHint": False, "openWorldHint": True}}
+    for name, definition in VALIDATION_TOOLS.items()
+]
+ALL_TOOL_DEFS = TOOL_DEFS + VALIDATION_TOOL_DEFS
 
 
 def rpc_error(request_id: Any, code: int, message: str) -> dict:
@@ -70,14 +78,21 @@ def handle_rpc(payload: Any) -> tuple[int, dict | None]:
     elif method == "ping":
         result = {}
     elif method == "tools/list":
-        result = {"tools": TOOL_DEFS}
+        result = {"tools": ALL_TOOL_DEFS}
     elif method == "tools/call":
         name = params.get("name")
         arguments = params.get("arguments", {})
-        if not isinstance(name, str) or name not in TOOLS or arguments != {}:
+        if not isinstance(name, str) or (name not in TOOLS and name not in VALIDATION_TOOLS):
+            return 200, rpc_error(request_id, -32602, "Unknown tool or non-empty arguments")
+        if name in TOOLS and arguments != {}:
             return 200, rpc_error(request_id, -32602, "Unknown tool or non-empty arguments")
         try:
-            content = TOOLS[name][1]()
+            content = TOOLS[name][1]() if name in TOOLS else VALIDATION_SERVICE.dispatch(name, arguments)
+        except ValidationInputError as exc:
+            return 200, rpc_error(request_id, -32602, str(exc))
+        except (ValidationUnavailable, OSError):
+            result = {"content": [{"type": "text", "text": "Validation service temporarily unavailable"}],
+                      "isError": True}
         except Exception:
             result = {"content": [{"type": "text", "text": "Diagnostic temporarily unavailable"}],
                       "isError": True}
