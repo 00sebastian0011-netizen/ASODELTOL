@@ -184,6 +184,15 @@ En `tool_policy`, una vez aprobado el texto:
 
 ## 11. Criterios para declarar cierre funcional
 
+### Addendum — texto suministrado por la institución
+
+El texto recibido posteriormente está conservado literalmente en
+`POLITICA_DATOS_AUTORIZACION_ASODELTOL_2026.md`. Esto actualiza el bloqueo de
+“texto no identificado”, pero no resuelve la aplicabilidad de las entidades y
+convocatoria al sitio ASODELTOL, ni responsable, canal, conservación o
+consecuencias ante rechazo/silencio. La publicación sigue bloqueada hasta
+confirmar esos parámetros.
+
 El cierre solo puede marcarse cuando todos se cumplan y exista aceptación
 institucional documentada:
 

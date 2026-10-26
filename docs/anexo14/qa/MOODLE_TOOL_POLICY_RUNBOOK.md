@@ -71,6 +71,9 @@ aprobado. Repetir la consulta de versión y acceso con la cuenta sintética.
 
 ## Estado de esta entrega
 
-El texto ASODELTOL sigue `PENDIENTE DE APROBACIÓN` en
-`CONSENT_POLICY_AUDIT_2026-10-26.md`. No activar producción hasta aprobar
-responsable, finalidades, canal, conservación y consecuencias ante rechazo.
+El texto suministrado está versionado en
+`POLITICA_DATOS_AUTORIZACION_ASODELTOL_2026.md` como aprobado. Antes de activar
+producción deben confirmarse su aplicabilidad institucional al sitio ASODELTOL,
+responsable, canal, conservación y consecuencias ante rechazo o silencio. La
+aprobación del texto no equivale por sí sola a autorización de publicación ni a
+una decisión de bloquear servicios.
