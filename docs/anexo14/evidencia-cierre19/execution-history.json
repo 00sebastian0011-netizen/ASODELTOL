@@ -1,0 +1,186 @@
+[
+  {
+    "path": "build/staging/close19/unit/20261025T204736.json",
+    "status": "FAIL"
+  },
+  {
+    "path": "build/staging/close19/unit/20261025T205543.json",
+    "status": "PASS"
+  },
+  {
+    "path": "build/staging/close19/unit/20261025T211335.json",
+    "status": "PASS"
+  },
+  {
+    "path": "build/staging/close19/load-20261025T210127.json",
+    "status": "FAIL"
+  },
+  {
+    "path": "build/staging/close19/load-20261025T210318.json",
+    "status": "PASS"
+  },
+  {
+    "path": "build/staging/close19/render50-2026-10-25T21-23-04-566Z.json",
+    "status": "FAIL"
+  },
+  {
+    "path": "build/staging/close19/render50-2026-10-25T21-34-26-946Z.json",
+    "status": "FAIL"
+  },
+  {
+    "path": "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json",
+    "status": "PASS"
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-01-18-139Z/results.json",
+    "counts": {
+      "pass": 2,
+      "fail": 2
+    },
+    "unexpected_issues": 5
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-02-38-256Z/results.json",
+    "counts": {
+      "pass": 6,
+      "fail": 0
+    },
+    "unexpected_issues": 0
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/results.json",
+    "counts": {
+      "pass": 36,
+      "fail": 16
+    },
+    "unexpected_issues": 325
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-05-31-116Z/results.json",
+    "counts": {
+      "pass": 9,
+      "fail": 4
+    },
+    "unexpected_issues": 6
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-07-50-786Z/results.json",
+    "counts": {
+      "pass": 6,
+      "fail": 6
+    },
+    "unexpected_issues": 266
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/results.json",
+    "counts": {
+      "pass": 15,
+      "fail": 1
+    },
+    "unexpected_issues": 0
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/results.json",
+    "counts": {
+      "pass": 41,
+      "fail": 8,
+      "blocked": 0
+    },
+    "unexpected_issues": 290
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/results.json",
+    "counts": {
+      "pass": 49,
+      "fail": 3,
+      "blocked": 0
+    },
+    "unexpected_issues": 273
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+    "counts": {
+      "pass": 40,
+      "fail": 0,
+      "blocked": 0
+    },
+    "unexpected_issues": 0
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-25T21-51-12-656Z/results.json",
+    "counts": {
+      "pass": 11,
+      "fail": 1,
+      "blocked": 0
+    },
+    "unexpected_issues": 7
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-26T00-34-51-567Z/results.json",
+    "counts": {
+      "pass": 12,
+      "fail": 0,
+      "blocked": 0
+    },
+    "unexpected_issues": 8
+  },
+  {
+    "path": "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json",
+    "counts": {
+      "pass": 12,
+      "fail": 0,
+      "blocked": 0
+    },
+    "unexpected_issues": 0
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-05-10-076Z/results.json",
+    "pass": 5,
+    "fail": 5
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-07-27-433Z/results.json",
+    "pass": 5,
+    "fail": 5
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-08-27-281Z/results.json",
+    "pass": 8,
+    "fail": 2
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-09-47-764Z/results.json",
+    "pass": 7,
+    "fail": 3
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-11-08-508Z/results.json",
+    "pass": 8,
+    "fail": 2
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-12-50-120Z/results.json",
+    "pass": 9,
+    "fail": 1
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-14-33-346Z/results.json",
+    "pass": 9,
+    "fail": 1
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+    "pass": 10,
+    "fail": 0
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-26T00-42-08-344Z/results.json",
+    "pass": 0,
+    "fail": 1
+  },
+  {
+    "path": "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/results.json",
+    "pass": 1,
+    "fail": 0
+  }
+]

@@ -1,0 +1,846 @@
+{
+  "snapshot_utc": "2026-10-26T00:52:16.954521+00:00",
+  "note": "Local artifacts only; private/ excluded. Monitor logs keep growing after this snapshot.",
+  "files": [
+    {
+      "path": "build/staging/close19/ASODELTOL_82_cierre19.xlsx",
+      "bytes": 18619,
+      "sha256": "a399c42aaaae826fa3d71213d4528c377f36af7bb0a438d6ab738ca6b389172f"
+    },
+    {
+      "path": "build/staging/close19/availability.jsonl",
+      "bytes": 2990,
+      "sha256": "fcf9942755c44ff6bceb79e873aaf71871e1b7d5c2a198f5f764d4744a1af91e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-01-18-139Z/chromium-desktop.png",
+      "bytes": 136895,
+      "sha256": "e9ed63865272a179607c0c4d10ee73edad7da9f1f565282062c8914a2d9295ee"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-01-18-139Z/results.json",
+      "bytes": 4308,
+      "sha256": "38919dbc036820ece957c291a1ebd42bbda1b0ea9c4d96cc1c4318e5528256d3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-02-38-256Z/axe.json",
+      "bytes": 9415,
+      "sha256": "4242f91bad790f0fdc06a965ff8bce78e4727891c73f00256af0b65e28c73d60"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-02-38-256Z/chromium-desktop.png",
+      "bytes": 136895,
+      "sha256": "e9ed63865272a179607c0c4d10ee73edad7da9f1f565282062c8914a2d9295ee"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-02-38-256Z/results.json",
+      "bytes": 4164,
+      "sha256": "d69efd34a87535081ffd1610f8edb2ff9c79650ec5d93c14d04c4597a99b2418"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/axe.json",
+      "bytes": 9415,
+      "sha256": "19f663b711807231af73c6523b8ed599dc4c11192b2d14b1d7d96452ae91c20c"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/chromium-desktop.png",
+      "bytes": 136895,
+      "sha256": "e9ed63865272a179607c0c4d10ee73edad7da9f1f565282062c8914a2d9295ee"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/chromium-mobile.png",
+      "bytes": 114050,
+      "sha256": "cf0818e2794c0996e3b81d48939c930094ba310cd65c436338f795dc28845643"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/chromium-tablet.png",
+      "bytes": 123201,
+      "sha256": "2019edfaa2912423dc3055529c932619dc19b1fef919c915ff087bdcbbcde41e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/edge-desktop.png",
+      "bytes": 131305,
+      "sha256": "85fb4d1c3d876965f167ecc93de4fdcb006499bc77e229fd63f9a394203fd59b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/edge-mobile.png",
+      "bytes": 112501,
+      "sha256": "227ebfea0e85cb42ddc78c6f3b663bfd5bba4b7a70d350cac92a753f5b38e77d"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/edge-tablet.png",
+      "bytes": 117748,
+      "sha256": "c4daae094ec025de53f7c10b1710e644107abbd891255bb1fe7831d063b54d38"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/firefox-desktop.png",
+      "bytes": 106953,
+      "sha256": "0dd1e762feba97b745b444ec48a60d50b1382461bea7319799432f3c26294b5a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/firefox-mobile.png",
+      "bytes": 86222,
+      "sha256": "eee98b314dfa16c03102b3a967d654ce0fd56da870f35aa0cd44ffa9c27a84d4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/firefox-tablet.png",
+      "bytes": 92508,
+      "sha256": "abbbd8393a81d06340c2b59d44e10a96f8c5208b034a4e6265134d20bcbb1dcd"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/results.json",
+      "bytes": 341934,
+      "sha256": "64b02fddfa7829f8bff3b561318328a2433a214cb85054f243e0b8a869d906ac"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/webkit-desktop.png",
+      "bytes": 87808,
+      "sha256": "5aa81ba52b321e76e74ec2facf6486129f328787796d14f399e4052281d97327"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/webkit-mobile.png",
+      "bytes": 77876,
+      "sha256": "d85862867e90f2ea69c633a56fd2b16790d908ce5bc3e89710d836e9229e0c09"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-03-46-207Z/webkit-tablet.png",
+      "bytes": 73844,
+      "sha256": "0d28626a1223f5d535579ce7065cb8b7e6d685196807c5fc1290e60bc1805b45"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-05-31-116Z/chromium-desktop.png",
+      "bytes": 136965,
+      "sha256": "ee4fc38e0c1cde03b4432e4a797935fa3e47c9713951ab67d1e4341c1fe94d84"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-05-31-116Z/chromium-mobile.png",
+      "bytes": 114132,
+      "sha256": "41910555d433bc36ff667904c44f94811a1ba4a8d584c79dc5a47d079c0a6064"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-05-31-116Z/chromium-tablet.png",
+      "bytes": 123273,
+      "sha256": "669672144d89e943c29e7b96d8a396fb144a891513ed597f85d610a404650a25"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-05-31-116Z/results.json",
+      "bytes": 12702,
+      "sha256": "e4753b0002ec68284563a20527246d993f767d12cc62f3f9c2329fb0919783ec"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-07-50-786Z/results.json",
+      "bytes": 307789,
+      "sha256": "bcffd3f140b88296633e156c426f3c2a73adebe83b5d99996e3d9ec29c71b054"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-07-50-786Z/webkit-desktop.png",
+      "bytes": 87844,
+      "sha256": "2cd46c7e076b61ba1755263b6191620a114c98244acc18e9973eb4d09ce424b3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-07-50-786Z/webkit-mobile.png",
+      "bytes": 77930,
+      "sha256": "79f8324346da9631fe114d6abc9d7dc451c8400180725e051ec7d6d14f801b71"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-07-50-786Z/webkit-tablet.png",
+      "bytes": 73898,
+      "sha256": "c373cc71ccc4085df2a9595d6e9f04c0f59cfce5403b6d511005327f5e4bc14a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/axe.json",
+      "bytes": 10245,
+      "sha256": "1b897c310e9e59c168a799cd09f842707cd4796b5c5e8b671c2b9bf53f06b0a4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/chromium-desktop.png",
+      "bytes": 137085,
+      "sha256": "89b29874022164ec20e2916f2205a66b1dc4fb76e7bc32172f305d864bb5b39b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/chromium-mobile.png",
+      "bytes": 114206,
+      "sha256": "d4feeb8479e3988dba3435bd264f42751a6906b9f4dfe87929138a07c79993ab"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/chromium-tablet.png",
+      "bytes": 123388,
+      "sha256": "534460db016cf3dcfd54573a55348222551df3e2cccc6e4cfc0be3e35f232d88"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-09-19-678Z/results.json",
+      "bytes": 15977,
+      "sha256": "9dc7917972536046e3196b604afb486c0ad0b6b75f73cfcf3eaf92cc12e32bf2"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/axe.json",
+      "bytes": 10245,
+      "sha256": "7eac3eba01256dc08d21b8260ed3b5febe68bd014c7fa4527e027c2fd5af2b14"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/chromium-desktop.png",
+      "bytes": 137105,
+      "sha256": "b1f77e3e2c1e4ff046f4d97f28407149a31c122412ab7f9c5283679481292bbc"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/chromium-mobile.png",
+      "bytes": 114096,
+      "sha256": "860e689c0b565d967e208f0010465346216e903efbec723588700381145bf2a8"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/chromium-tablet.png",
+      "bytes": 123412,
+      "sha256": "879740cc76d2b0465802f16b609901c5ffef4135859ba3018a88caaaf26e4ee8"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/edge-desktop.png",
+      "bytes": 131361,
+      "sha256": "0243e1927becc78afbdeb83b548775f13dc2aa21144ed29db6ce9a870de8264a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/edge-mobile.png",
+      "bytes": 112655,
+      "sha256": "f3912d6db7369e8f8cb05e2f47832d000dd4ed20a2b56ade19ab246bdbd6b723"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/edge-tablet.png",
+      "bytes": 117816,
+      "sha256": "6ed00a5a4099086b9efbc69a3b44ecbfee6e715760adda83ad70cca338cae90a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-12-08-465Z/firefox-desktop.png",
+      "bytes": 107208,
+      "sha256": "f0394a5e5bc4c3bc603a9ab084f6563add7719ca1619524e6b2013f4a6490a39"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-15-19-061Z/chromium-desktop.png",
+      "bytes": 136926,
+      "sha256": "df4a28caaafe340ad43106fba2d24ead8e8478a632a5c58151e003e4d97078bc"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-15-19-061Z/chromium-mobile.png",
+      "bytes": 114096,
+      "sha256": "860e689c0b565d967e208f0010465346216e903efbec723588700381145bf2a8"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-15-19-061Z/chromium-tablet.png",
+      "bytes": 123230,
+      "sha256": "1eb798c227f843cbd63b0061feb6792bce58ee439225744e78032e60b57bfb8f"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/axe.json",
+      "bytes": 10245,
+      "sha256": "94d506d177e168708c9be79421dd857f13e881081157d25912da76bc805b4ff0"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/chromium-desktop.png",
+      "bytes": 136926,
+      "sha256": "df4a28caaafe340ad43106fba2d24ead8e8478a632a5c58151e003e4d97078bc"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/chromium-mobile.png",
+      "bytes": 114096,
+      "sha256": "860e689c0b565d967e208f0010465346216e903efbec723588700381145bf2a8"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/chromium-tablet.png",
+      "bytes": 123230,
+      "sha256": "1eb798c227f843cbd63b0061feb6792bce58ee439225744e78032e60b57bfb8f"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/edge-desktop.png",
+      "bytes": 131534,
+      "sha256": "a9654cd7576eb52774571379d4a72f34280fb2caf964f8ff82b902833810cfe3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/edge-mobile.png",
+      "bytes": 112665,
+      "sha256": "98f3488042fbb845e737de1b47e08fe25f13c48d9158fa5593ef7896d1495c4b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/edge-tablet.png",
+      "bytes": 117947,
+      "sha256": "d0f5d34c989bf974216580c7c8843798ab022dcb09f837b2ca6f1d7d607f429e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/firefox-mobile.png",
+      "bytes": 86296,
+      "sha256": "776812b144b16db86cfc149b2da9e253d195db402ba455c3bcd8db4121fc823d"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/firefox-tablet.png",
+      "bytes": 92601,
+      "sha256": "ec8c4eccc368ee6ba983ab8c18e9ffdde051c226cf09fcb548635d7187d39fe4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/results.json",
+      "bytes": 336214,
+      "sha256": "afce267a648ad852a16cd006e2e6f0e4ad786584b8f4b8510cf7ca99caa3702e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/webkit-desktop.png",
+      "bytes": 87810,
+      "sha256": "aa0874a5f00f88ab630dd0b0f1797e12d82aa13007f4ca8d862d2a90c57ef511"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/webkit-mobile.png",
+      "bytes": 77948,
+      "sha256": "a0d030ce43a646431d9f8fb88fc1a51a6b0c109b9cb5fc89c2eef52a23367c78"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-16-07-512Z/webkit-tablet.png",
+      "bytes": 73888,
+      "sha256": "cf156979efb33b703e6b471f643221223c7320d3198da1bffa8a47f6ea6216a2"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/axe.json",
+      "bytes": 10245,
+      "sha256": "75c9c44ac11314c571d0e73a4015f84937e944a91b97610c1091776296161f79"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/chromium-desktop.png",
+      "bytes": 137028,
+      "sha256": "99dd0ea505917ab9bf72d2b04984321c98d43c090458ff16cf0f1bb686aef1bf"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/chromium-mobile.png",
+      "bytes": 114176,
+      "sha256": "415393e5eae29d1098404668a7387f8a6b4555e877f5f3d088ad1dc7d8265c27"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/chromium-tablet.png",
+      "bytes": 123320,
+      "sha256": "16457b57e64972045bf87718b6d34c754368a59048105ab1334055a7ba8151c4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/edge-desktop.png",
+      "bytes": 131534,
+      "sha256": "a9654cd7576eb52774571379d4a72f34280fb2caf964f8ff82b902833810cfe3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/edge-mobile.png",
+      "bytes": 112665,
+      "sha256": "98f3488042fbb845e737de1b47e08fe25f13c48d9158fa5593ef7896d1495c4b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/edge-tablet.png",
+      "bytes": 117947,
+      "sha256": "d0f5d34c989bf974216580c7c8843798ab022dcb09f837b2ca6f1d7d607f429e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/firefox-desktop.png",
+      "bytes": 107164,
+      "sha256": "9de2902dfa0bb7837dc342d8b6416e9d74e49716ac47fb4e34e1b433e3968ec3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/firefox-mobile.png",
+      "bytes": 86296,
+      "sha256": "776812b144b16db86cfc149b2da9e253d195db402ba455c3bcd8db4121fc823d"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/firefox-tablet.png",
+      "bytes": 92601,
+      "sha256": "ec8c4eccc368ee6ba983ab8c18e9ffdde051c226cf09fcb548635d7187d39fe4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/results.json",
+      "bytes": 317355,
+      "sha256": "5504495505e4d7472cf2b6f84dfa04f28bcec55afb875a0b04df7701a435e32f"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/webkit-desktop.png",
+      "bytes": 87810,
+      "sha256": "aa0874a5f00f88ab630dd0b0f1797e12d82aa13007f4ca8d862d2a90c57ef511"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/webkit-mobile.png",
+      "bytes": 77948,
+      "sha256": "a0d030ce43a646431d9f8fb88fc1a51a6b0c109b9cb5fc89c2eef52a23367c78"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-24-47-225Z/webkit-tablet.png",
+      "bytes": 73888,
+      "sha256": "cf156979efb33b703e6b471f643221223c7320d3198da1bffa8a47f6ea6216a2"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/axe.json",
+      "bytes": 10245,
+      "sha256": "0c5c6fd60dc9c3cf8128636b0f99a3fb41bb96670386afc4d96a8dc0cabbce32"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/chromium-desktop.png",
+      "bytes": 137028,
+      "sha256": "99dd0ea505917ab9bf72d2b04984321c98d43c090458ff16cf0f1bb686aef1bf"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/chromium-mobile.png",
+      "bytes": 114176,
+      "sha256": "415393e5eae29d1098404668a7387f8a6b4555e877f5f3d088ad1dc7d8265c27"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/chromium-tablet.png",
+      "bytes": 123320,
+      "sha256": "16457b57e64972045bf87718b6d34c754368a59048105ab1334055a7ba8151c4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/edge-desktop.png",
+      "bytes": 131534,
+      "sha256": "a9654cd7576eb52774571379d4a72f34280fb2caf964f8ff82b902833810cfe3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/edge-mobile.png",
+      "bytes": 112665,
+      "sha256": "98f3488042fbb845e737de1b47e08fe25f13c48d9158fa5593ef7896d1495c4b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/edge-tablet.png",
+      "bytes": 117947,
+      "sha256": "d0f5d34c989bf974216580c7c8843798ab022dcb09f837b2ca6f1d7d607f429e"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/firefox-desktop.png",
+      "bytes": 107164,
+      "sha256": "9de2902dfa0bb7837dc342d8b6416e9d74e49716ac47fb4e34e1b433e3968ec3"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/firefox-mobile.png",
+      "bytes": 86296,
+      "sha256": "776812b144b16db86cfc149b2da9e253d195db402ba455c3bcd8db4121fc823d"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/firefox-tablet.png",
+      "bytes": 92601,
+      "sha256": "ec8c4eccc368ee6ba983ab8c18e9ffdde051c226cf09fcb548635d7187d39fe4"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-49-37-915Z/results.json",
+      "bytes": 30163,
+      "sha256": "51e58a5bab15410146697c66310c977fbb1b46e4b1ebcf8ce3e6734d18261b3c"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-51-12-656Z/results.json",
+      "bytes": 13914,
+      "sha256": "e8d966ff7aed075aae3e149045cc2c1d0d7f38e070c6af03375b3768edb0530b"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-51-12-656Z/webkit-desktop.png",
+      "bytes": 119304,
+      "sha256": "265824bbb32990a97f20c79fa191385e1322950439825aece04d6210401573d1"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-51-12-656Z/webkit-mobile.png",
+      "bytes": 108484,
+      "sha256": "fe483fd376a90e035e7d367c642002ddd6799439486d2f35110f29bbb4809312"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-25T21-51-12-656Z/webkit-tablet.png",
+      "bytes": 106080,
+      "sha256": "9b232a5253c7b7a0c3a0b5cfd19a355f94c673a371343ab2872aca03d0842c56"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-34-51-567Z/results.json",
+      "bytes": 12602,
+      "sha256": "6035d3cd5d44f459fdb4218e9add5361c298aeca1995d800b25d3b730dc5a0b1"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-34-51-567Z/webkit-desktop.png",
+      "bytes": 119307,
+      "sha256": "117c2f34d6d4891af4bd9b5ab9a724b61b15404f6f8b1b4d739ed4a26e246d5a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-34-51-567Z/webkit-mobile.png",
+      "bytes": 108665,
+      "sha256": "b5a5ca72adef315973005b0f3b9f7d68d313fc699d1f6fdcf25cc71e4e7b20a5"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-34-51-567Z/webkit-tablet.png",
+      "bytes": 106079,
+      "sha256": "80add503a6f040c550d39c014ce29d6202cb18c766d517aeb446b02bd7771b99"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-37-14-578Z/results.json",
+      "bytes": 9129,
+      "sha256": "cf0b9bef6aeae91fd7901489b29fee658bfa409dcd92760154e0a7b042d58324"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-37-14-578Z/webkit-desktop.png",
+      "bytes": 119307,
+      "sha256": "117c2f34d6d4891af4bd9b5ab9a724b61b15404f6f8b1b4d739ed4a26e246d5a"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-37-14-578Z/webkit-mobile.png",
+      "bytes": 108665,
+      "sha256": "b5a5ca72adef315973005b0f3b9f7d68d313fc699d1f6fdcf25cc71e4e7b20a5"
+    },
+    {
+      "path": "build/staging/close19/browser-2026-10-26T00-37-14-578Z/webkit-tablet.png",
+      "bytes": 106079,
+      "sha256": "80add503a6f040c550d39c014ce29d6202cb18c766d517aeb446b02bd7771b99"
+    },
+    {
+      "path": "build/staging/close19/candidate.json",
+      "bytes": 24116,
+      "sha256": "6fb2e865a5646d868fc37c74ea0cf50d6ab17291d6a4d406292adb0e3268d6f3"
+    },
+    {
+      "path": "build/staging/close19/context-final.json",
+      "bytes": 250765,
+      "sha256": "1a4f456c483434a2330e013383f339c1497080190ccc7544b80358386211bdbc"
+    },
+    {
+      "path": "build/staging/close19/context-initial.json",
+      "bytes": 9974,
+      "sha256": "f45c6219a9ca57b5b92270fa0e2bb070acf22da13077fc3950daf921bcb0d64a"
+    },
+    {
+      "path": "build/staging/close19/context-rsmax.json",
+      "bytes": 9972,
+      "sha256": "1b69c0ba7ae3800b1046c7767e360369fa6f96fcdf6400dd1be80063b9b78c29"
+    },
+    {
+      "path": "build/staging/close19/context-youtube-link.json",
+      "bytes": 250765,
+      "sha256": "1a4f456c483434a2330e013383f339c1497080190ccc7544b80358386211bdbc"
+    },
+    {
+      "path": "build/staging/close19/context-youtube.json",
+      "bytes": 247812,
+      "sha256": "99949f1b3eb4278a65c6db7706aeb7a79f6f7d058af9500084c4d19e1d3162cd"
+    },
+    {
+      "path": "build/staging/close19/deployment-classification.json",
+      "bytes": 4793,
+      "sha256": "6c79510ae65a66db904fba43bd072a9234d6f69110a4ca412e7b8022eeac6473"
+    },
+    {
+      "path": "build/staging/close19/install.txt",
+      "bytes": 22294,
+      "sha256": "e3baf65c2473bcb733da4c5c6d7481ee290ef0ca01dda142d488ce7ce55c9643"
+    },
+    {
+      "path": "build/staging/close19/links.json",
+      "bytes": 14598,
+      "sha256": "a68a67389af589f68074ac0bf7e1f0a93e5e532775bb40d21ddabca8e3dfa37d"
+    },
+    {
+      "path": "build/staging/close19/linux-runtime.json",
+      "bytes": 399,
+      "sha256": "1fe7b192e8a795e334232f58ee92c7231484d3abd44a0491d8ba62433a02dd97"
+    },
+    {
+      "path": "build/staging/close19/load-20261025T210127.json",
+      "bytes": 124266,
+      "sha256": "6fad2b9cbc6c85c6f885c5314d73a2e13a71923ccb9429160e4ce4e93cba485c"
+    },
+    {
+      "path": "build/staging/close19/load-20261025T210318.json",
+      "bytes": 123425,
+      "sha256": "d24d438bdca5dd845f2a8cf91efa647dfd830355d63ba1801801c66463f945f5"
+    },
+    {
+      "path": "build/staging/close19/media-diagnostic.json",
+      "bytes": 1705,
+      "sha256": "e8d537e44182b98d05952339d211df8640aa922a85ffb0f5f7d374bc6a23d6cc"
+    },
+    {
+      "path": "build/staging/close19/monitor/availability.jsonl",
+      "bytes": 700,
+      "sha256": "cc79d7a9e7081457fb45d53b2dd770592866f20a2b4b93a44b6f6895c984e1a8"
+    },
+    {
+      "path": "build/staging/close19/monitor-image-pull.txt",
+      "bytes": 655,
+      "sha256": "a65a12f372f8624095843753d5bb5d86765b81aa450e2fc0a77908da30c4b963"
+    },
+    {
+      "path": "build/staging/close19/monitor-process-error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/staging/close19/monitor-process.json",
+      "bytes": 144,
+      "sha256": "48cbed6d9ccd3e24a88e177ed9a6ec3bba81f8cae9764ddfa1041e120479aba2"
+    },
+    {
+      "path": "build/staging/close19/monitor-process.log",
+      "bytes": 763,
+      "sha256": "6edf0ef7b5817079c82b973d31ba5a39583c5075a73b49ab3859a8e0b67f25d3"
+    },
+    {
+      "path": "build/staging/close19/native-evaluation-matrix.json",
+      "bytes": 656,
+      "sha256": "acfe9becb07a228d90b0018dfc905d85bbc1e899397204cebcc9140245981775"
+    },
+    {
+      "path": "build/staging/close19/node-quality-final.txt",
+      "bytes": 4585,
+      "sha256": "40fa470f5968ca4c474196529d78db3910647448cfaeaf88f56e9bebd3dcfe45"
+    },
+    {
+      "path": "build/staging/close19/node-quality-merged.txt",
+      "bytes": 4576,
+      "sha256": "af8be4144af587175a56f9468eae5b4a0b812608c46e879a8ff123c8732d5e90"
+    },
+    {
+      "path": "build/staging/close19/node-quality.txt",
+      "bytes": 3788,
+      "sha256": "27cd49606103058506ff876bd84bd6c1a454754084f00b2ae4915f783862424a"
+    },
+    {
+      "path": "build/staging/close19/phpunit-init.txt",
+      "bytes": 21931,
+      "sha256": "3b1c1743075dff79c1d61a7a1647d45edf3e1842363f6340a20c40e07134a71e"
+    },
+    {
+      "path": "build/staging/close19/playwright-linux-manifest.json",
+      "bytes": 733,
+      "sha256": "b368e1770c17a1d1475124d795baef5d8e6e6219aff2e5dfba93ab536d494260"
+    },
+    {
+      "path": "build/staging/close19/playwright-linux-pull.txt",
+      "bytes": 905,
+      "sha256": "e5c0468d240c6bd68aa20dd19fd89603e28da32eb5d0f90bd433983908f9bdf9"
+    },
+    {
+      "path": "build/staging/close19/render50-2026-10-25T21-23-04-566Z.json",
+      "bytes": 45347,
+      "sha256": "459dfe9f155d5756be27634b584415cf8b30b5d953003109c1f50304220124ee"
+    },
+    {
+      "path": "build/staging/close19/render50-2026-10-25T21-34-26-946Z.json",
+      "bytes": 51307,
+      "sha256": "96d11f1b0b118e78725b74202e85fd938e77f658ba85bec5f1a0d71f7040fd0e"
+    },
+    {
+      "path": "build/staging/close19/render50-2026-10-25T21-42-57-825Z.json",
+      "bytes": 45072,
+      "sha256": "e87750d00a942ce29f063c8c33365c0f75a52e8798b973c4f7be3686c2df2459"
+    },
+    {
+      "path": "build/staging/close19/repository-quality-final.txt",
+      "bytes": 734,
+      "sha256": "dff485e9c514451c5e841ff91bc3b7f0677d2280bade6951361a7458c7badd89"
+    },
+    {
+      "path": "build/staging/close19/repository-quality.txt",
+      "bytes": 734,
+      "sha256": "dff485e9c514451c5e841ff91bc3b7f0677d2280bade6951361a7458c7badd89"
+    },
+    {
+      "path": "build/staging/close19/runtime.json",
+      "bytes": 449,
+      "sha256": "25eff89f1240ce69eef2275981c6de3f99d2dbadad6bb7cb16f9d94c48f13451"
+    },
+    {
+      "path": "build/staging/close19/sanitization.json",
+      "bytes": 1183,
+      "sha256": "7678acc3d74b7bbce516dd7dadfa9cf3552b9b6282988adbed3138042bbdeb5b"
+    },
+    {
+      "path": "build/staging/close19/support-final.txt",
+      "bytes": 395,
+      "sha256": "b3b786891126c9a16ebe79bf1ad8d8915c2db62abc7a7c78080c92747854433c"
+    },
+    {
+      "path": "build/staging/close19/theme-favicon-final.txt",
+      "bytes": 394,
+      "sha256": "86bf1ce085b850df7d916fd483c088d0977c3883839b8b29aabb1dead099d1ff"
+    },
+    {
+      "path": "build/staging/close19/theme-favicon.txt",
+      "bytes": 813,
+      "sha256": "3c6ecb5a55433f6c4485cf28077b1e8c3e6ea530afaf18131f3e05c0e836c731"
+    },
+    {
+      "path": "build/staging/close19/tracking82.json",
+      "bytes": 126858,
+      "sha256": "2d9dad7e7b58ec7329e135103237800372cd52fceba828e729cfa2daba4558a5"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T204736.json",
+      "bytes": 331,
+      "sha256": "ab33b6cb4563485e384075c7d8efd7262a43973aeba97cb175303692ed3c074e"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T204736.txt",
+      "bytes": 670,
+      "sha256": "85054860bd77f18fc0a697d6cabd76d8f5c3aebbf109cec00c8149760cb50d94"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T204736.xml",
+      "bytes": 21916,
+      "sha256": "fd72d6045623078e72736edc29dc03de60436a0d51f7a578b6daeafd64277a12"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T205543.json",
+      "bytes": 331,
+      "sha256": "466db96220c220e0595dfb1dd3d6d60644edb376f816d7c1a7f0721d3983ae80"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T205543.txt",
+      "bytes": 395,
+      "sha256": "bc4fe62b1c67d8d7f59a2447bf2fb250bd2a18613033177a7b5656e9e396f8c4"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T205543.xml",
+      "bytes": 21602,
+      "sha256": "3a2b65d182550fd92c314b9c9fdc2245ad35403207e7dd5e78d774fa5d6a7197"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T211335.json",
+      "bytes": 331,
+      "sha256": "7c3b761eb0053f5faa53114bd4e417db960f958cb0398b66dc511477f32980b6"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T211335.txt",
+      "bytes": 395,
+      "sha256": "c7ad1c86e7078811398c4153b8ccdaa5b479b22c0f8c7d19e20e5d198f7f996a"
+    },
+    {
+      "path": "build/staging/close19/unit/20261025T211335.xml",
+      "bytes": 21602,
+      "sha256": "1d5d1ff62bcb91a4a297bf5f2301910c265d26c9e29166bcc095de5bfb083b02"
+    },
+    {
+      "path": "build/staging/close19/unit-upgrade-theme.txt",
+      "bytes": 143,
+      "sha256": "ced3dd802c976b20aebdc88ab48abff8636dac723e7a4343fc4705a8c7b63258"
+    },
+    {
+      "path": "build/staging/close19/upgrade-1792961098.txt",
+      "bytes": 221,
+      "sha256": "1622da20be817b2ed81673b942bb8e18fed3f1a0fb4f88643006ed034f79a7e5"
+    },
+    {
+      "path": "build/staging/close19/upgrade-1792961722.txt",
+      "bytes": 3005,
+      "sha256": "232771ddfae5037d339cbca7271cd0d729de14025936d58a2dd6365cbeba8976"
+    },
+    {
+      "path": "build/staging/close19/upgrade-1792964158.txt",
+      "bytes": 212,
+      "sha256": "dd864dfac1bab6ac1e8fa295e5073bc96908aeff33132dbb90df852bdf20ebf0"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-05-10-076Z/context-final.json",
+      "bytes": 27125,
+      "sha256": "4c6e9e32ab4f87d79c942918eec71b87035dc4db5a3a47051a8d01d796d4b902"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-05-10-076Z/results.json",
+      "bytes": 9087,
+      "sha256": "28a2141962a6cff19f348b549e8adbad33dfb870273d8db6725ee861ca6b8006"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-07-27-433Z/context-final.json",
+      "bytes": 63078,
+      "sha256": "c4244133e6745c81b619cd15b442562a516191c8636caa4c8028967471dcfc16"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-07-27-433Z/results.json",
+      "bytes": 6750,
+      "sha256": "fcd73addb805273e89d22857a3b1296733cb1b25821cb883640262b1403fc6c9"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-08-27-281Z/context-final.json",
+      "bytes": 87012,
+      "sha256": "acd8a21264a9adb80afa4402280b301098118f22482de8da4edfe97db234a956"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-08-27-281Z/results.json",
+      "bytes": 5412,
+      "sha256": "e162a520b54549784784eb0c96dd458f3e83bb3e98b13ffe96513450d4836cbf"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-09-47-764Z/context-final.json",
+      "bytes": 99662,
+      "sha256": "b2ccfda2586025cab6ccee9d82635aae3658ac4d117765448fa6f94305b02b64"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-09-47-764Z/results.json",
+      "bytes": 6989,
+      "sha256": "b52e27f854f93cd2e54620206b0984a16cf34a7895b5db53516fb2c21a6687c8"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-11-08-508Z/context-final.json",
+      "bytes": 123776,
+      "sha256": "26574611d99b78ba2dc0c3fd4bb9bae631b653ab42a7b9bf524454162a35b505"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-11-08-508Z/results.json",
+      "bytes": 4775,
+      "sha256": "befec812cf2bd3f454c990536b0c9cc587a74fad7880d1e2f53215fb118028b4"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-12-50-120Z/context-final.json",
+      "bytes": 148548,
+      "sha256": "033e1d747e3601da5d638421ec9d23775e2eeb87cf70bbe6cdc1434fcc694c45"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-12-50-120Z/results.json",
+      "bytes": 5102,
+      "sha256": "39b70d71e4e7bc621b6caf96894906306f978b71eef31fdc1839e40246ffed2c"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-14-33-346Z/context-final.json",
+      "bytes": 172666,
+      "sha256": "8d310db5262c9874c129cc0acbb04f55951f4a25524522978e5e4a5cc9d797a0"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-14-33-346Z/form-failure.png",
+      "bytes": 424773,
+      "sha256": "72e3be7e6c26738561348e34ed064fb2c06099eacf3d49495ce49c9b77d2b143"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-14-33-346Z/results.json",
+      "bytes": 5123,
+      "sha256": "f8d94953e448d885196e8ba7537e69c6fd6fdf397f3a162ec5aa188dc20e2570"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/context-final.json",
+      "bytes": 197443,
+      "sha256": "af308d87de88e5a37649711f61b1b8009b07ae0085d5dee71e2fb1e1d59f3f5c"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-25T21-16-54-693Z/results.json",
+      "bytes": 3897,
+      "sha256": "e4dd0d7e594e3afc552e91484c5666a25f9709833b6caad4dd0953ae37cf483b"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-26T00-42-08-344Z/context-final.json",
+      "bytes": 199833,
+      "sha256": "343e4b2dc129c51991bab76dfebca19dcdd80d8ed9c4324c790ae0f0b147ca53"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-26T00-42-08-344Z/results.json",
+      "bytes": 823,
+      "sha256": "209446b7ce17dcd099c1d0f1cb455bf341c614f5f15de34d386551f451552e32"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/context-final.json",
+      "bytes": 199833,
+      "sha256": "343e4b2dc129c51991bab76dfebca19dcdd80d8ed9c4324c790ae0f0b147ca53"
+    },
+    {
+      "path": "build/staging/close19/workflows-2026-10-26T00-42-43-021Z/results.json",
+      "bytes": 1225,
+      "sha256": "38bdf9251b76d8649bbb880f0159b725f8f86e56a8e7a8bc9446907a8740f9d5"
+    },
+    {
+      "path": "build/staging/close19/youtube-link.json",
+      "bytes": 297,
+      "sha256": "89ba9436c971b259aba0cf25ae1d597084c0fb63f99dea18fec00e16bf8dd23f"
+    },
+    {
+      "path": "build/staging/close19/youtube-observation.png",
+      "bytes": 370648,
+      "sha256": "d534e4e6f9b6f337af66c6bdfd630cd80fe082a1703e2fd098205952dd1df2f9"
+    },
+    {
+      "path": "build/staging/close19/youtube.json",
+      "bytes": 946,
+      "sha256": "bf8c31f34f8ca538a14c9abb0e3093764cb2f0c1ad627a130be7f6438812ec87"
+    }
+  ]
+}

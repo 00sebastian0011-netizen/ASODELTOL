@@ -1,0 +1,32 @@
+{
+  "courseid": 4,
+  "groupid": 10,
+  "tools": [
+    {
+      "kind": "assign",
+      "cmid": 109,
+      "url": "/mod/assign/view.php?id=109"
+    },
+    {
+      "kind": "quiz",
+      "cmid": 65,
+      "url": "/mod/quiz/view.php?id=65"
+    },
+    {
+      "kind": "forum",
+      "cmid": 110,
+      "url": "/mod/forum/view.php?id=110"
+    },
+    {
+      "kind": "feedback",
+      "cmid": 111,
+      "url": "/mod/feedback/view.php?id=111"
+    }
+  ],
+  "gradebook": "/grade/report/grader/index.php?id=4&group=10",
+  "synthetic": true,
+  "officialEvaluationRules": null,
+  "approval": "NOT ACCREDITED",
+  "gradeItems": 11,
+  "otherGroupExcludedFromGrader": true
+}
