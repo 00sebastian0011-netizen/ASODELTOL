@@ -177,10 +177,6 @@ final class course_utilities {
     }
 
     /**
-     * Resolve links for the current viewer; activity availability is checked per viewer.
-     * A course editor cannot make a restricted activity visible to another group.
-     */
-    /**
      * Official Moodle policy link for the current viewer, or false when not active.
      * A banner is not evidence of accepting any data processing policy.
      */
@@ -193,6 +189,10 @@ final class course_utilities {
             : false;
     }
 
+    /**
+     * Resolve links for the current viewer; activity availability is checked per viewer.
+     * A course editor cannot make a restricted activity visible to another group.
+     */
     public static function export(\stdClass $course): array {
         global $DB;
         $modinfo = get_fast_modinfo($course);
