@@ -8,7 +8,8 @@ final class report_manager {
     public static function columns(string $dataset): array {
         $common = ['trainingactioncode', 'trainingaction'];
         $fields = match ($dataset) {
-            'participants' => ['group', 'username', 'student', 'enrolmentstate', 'moodlecompleted', 'completionutc'],
+            'participants' => ['group', 'username', 'student', 'enrolmentstate', 'residence', 'characterization',
+                'moodlecompleted', 'completionutc'],
             'consolidated' => ['groupcount', 'registeredcount', 'activecount', 'moodlecompletedcount', 'completionenabled'],
             'access' => ['trainer', 'group', 'rowtype', 'loginutc', 'logoututc', 'coursestartutc', 'courseendutc',
                 'officehoursstartutc', 'officehoursendutc', 'sourcerecord'],
@@ -75,12 +76,34 @@ final class report_manager {
                 'activecount' => $activecount, 'moodlecompletedcount' => count($completions),
                 'completionenabled' => empty($course->enablecompletion) ? 0 : 1]];
         }
+        $profilevalues = ['residence' => [], 'characterization' => []];
+        if ($users) {
+            [$insql, $inparams] = $DB->get_in_or_equal(array_keys($users), SQL_PARAMS_NAMED, 'profileuser');
+            foreach (['residence' => 'residencefield', 'characterization' => 'characterizationfield'] as $key => $setting) {
+                $shortname = trim((string) get_config('local_asodeltolstaff', $setting));
+                // The administrator must opt in to each existing native field. Empty means no export.
+                if ($shortname === '' || !preg_match('/^[a-z0-9_]{1,100}$/D', $shortname)) {
+                    continue;
+                }
+                $fieldid = $DB->get_field('user_info_field', 'id', ['shortname' => $shortname]);
+                if (!$fieldid) {
+                    continue;
+                }
+                $params = $inparams + ['profilefield' => $fieldid];
+                foreach ($DB->get_records_select('user_info_data', "fieldid = :profilefield AND userid $insql",
+                        $params, '', 'id,userid,data') as $record) {
+                    $profilevalues[$key][(int) $record->userid] = (string) $record->data;
+                }
+            }
+        }
         $rows = [];
         foreach ($users as $user) {
             foreach ($memberships[$user->id] ?? [0] as $groupid) {
                 $rows[] = $common + ['group' => $groupid ? $groups[$groupid]->name : '',
                     'username' => $user->username, 'student' => fullname($user),
                     'enrolmentstate' => isset($active[$user->id]) && !$user->suspended ? 'active' : 'inactive',
+                    'residence' => $profilevalues['residence'][(int)$user->id] ?? '',
+                    'characterization' => $profilevalues['characterization'][(int)$user->id] ?? '',
                     'moodlecompleted' => isset($completions[$user->id]) ? 1 : 0,
                     'completionutc' => isset($completions[$user->id])
                         ? gmdate('Y-m-d\TH:i:s\Z', (int) $completions[$user->id]) : ''];

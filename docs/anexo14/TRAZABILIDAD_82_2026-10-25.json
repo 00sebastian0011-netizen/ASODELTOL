@@ -4,9 +4,9 @@
   "base_commit": "87ed48827a676fadd4b8b78f892e9b07a5d4e60f",
   "total": 82,
   "counts": {
-    "VERIFICADO LOCAL": 34,
+    "VERIFICADO LOCAL": 43,
     "PENDIENTE": 2,
-    "BLOQUEADO": 46
+    "BLOQUEADO": 37
   },
   "formal_acceptances": 0,
   "rows": [
@@ -330,7 +330,13 @@
       },
       "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
       "plugin_version": "0.5.0 (2026102506)",
-      "theme_version": "RSMax 1.2.4 (2026102500)"
+      "theme_version": "RSMax 1.2.4 (2026102500)",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-04-01",
@@ -412,7 +418,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-05-02",
@@ -430,7 +442,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-05-03",
@@ -448,7 +466,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-06-01",
@@ -460,13 +484,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Verificar que el material real no sea documento escaneado y tenga contenido multimedia usable.",
+      "evidence": [
+        "Verificar que el material real no sea documento escaneado y tenga contenido multimedia usable.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-06-02",
@@ -478,13 +522,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Subir video y demostrar calidad técnica y audio; URL de YouTube no la certifica.",
+      "evidence": [
+        "Subir video y demostrar calidad técnica y audio; URL de YouTube no la certifica.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-06-03",
@@ -496,13 +560,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Validar subtítulos o lengua de señas sobre el video definitivo.",
+      "evidence": [
+        "Validar subtítulos o lengua de señas sobre el video definitivo.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-06-04",
@@ -514,31 +598,72 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Revisar legibilidad/resolución y calidad de infografías reales.",
+      "evidence": [
+        "Revisar legibilidad/resolución y calidad de infografías reales.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-06-05",
       "criterion": "Hay al menos una actividad interactiva (selección múltiple, arrastrar y soltar, falso/verdadero, etc.) que se ejecuta sin salir de la plataforma y no aparece en el libro de calificaciones.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Agregar y probar recurso interactivo H5P o Lección sin nota, en el curso.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Agregar y probar recurso interactivo H5P o Lección sin nota, en el curso.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/private/content-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/private/content-check.json",
+            "sha256": "c7c35b5f97af07e114c6c9b6f1c0d36b88019d20ee567d40bddf1387940c7056"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-07-01",
@@ -556,7 +681,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-07-02",
@@ -568,13 +699,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Inventario bibliográfico/licencias y citas de todos los recursos.",
+      "evidence": [
+        "Inventario bibliográfico/licencias y citas de todos los recursos.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-01",
@@ -655,7 +806,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-04",
@@ -673,7 +830,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-05",
@@ -689,7 +852,9 @@
       "negative_test": "Pendiente según alcance",
       "observed": "50/50 coincidencias estructurales. No se inventa qué significan los cinco componentes.",
       "evidence": [
-        "build/staging/close19/context-final.json"
+        "build/staging/close19/context-final.json",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/private/content-check.json"
       ],
       "environment": "http://127.0.0.1:8054 — Moodle 5.3+ (20261021), PHP 8.4.27, MySQL 8.4.13",
       "commit": "3326e77c2e77cec71ed76d60f228abdf410219a6",
@@ -715,9 +880,24 @@
         "next_action": "Completar/ajustar implementación y ejecutar prueba integral con evidencia.",
         "formal_acceptance": "NO ACREDITADA"
       },
-      "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
       "plugin_version": "0.5.0 (2026102506)",
-      "theme_version": "RSMax 1.2.4 (2026102500)"
+      "theme_version": "RSMax 1.2.4 (2026102500)",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/private/content-check.json",
+            "sha256": "c7c35b5f97af07e114c6c9b6f1c0d36b88019d20ee567d40bddf1387940c7056"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-06",
@@ -729,13 +909,28 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Confirmar si se usan secciones de material complementario; si se usan verificar navegación.",
+      "evidence": [
+        "Confirmar si se usan secciones de material complementario; si se usan verificar navegación.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-07",
@@ -753,7 +948,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-08-08",
@@ -789,7 +990,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-09-01",
@@ -801,13 +1008,28 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Aplicaría a sesiones de la modalidad; comprobar registros de duración >=60 minutos.",
+      "evidence": [
+        "Aplicaría a sesiones de la modalidad; comprobar registros de duración >=60 minutos.",
+        "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json",
+            "sha256": "8379e897c7f7439e5ca4e734b5e1ebb80873a75c10af624d9ea48acbbcb24cbc"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-09-02",
@@ -825,7 +1047,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-01",
@@ -837,13 +1065,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia.",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-02",
@@ -855,13 +1103,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia.",
+      "evidence": [
+        "Confirmar formación híbrida; si aplica, probar plataforma de transmisión, 720p, subtítulos, reportes, asistencia.",
+        "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+        "build/staging/close19/media350-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/content-browser-2026-10-26T13-54-37-491Z/results.json",
+            "sha256": "6facbed376be5ad7133973526b013501b7b45d4ec1952e1dddec715e7c712a45"
+          },
+          {
+            "path": "build/staging/close19/media350-validation.json",
+            "sha256": "32bd6a3d3ac84eeb8eaa0b1c57c6b0d2932719e6420af8ed5748b137a2a7a23a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-03",
@@ -879,7 +1147,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-04",
@@ -897,7 +1171,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-05",
@@ -915,7 +1195,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-10-06",
@@ -933,7 +1219,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-11-01",
@@ -951,7 +1243,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-11-02",
@@ -969,7 +1267,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-11-03",
@@ -987,7 +1291,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-11-04",
@@ -1005,7 +1315,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Académico, licencia, modalidad o proveedor",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-12-01",
@@ -1104,7 +1420,13 @@
       },
       "technical_status": "BLOQUEADO POR INSUMO O DECISIÓN EXTERNA",
       "plugin_version": "0.5.0 (2026102506)",
-      "theme_version": "RSMax 1.2.4 (2026102500)"
+      "theme_version": "RSMax 1.2.4 (2026102500)",
+      "close19_20261026": {
+        "status": "BLOCKED_EXTERNAL",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-13-01",
@@ -1174,19 +1496,40 @@
       "id": "REQ-13-03",
       "criterion": "Existe un glosario que el administrador y el capacitador pueden editar. Es opcional: si no existe, N/A.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Crear/editar/eliminar formación de prueba; comparar campos contractuales y estado disponible/no disponible. Aplicabilidad condicional/opcional según el Anexo.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Crear/editar/eliminar formación de prueba; comparar campos contractuales y estado disponible/no disponible. Aplicabilidad condicional/opcional según el Anexo.",
+        "build/staging/close19/glossary-browser-2026-10-26T14-07-24-359Z/results.json",
+        "build/staging/close19/private/content-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Pruebas técnicas y aprobación",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/glossary-browser-2026-10-26T14-07-24-359Z/results.json",
+            "sha256": "fb1b0b0fa2e9c80888251068b06a23662f15d9a0bdf60e5adf53988935791c14"
+          },
+          {
+            "path": "build/staging/close19/private/content-check.json",
+            "sha256": "c7c35b5f97af07e114c6c9b6f1c0d36b88019d20ee567d40bddf1387940c7056"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-14-01",
@@ -1345,13 +1688,33 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Campos de identidad, tipo y número de documento, residencia y caracterización aún no acreditados.",
+      "evidence": [
+        "Campos de identidad, tipo y número de documento, residencia y caracterización aún no acreditados.",
+        "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+        "build/staging/close19/private/identity-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Identidad, caracterización y roles",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+            "sha256": "e347028011d276d0f9d687a7da81b143206c1082cccda10534fa218a04576509"
+          },
+          {
+            "path": "build/staging/close19/private/identity-check.json",
+            "sha256": "07648ef9b9cb85c939c133d47c9e153a1757a891d480be848f168190e6a63247"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-16-01",
@@ -1393,37 +1756,79 @@
       "id": "REQ-16-03",
       "criterion": "Registrar o asignar de nuevo un documento ya existente es rechazado.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Exigir unicidad por documento verificada en importación y asignación, no solo por email de Moodle.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Exigir unicidad por documento verificada en importación y asignación, no solo por email de Moodle.",
+        "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+        "build/staging/close19/private/identity-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Identidad, caracterización y roles",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+            "sha256": "e347028011d276d0f9d687a7da81b143206c1082cccda10534fa218a04576509"
+          },
+          {
+            "path": "build/staging/close19/private/identity-check.json",
+            "sha256": "07648ef9b9cb85c939c133d47c9e153a1757a891d480be848f168190e6a63247"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-17-01",
       "criterion": "En la gestión de roles existen Administrador, Capacitador, Beneficiario, Interventoría y SENA.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "El criterio pide cinco roles; catálogo actual contiene cuatro, no SENA.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "El criterio pide cinco roles; catálogo actual contiene cuatro, no SENA.",
+        "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+        "build/staging/close19/private/roles-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Identidad, caracterización y roles",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+            "sha256": "f7c68147bfe2d1113f307291ee05ac3472f054a75ca942beadefd9fc8251f1a6"
+          },
+          {
+            "path": "build/staging/close19/private/roles-check.json",
+            "sha256": "9b15225f564afa3b6994fc271eb1170e97bd2b14f6eac5bf8493716982239b28"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-17-02",
@@ -1663,19 +2068,35 @@
       "id": "REQ-19-07",
       "criterion": "El capacitador crea una sesión sincrónica que el grupo puede ver. N/A si la acción no tiene sesiones sincrónicas.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones. Aplicabilidad condicional/opcional según el Anexo.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Probar capacitador con permisos reales y grupos; publicar material/anuncios, notas, secciones y sesiones. Aplicabilidad condicional/opcional según el Anexo.",
+        "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Pruebas técnicas y aprobación",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json",
+            "sha256": "8379e897c7f7439e5ca4e734b5e1ebb80873a75c10af624d9ea48acbbcb24cbc"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-20-01",
@@ -1784,37 +2205,79 @@
       "id": "REQ-20-05",
       "criterion": "El beneficiario diligencia y guarda su caracterización o pertenencia a grupo o comunidad.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Formulario de caracterización guardando el dato y controles de privacidad.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Formulario de caracterización guardando el dato y controles de privacidad.",
+        "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+        "build/staging/close19/private/identity-check.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Identidad, caracterización y roles",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/identity-browser-2026-10-26T13-40-03-833Z/results.json",
+            "sha256": "e347028011d276d0f9d687a7da81b143206c1082cccda10534fa218a04576509"
+          },
+          {
+            "path": "build/staging/close19/private/identity-check.json",
+            "sha256": "07648ef9b9cb85c939c133d47c9e153a1757a891d480be848f168190e6a63247"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-21-01",
       "criterion": "Ve el listado de beneficiarios por grupo con su estado activo/inactivo, lugar de residencia y caracterización.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Interventoría debe ver estado, residencia y caracterización autorizados por grupo.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Interventoría debe ver estado, residencia y caracterización autorizados por grupo.",
+        "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+        "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Roles, datos personales y permisos",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+            "sha256": "f7c68147bfe2d1113f307291ee05ac3472f054a75ca942beadefd9fc8251f1a6"
+          },
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json",
+            "sha256": "dad7637f8e6657a2043ebf4a1a9e1ce32b2c3dee4df0d0651c226e6e590a035a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-21-02",
@@ -1859,7 +2322,7 @@
       "id": "REQ-22-01",
       "criterion": "Ve el listado de beneficiarios por grupo con su estado activo/inactivo, lugar de residencia y caracterización.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "observer_scope_test: beneficiarios del propio grupo; residencia/caracterización pendientes",
       "files": [
         "plugins/local/asodeltolstaff/tests/communication_support_test.php",
@@ -1867,14 +2330,35 @@
       ],
       "positive_test": "Batería PHPUnit privada PASS; cobertura parcial del criterio",
       "negative_test": "Denegación entre grupos / destinatario no configurado según caso",
-      "observed": "Prueba técnica parcial; estado integral conservado",
-      "evidence": "build\\staging\\anexo14-isolated\\20261025054505-summary.json",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "build\\staging\\anexo14-isolated\\20261025054505-summary.json",
+        "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+        "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json"
+      ],
       "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Roles, datos personales y permisos",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_REAL_LOCAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+            "sha256": "f7c68147bfe2d1113f307291ee05ac3472f054a75ca942beadefd9fc8251f1a6"
+          },
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json",
+            "sha256": "dad7637f8e6657a2043ebf4a1a9e1ce32b2c3dee4df0d0651c226e6e590a035a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-22-02",
@@ -1889,13 +2373,28 @@
       "positive_test": "Batería PHPUnit privada PASS; cobertura parcial del criterio",
       "negative_test": "Denegación entre grupos / destinatario no configurado según caso",
       "observed": "Prueba técnica parcial; estado integral conservado",
-      "evidence": "build\\staging\\anexo14-isolated\\20261025054505-summary.json",
+      "evidence": [
+        "build\\staging\\anexo14-isolated\\20261025054505-summary.json",
+        "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json"
+      ],
       "environment": "Moodle 5.3+ / PHP 8.4.27 / MySQL 8.4.13, BD/dataroot aislados",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Roles, datos personales y permisos",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+            "sha256": "f7c68147bfe2d1113f307291ee05ac3472f054a75ca942beadefd9fc8251f1a6"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-22-03",
@@ -1913,7 +2412,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Roles, datos personales y permisos",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-23-01",
@@ -1931,7 +2436,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-23-02",
@@ -1949,7 +2460,13 @@
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "close19_20261026": {
+        "status": "NOT_EXECUTED",
+        "evidence": [],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-23-03",
@@ -1961,13 +2478,28 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Asistencia contractual pendiente; prototipo staff no instalado en producción.",
+      "evidence": [
+        "Asistencia contractual pendiente; prototipo staff no instalado en producción.",
+        "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json",
+            "sha256": "8379e897c7f7439e5ca4e734b5e1ebb80873a75c10af624d9ea48acbbcb24cbc"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-24-01",
@@ -1979,13 +2511,28 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Reporte beneficiarios requiere columnas exactas de Anexo 12, numeral 2.14.",
+      "evidence": [
+        "Reporte beneficiarios requiere columnas exactas de Anexo 12, numeral 2.14.",
+        "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json",
+            "sha256": "dad7637f8e6657a2043ebf4a1a9e1ce32b2c3dee4df0d0651c226e6e590a035a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-24-02",
@@ -1997,31 +2544,72 @@
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
       "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Consolidado final requiere inscritos, grupos y culminación aprobada.",
+      "evidence": [
+        "Consolidado final requiere inscritos, grupos y culminación aprobada.",
+        "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+        "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "SUBPRUEBA LOCAL APROBADA; CRITERIO INTEGRAL AÚN BLOQUEADO",
+      "close19_20261026": {
+        "status": "PARTIAL",
+        "evidence": [
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-12-18-513Z/results.json",
+            "sha256": "f7c68147bfe2d1113f307291ee05ac3472f054a75ca942beadefd9fc8251f1a6"
+          },
+          {
+            "path": "build/staging/close19/roles-browser-2026-10-26T14-10-56-782Z/xlsx-validation.json",
+            "sha256": "dad7637f8e6657a2043ebf4a1a9e1ce32b2c3dee4df0d0651c226e6e590a035a"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      }
     },
     {
       "id": "REQ-24-03",
       "criterion": "El reporte se descarga en .xlsx o .xls con asistencia por sesión, grupo y acción. Si la plataforma no lo genera, debe integrar otra que sí lo haga.",
       "previous_state": "BLOQUEADO",
-      "state": "BLOQUEADO",
+      "state": "VERIFICADO LOCAL",
       "implementation": "Conservar implementación existente; revisión integral todavía abierta",
       "files": [],
       "positive_test": "Sin nueva prueba integral acreditada para este criterio",
       "negative_test": "Pendiente según alcance",
-      "observed": "Estado histórico conservado, no recertificado",
-      "evidence": "Reporte sesiones y asistencia no puede cerrarse sin asistencia válida.",
+      "observed": "Función técnica comprobada en staging 8054; aceptación contractual no acreditada.",
+      "evidence": [
+        "Reporte sesiones y asistencia no puede cerrarse sin asistencia válida.",
+        "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json",
+        "build/staging/close19/session-report-browser-2026-10-26T14-11-46-814Z/xlsx-validation.json"
+      ],
       "environment": "Histórico local; nueva batería aislada se registra por separado",
       "commit": "17638ff34ba08848a4665f79753800a938d18387",
       "production": "NO VERIFICADA EN ESTA INTERVENCIÓN",
       "dependency": "Asistencia, proveedor o Anexo 12",
       "next_action": "Preparar componentes y tests; no cerrar hasta recibir insumo/decisión institucional.",
-      "formal_acceptance": "NO ACREDITADA"
+      "formal_acceptance": "NO ACREDITADA",
+      "technical_status": "VERIFICADO EN MOODLE LOCAL CON DATOS SINTÉTICOS",
+      "close19_20261026": {
+        "status": "PASS_SIMULATED",
+        "evidence": [
+          {
+            "path": "build/staging/close19/session-browser-2026-10-26T14-11-38-449Z/results.json",
+            "sha256": "8379e897c7f7439e5ca4e734b5e1ebb80873a75c10af624d9ea48acbbcb24cbc"
+          },
+          {
+            "path": "build/staging/close19/session-report-browser-2026-10-26T14-11-46-814Z/xlsx-validation.json",
+            "sha256": "1bbfd42a6a73f90bfa8dec46e88c9af5ee466c6f0229c8fd95a276f48e3b19af"
+          }
+        ],
+        "environment": "http://127.0.0.1:8054, isolated local Docker",
+        "formal_acceptance": "NO ACREDITADA"
+      },
+      "plugin_version": "0.5.1 (2026102601)"
     },
     {
       "id": "REQ-24-04",
@@ -2055,5 +2643,19 @@
     "formal_acceptances": 0,
     "production_actions": 0,
     "scope": "14 nuevos verificados en staging; 20 verificados históricos conservados, no recertificados hoy."
+  },
+  "close19_assessment": {
+    "assessed_at": "2026-10-26T14:15:38.269976+00:00",
+    "originally_blocked": 46,
+    "statuses": {
+      "PASS_REAL_LOCAL": 8,
+      "PASS_SIMULATED": 1,
+      "PARTIAL": 15,
+      "FAIL": 0,
+      "BLOCKED_EXTERNAL": 6,
+      "NOT_EXECUTED": 16
+    },
+    "official_acceptances": 0,
+    "note": "A passing subtest never changes an integral criterion from BLOQUEADO."
   }
 }
