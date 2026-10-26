@@ -331,32 +331,56 @@ def swap_component(item: dict[str, Any], state_root: Path, timestamp: str) -> di
     target: Path = item["target"]
     stage: Path = item["stage"]
     backup = state_root / "backups" / item["component"] / f"{timestamp}-{item['base_sha'][:12]}"
+    local_rollback = target.parent / f".{target.name}.rollback-{timestamp}-{item['base_sha'][:12]}"
     backup.parent.mkdir(parents=True, exist_ok=True)
-    if backup.exists():
-        raise RuntimeError(f"Backup destination already exists: {backup}")
+    if backup.exists() or local_rollback.exists():
+        raise RuntimeError(f"Backup destination already exists: {backup} or {local_rollback}")
     if target.exists():
-        os.replace(target, backup)
+        os.replace(target, local_rollback)
     try:
         os.replace(stage, target)
     except Exception:
-        if backup.exists() and not target.exists():
-            os.replace(backup, target)
+        if local_rollback.exists() and not target.exists():
+            os.replace(local_rollback, target)
         raise
     item["backup"] = backup
+    item["local_rollback"] = local_rollback
     item["status"] = "deployed"
     return item
+
+
+def archive_backup(item: dict[str, Any]) -> None:
+    local_rollback: Path = item["local_rollback"]
+    backup: Path = item["backup"]
+    if local_rollback.exists():
+        shutil.copytree(local_rollback, backup, symlinks=False)
+
+
+def discard_local_rollback(item: dict[str, Any]) -> bool:
+    local_rollback: Path = item["local_rollback"]
+    try:
+        if local_rollback.exists():
+            shutil.rmtree(local_rollback)
+        return True
+    except OSError:
+        return False
 
 
 def rollback(swapped: list[dict[str, Any]], state_root: Path, timestamp: str) -> None:
     for item in reversed(swapped):
         target: Path = item["target"]
-        backup: Path = item["backup"]
-        failed = state_root / "failed" / item["component"] / f"{timestamp}-{item['target_sha'][:12]}"
-        failed.parent.mkdir(parents=True, exist_ok=True)
+        local_rollback: Path = item["local_rollback"]
+        failed = target.parent / f".{target.name}.failed-{timestamp}-{item['target_sha'][:12]}"
         if target.exists():
             os.replace(target, failed)
-        if backup.exists():
-            os.replace(backup, target)
+        if local_rollback.exists():
+            os.replace(local_rollback, target)
+        if failed.exists():
+            failed_archive = state_root / "failed" / item["component"] / f"{timestamp}-{item['target_sha'][:12]}"
+            failed_archive.parent.mkdir(parents=True, exist_ok=True)
+            if not failed_archive.exists():
+                shutil.copytree(failed, failed_archive, symlinks=False)
+            shutil.rmtree(failed)
         item["status"] = "rolled_back"
 
 
@@ -435,7 +459,9 @@ def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any],
     swapped: list[dict[str, Any]] = []
     try:
         for item in prepared:
-            swapped.append(swap_component(item, state_root, timestamp))
+            swapped_item = swap_component(item, state_root, timestamp)
+            swapped.append(swapped_item)
+            archive_backup(swapped_item)
         if swapped:
             purge_and_health(site)
             for item in swapped:
@@ -457,6 +483,10 @@ def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any],
             if isinstance(stage, Path) and stage.exists():
                 shutil.rmtree(stage)
         raise
+
+    for item in swapped:
+        if not discard_local_rollback(item):
+            item["reasons"].append(f"local rollback retained: {item['local_rollback']}")
 
     for item in results:
         commit_state(item, state_root)
