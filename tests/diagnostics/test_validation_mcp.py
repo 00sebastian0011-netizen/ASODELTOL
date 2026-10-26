@@ -48,6 +48,8 @@ class TestValidationService(unittest.TestCase):
         self.assertEqual(blocked["status"], "BLOCKED")
         results = self.service.results({"validation_id": blocked["validation_id"]})
         self.assertEqual(results["results"][0]["status"], "BLOCKED")
+        policy_write = self.service.run({"case_ids": ["TC-POLICY-NEW-ACCEPT"]})
+        self.assertEqual(policy_write["status"], "BLOCKED")
 
     def test_rpc_exposes_validation_tools_without_shell(self):
         status, response = mcp_server.handle_rpc({"jsonrpc": "2.0", "id": 7, "method": "tools/call", "params": {"name": "validation_catalog", "arguments": {"limit": 1}}})

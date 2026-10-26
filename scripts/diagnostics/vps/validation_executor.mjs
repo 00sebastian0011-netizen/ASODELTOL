@@ -91,7 +91,8 @@ async function runJob(job) {
   const catalog = readJson(catalogFile);
   const cases = new Map((catalog.cases || []).map(item => [item.case_id, item]));
   if (!Array.isArray(job.case_ids) || job.case_ids.length < 1 || job.case_ids.length > maxCases) throw new Error('job_case_limit_invalid');
-  const destructive = job.case_ids.filter(caseId => cases.get(caseId)?.kind === 'upload');
+  const riskOf = caseId => cases.get(caseId)?.risk || (cases.get(caseId)?.kind === 'upload' ? 'destructive_requires_authorization' : 'non_destructive');
+  const destructive = job.case_ids.filter(caseId => riskOf(caseId) !== 'non_destructive');
   const results = destructive.map(caseId => ({case_id: caseId, requirements: cases.get(caseId).requirements, status: 'BLOCKED', reason: 'Requires later authorization, isolation, backup and recovery', method: 'policy'}));
   const runnable = job.case_ids.filter(caseId => !destructive.includes(caseId));
   if (!runnable.length) return {results, evidence: results.map(resultEvidence => reportEvidence(job.validation_id, resultEvidence)), executor: {method: 'policy', version: '1.0'}};

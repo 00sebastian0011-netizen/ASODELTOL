@@ -198,11 +198,12 @@ class ValidationService:
         os.replace(temporary, target)
 
     def _case_summary(self, case: dict[str, Any]) -> dict[str, Any]:
+        risk = case.get("risk") or ("destructive_requires_authorization" if case.get("kind") == "upload" else "non_destructive")
         return {
             "case_id": case["case_id"],
             "requirements": case["requirements"],
             "kind": case.get("kind"),
-            "risk": "destructive_requires_authorization" if case.get("kind") == "upload" else "non_destructive",
+            "risk": risk,
             "authorized_action": str(case.get("authorized_action", ""))[:220],
         }
 
@@ -252,7 +253,7 @@ class ValidationService:
             validation_id = "val-" + secrets.token_hex(8)
             blocked = [
                 {"case_id": case_id, "requirements": catalog[case_id]["requirements"], "status": "BLOCKED", "reason": "Requires later authorization, isolation, backup and recovery"}
-                for case_id in case_ids if catalog[case_id].get("kind") == "upload"
+                for case_id in case_ids if (catalog[case_id].get("risk") or ("destructive_requires_authorization" if catalog[case_id].get("kind") == "upload" else "non_destructive")) != "non_destructive"
             ]
             status = "BLOCKED" if len(blocked) == len(case_ids) else "QUEUED"
             job = {
