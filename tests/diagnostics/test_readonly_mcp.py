@@ -12,6 +12,7 @@ import urllib.error
 import urllib.request
 import sys
 import shutil
+from unittest.mock import patch
 
 SRC = Path(__file__).resolve().parents[2] / "scripts" / "diagnostics" / "vps"
 sys.path.insert(0, str(SRC))
@@ -107,6 +108,23 @@ class TestSanitizedProbes(unittest.TestCase):
         self.assertFalse(result["datacurso_present"])
         self.assertEqual(result["diagnosis"], "target_missing_or_unreadable")
 
+    def test_permission_probe_existing_target_without_write_or_traverse(self):
+        root = ROOT / "site" / "public"
+        (root / "ai" / "provider" / "datacurso").mkdir(parents=True, exist_ok=True)
+        probes.PLUGIN_ROOT = root
+        probes._php_fpm_identity = lambda: {"determinable": True, "user": "php", "group": "php"}
+        with patch.object(probes.os, "access", return_value=False):
+            result = probes.moodle_plugin_install_permissions()
+        self.assertFalse(result["paths"][-1]["write_for_probe_process"])
+        self.assertEqual(result["diagnosis"], "directory_not_traversable")
+
+    def test_permission_probe_access_denied_is_sanitized(self):
+        probes.PLUGIN_ROOT = ROOT / "site" / "public"
+        with patch.object(type(probes.PLUGIN_ROOT), "stat", side_effect=PermissionError):
+            result = probes.moodle_plugin_install_permissions()
+        self.assertEqual(result["diagnosis"], "target_missing_or_unreadable")
+        self.assertNotIn(str(ROOT), json.dumps(result))
+
     def test_permission_probe_acl_restriction_is_reported(self):
         root = ROOT / "site" / "public"
         (root / "ai" / "provider" / "datacurso").mkdir(parents=True, exist_ok=True)
@@ -140,6 +158,7 @@ class TestRpc(unittest.TestCase):
             ("ssh_exec", {}),
             ("upload_limits", {"path": "/etc/shadow"}),
             ("vps_system_health", {"command": "rm -rf /"}),
+            ("moodle_plugin_install_permissions", {"path": "/etc/shadow"}),
         ]:
             _, resp = mcp_server.handle_rpc({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
                                               "params": {"name": name, "arguments": args}})
