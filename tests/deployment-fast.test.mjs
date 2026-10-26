@@ -71,10 +71,20 @@ test('receiver validates HMAC and the deployer supports drift and rollback state
   assert.match(receiver, /hmac\.compare_digest/);
   assert.match(receiver, /EXPECTED_REPOSITORY/);
   assert.match(receiver, /EXPECTED_REF/);
+  assert.match(receiver, /payload\.get\("before"/);
+  assert.match(receiver, /"--before", before_sha, "--sha", sha/);
   assert.match(deployer, /protected production drift/);
   assert.match(deployer, /rollback\(/);
   assert.match(deployer, /Post-deploy hash mismatch/);
   assert.match(service, /User=user/);
   assert.match(service, /NoNewPrivileges=true/);
   assert.doesNotMatch(service, /User=root/);
+});
+
+test('deployment evaluates the exact GitHub push range instead of accumulated component history', () => {
+  const deployer = fs.readFileSync('scripts/deploy/vps/deploy_release.py', 'utf8');
+  assert.match(deployer, /changed_paths\(repo, change_base_sha, target_sha/);
+  assert.match(deployer, /target_sha = requested_sha/);
+  assert.match(deployer, /Webhook before commit is not an ancestor/);
+  assert.doesNotMatch(deployer, /changed_paths\(repo, base_sha, target_sha/);
 });

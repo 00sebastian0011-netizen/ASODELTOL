@@ -58,13 +58,15 @@ deploy_change() {
   local label="$1"
   local path="$2"
   local value="$3"
+  local before
+  before="$(git -C "$work" rev-parse HEAD)"
   printf '%s\n' "$value" >"$work/$path"
   git -C "$work" add "$path"
   git -C "$work" commit --quiet -m "selftest $label"
   git -C "$work" push --quiet origin main
   local sha result
   sha="$(git -C "$work" rev-parse HEAD)"
-  result="$(/usr/bin/python3 "$script_dir/deploy_release.py" --sha "$sha")"
+  result="$(/usr/bin/python3 "$script_dir/deploy_release.py" --before "$before" --sha "$sha")"
   python3 - "$label" "$result" <<'PY'
 import json
 import sys
@@ -81,12 +83,13 @@ deploy_change mustache 'plugins/theme/rsmax/templates/probe.mustache' '<div>one<
 deploy_change php 'plugins/theme/rsmax/classes/probe.php' '<?php class theme_rsmax_probe { public const VALUE = "one"; }'
 
 printf ':root { --probe: direct-production-edit; }\n' >"$site/public/theme/rsmax/style/probe.css"
+drift_before="$(git -C "$work" rev-parse HEAD)"
 printf ':root { --probe: repository-two; }\n' >"$work/plugins/theme/rsmax/style/probe.css"
 git -C "$work" add plugins/theme/rsmax/style/probe.css
 git -C "$work" commit --quiet -m 'selftest protected drift'
 git -C "$work" push --quiet origin main
 drift_sha="$(git -C "$work" rev-parse HEAD)"
-drift_result="$(/usr/bin/python3 "$script_dir/deploy_release.py" --sha "$drift_sha")"
+drift_result="$(/usr/bin/python3 "$script_dir/deploy_release.py" --before "$drift_before" --sha "$drift_sha")"
 python3 - "$drift_result" <<'PY'
 import json
 import sys
@@ -99,12 +102,13 @@ grep -q 'direct-production-edit' "$site/public/theme/rsmax/style/probe.css"
 
 printf ':root { --probe: 1; }\n' >"$site/public/theme/rsmax/style/probe.css"
 before_hash="$(sha256sum "$site/public/theme/rsmax/amd/build/probe.min.js" | awk '{print $1}')"
+rollback_before="$(git -C "$work" rev-parse HEAD)"
 printf 'define([],function(){return "rollback";});\n' >"$work/plugins/theme/rsmax/amd/build/probe.min.js"
 git -C "$work" add plugins/theme/rsmax/amd/build/probe.min.js
 git -C "$work" commit --quiet -m 'selftest rollback'
 git -C "$work" push --quiet origin main
 rollback_sha="$(git -C "$work" rev-parse HEAD)"
-if ASODELTOL_PUBLIC_URL=http://127.0.0.1:9 /usr/bin/python3 "$script_dir/deploy_release.py" --sha "$rollback_sha" >/dev/null 2>&1; then
+if ASODELTOL_PUBLIC_URL=http://127.0.0.1:9 /usr/bin/python3 "$script_dir/deploy_release.py" --before "$rollback_before" --sha "$rollback_sha" >/dev/null 2>&1; then
   echo 'Rollback self-test unexpectedly succeeded.' >&2
   exit 8
 fi

@@ -33,12 +33,12 @@ foreach ($component in $policy.components) {
 }
 
 $receiver = Get-Content -Raw -LiteralPath (Join-Path $deploy 'vps/receiver.py')
-foreach ($pattern in @('hmac\.compare_digest', 'X-Hub-Signature-256', 'EXPECTED_REPOSITORY', 'EXPECTED_REF')) {
+foreach ($pattern in @('hmac\.compare_digest', 'X-Hub-Signature-256', 'EXPECTED_REPOSITORY', 'EXPECTED_REF', 'payload\.get\("before"', '"--before", before_sha')) {
     if ($receiver -notmatch $pattern) { throw "Webhook safeguard missing: $pattern" }
 }
 
 $deployer = Get-Content -Raw -LiteralPath (Join-Path $deploy 'vps/deploy_release.py')
-foreach ($pattern in @('protected production drift', 'rollback\(', 'Post-deploy hash mismatch', 'merge-base')) {
+foreach ($pattern in @('protected production drift', 'rollback\(', 'Post-deploy hash mismatch', 'merge-base', 'changed_paths\(repo, change_base_sha, target_sha', 'target_sha = requested_sha')) {
     if ($deployer -notmatch $pattern) { throw "Deployment safeguard missing: $pattern" }
 }
 
