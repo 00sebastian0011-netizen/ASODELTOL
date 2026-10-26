@@ -1,16 +1,14 @@
 <?php
-/** Local QA exercise of native Moodle profile fields and duplicate-document rejection. */
+/** Native Moodle profile-form validation, persistence and duplicate rejection; close19 only. */
 define('CLI_SCRIPT', true);
-require('/var/www/html/config.php');
-require_once($CFG->dirroot . '/user/profile/lib.php');
-if ($CFG->wwwroot !== 'http://127.0.0.1:8054' || $CFG->dbname !== 'close19') throw new RuntimeException('close19 only');
-$fields=['qa_documento'=>'Documento ficticio','qa_residencia'=>'Residencia ficticia','qa_caracterizacion'=>'Caracterización ficticia'];
-foreach($fields as $short=>$name){ if(!$DB->record_exists('user_info_field',['shortname'=>$short])) $DB->insert_record('user_info_field',(object)['shortname'=>$short,'name'=>$name,'datatype'=>'text','categoryid'=>0,'required'=>0,'locked'=>0,'visible'=>PROFILE_VISIBLE_ALL,'forceunique'=>0,'signup'=>0]); }
-$user=$DB->get_record('user',['username'=>'qa350_001'],'*',MUST_EXIST); $document='QA-DOC-350-001';
-foreach(['qa_documento'=>$document,'qa_residencia'=>'Bogotá QA','qa_caracterizacion'=>'Sintética, no institucional'] as $short=>$value){ $field=$DB->get_record('user_info_field',['shortname'=>$short],'*',MUST_EXIST); $old=$DB->get_record('user_info_data',['userid'=>$user->id,'fieldid'=>$field->id],'*',IGNORE_MISSING); if($old){$old->data=$value;$DB->update_record('user_info_data',$old);}else $DB->insert_record('user_info_data',(object)['userid'=>$user->id,'fieldid'=>$field->id,'data'=>$value,'dataformat'=>FORMAT_PLAIN]); }
-$field=$DB->get_record('user_info_field',['shortname'=>'qa_documento'],'*',MUST_EXIST);
-$duplicates=$DB->count_records('user_info_data',['fieldid'=>$field->id,'data'=>$document]); if($duplicates!==1) throw new RuntimeException('Duplicate identity document detected');
-$negative=false; try { if($DB->record_exists('user_info_data',['fieldid'=>$field->id,'data'=>$document])) throw new moodle_exception('duplicate_document_rejected'); } catch (moodle_exception $e) {$negative=true;}
-if(!$negative) throw new RuntimeException('Duplicate rejection did not execute');
-$out=['status'=>'PASS_SIMULATED','user'=>$user->id,'document_unique'=>true,'residence_persisted'=>true,'characterization_persisted'=>true,'duplicate_rejected'=>true,'created_at'=>gmdate('c'),'scope'=>'native Moodle profile fields; synthetic local QA only'];
-file_put_contents('/tmp/close19-identity.json',json_encode($out,JSON_PRETTY_PRINT)); echo json_encode($out).PHP_EOL;
+require('/var/www/html/config.php'); require_once($CFG->dirroot.'/user/profile/lib.php');
+if($CFG->wwwroot!=='http://127.0.0.1:8054'||$CFG->dbname!=='close19'||$CFG->prefix!=='mdl_')throw new RuntimeException('close19 only');
+$course=$DB->get_record('course',['shortname'=>'QA350-AF8'],'*',MUST_EXIST);$category=$DB->get_record('course_categories',['id'=>$course->category],'*',MUST_EXIST);if($course->visible||$category->visible)throw new RuntimeException('QA350 must remain hidden');
+$fields=['qa_documento'=>['Documento ficticio',1],'qa_residencia'=>['Residencia ficticia',0],'qa_caracterizacion'=>['Caracterización ficticia',0]];
+foreach($fields as $short=>[$name,$unique]){ $f=$DB->get_record('user_info_field',['shortname'=>$short],'*',IGNORE_MISSING);if(!$f)$DB->insert_record('user_info_field',(object)['shortname'=>$short,'name'=>$name,'datatype'=>'text','categoryid'=>0,'required'=>0,'locked'=>0,'visible'=>PROFILE_VISIBLE_PRIVATE,'forceunique'=>$unique,'signup'=>0]);else if((int)$f->forceunique!==$unique||$f->visible!==PROFILE_VISIBLE_PRIVATE){$f->forceunique=$unique;$f->visible=PROFILE_VISIBLE_PRIVATE;$DB->update_record('user_info_field',$f);} }
+$a=$DB->get_record('user',['username'=>'qa350_001'],'*',MUST_EXIST);$b=$DB->get_record('user',['username'=>'qa350_002'],'*',MUST_EXIST);$doc='QA-DOC-350-001';
+$a->profile_field_qa_documento=$doc;$a->profile_field_qa_residencia='Bogotá QA';$a->profile_field_qa_caracterizacion='Sintética, no institucional';$errors=profile_validation($a,[]);if($errors)throw new RuntimeException('First profile rejected: '.json_encode($errors));profile_save_data($a);
+$reload=profile_user_record($a->id,false);if($reload->qa_documento!==$doc||$reload->qa_residencia!=='Bogotá QA'||$reload->qa_caracterizacion!=='Sintética, no institucional')throw new RuntimeException('Native profile read-back failed');
+$b->profile_field_qa_documento=$doc;$duplicateerrors=profile_validation($b,[]);if(!$duplicateerrors)throw new RuntimeException('Duplicate document accepted by native profile validation');$before=$DB->count_records('user_info_data',['userid'=>$b->id]);
+$b->profile_field_qa_documento='QA-DOC-350-002';$uniqueerrors=profile_validation($b,[]);if($uniqueerrors)throw new RuntimeException('Unique document rejected: '.json_encode($uniqueerrors));profile_save_data($b);$after=profile_user_record($b->id,false);if($after->qa_documento!=='QA-DOC-350-002')throw new RuntimeException('Second profile persistence failed');
+$out=['status'=>'PASS_SIMULATED','courseid'=>(int)$course->id,'profile_visibility'=>'private','document_unique'=>true,'residence_persisted'=>true,'characterization_persisted'=>true,'duplicate_rejected_by_native_form_validation'=>true,'duplicate_target_unchanged'=>$before===$DB->count_records('user_info_data',['userid'=>$b->id])-1,'created_at'=>gmdate('c')];file_put_contents('/tmp/close19-identity.json',json_encode($out,JSON_PRETTY_PRINT));echo json_encode($out).PHP_EOL;
