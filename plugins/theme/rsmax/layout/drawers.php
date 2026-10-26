@@ -180,6 +180,13 @@ if ($oncoursehome && !empty($settings->courseheader) && !$PAGE->user_is_editing(
     $extraclasses[] = 'rsmax-hascoursehero';
     $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 }
+// A course-local information panel; do not modify course data or the QA plugin.
+$courseutilities = false;
+if ($oncoursehome && isloggedin() && !isguestuser() && !$PAGE->user_is_editing()
+        && (!isset($settings->courseutilitiesenabled) || !empty($settings->courseutilitiesenabled))) {
+    $courseutilities = \theme_rsmax\local\course_utilities::export($PAGE->course);
+}
+
 // Activity pages open with a stage: the kind of activity, its name and its place in the section.
 $stage = false;
 $coursedata = null;
@@ -380,6 +387,7 @@ $templatecontext = [
     'navbar' => $navbar,
     'dashboard' => $dashboard,
     'coursehero' => $coursehero,
+    'courseutilities' => $courseutilities,
     'assistantholder' => $assistantholder,
     'homehero' => $homehero,
 ];

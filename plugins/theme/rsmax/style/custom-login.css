@@ -54,3 +54,34 @@ body li:has(> a[href$="/my/"]),
 body li:has(> a[href*="/my/index.php"]) {
     display: none !important;
 }
+
+/* Accessible three-second notice. Added inside the inherited Moodle login form layout. */
+body.pagelayout-login .rsmax-login-free-notice {
+    position: fixed;
+    z-index: 1035;
+    top: clamp(1rem, 12vh, 7rem);
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    width: min(37rem, calc(100vw - 2rem));
+    padding: .85rem 1.2rem;
+    border-radius: .6rem;
+    background: #11374b;
+    color: #fff;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .18);
+    font-size: clamp(.9rem, 1.9vw, 1.05rem);
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    pointer-events: none;
+    animation: rsmax-login-free-3s 3s linear forwards;
+}
+@keyframes rsmax-login-free-3s {
+    0%, 88% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.pagelayout-login .rsmax-login-free-notice {
+        animation-timing-function: steps(1, end);
+    }
+}

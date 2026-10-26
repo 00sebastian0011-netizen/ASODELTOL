@@ -235,6 +235,14 @@ if ($ADMIN->fulltree) {
     // Courses.
     $page = new admin_settingpage('theme_rsmax_course', $name('coursesettings'));
     $add($page, $checkbox('courseheader', 1));
+    $add($page, $checkbox('courseutilitiesenabled', 1));
+    $add($page, new admin_setting_configtextarea(
+        'theme_rsmax/coursequicklinks',
+        $name('coursequicklinks'),
+        $desc('coursequicklinks'),
+        '',
+        PARAM_RAW_TRIMMED
+    ));
     $add($page, $checkbox('courseprogress', 1));
     $add($page, $checkbox('sectionprogress', 1));
     $widths = [];
