@@ -17,7 +17,8 @@
     "qa:close19:links": "node scripts/staging/close19/links.mjs",
     "qa:close19:render50": "node scripts/staging/close19/render50.mjs",
     "agent:brief": "node scripts/quality/agent-brief.mjs",
-    "qa:anexo14:manifest": "python scripts/anexo14/build-simulation-manifest.py && python scripts/anexo14/validate-scenarios.py"
+    "qa:anexo14:manifest": "python scripts/anexo14/build-simulation-manifest.py && python scripts/anexo14/validate-scenarios.py",
+    "qa:anexo14:all": "npm run qa:anexo14:manifest && npm run qa:close19:links && npm run qa:close19:workflows"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
