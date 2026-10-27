@@ -194,7 +194,10 @@ final class course_utilities {
     public static function policy_url(): string|false {
         global $CFG;
         $haspolicy = ($CFG->sitepolicyhandler ?? '') === 'tool_policy'
-            && (int) get_config('tool_policy', 'version') > 0;
+            && class_exists('\\tool_policy\\api')
+            && !empty(\tool_policy\api::get_current_versions_ids(
+                \tool_policy\policy_version::AUDIENCE_LOGGEDIN
+            ));
         return $haspolicy
             ? (new \moodle_url('/admin/tool/policy/user.php'))->out(false)
             : false;

@@ -9186,11 +9186,11 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
         gap: 1rem;
         padding: 1.2rem 1.4rem;
         margin-bottom: 1.4rem;
-        border: 1px solid #c9ddea;
-        border-left: 6px solid #006ba6;
+        border: 1px solid #b9d8cc;
+        border-left: 6px solid #1b5e49;
         border-radius: .75rem;
-        background: #f2f8fb;
-        box-shadow: 0 4px 16px rgba(12, 55, 82, .07);
+        background: #f2f8f5;
+        box-shadow: 0 4px 16px rgba(27, 94, 73, .08);
     }
     .rsmax-courseutilities-consentcopy {
         flex: 1 1 20rem;
@@ -9198,7 +9198,7 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
     }
     .rsmax-courseutilities-consenttitle {
         margin: 0 0 .35rem;
-        color: #0f557d;
+        color: #154b3b;
         font-size: 1.06rem;
         font-weight: 750;
     }
@@ -9215,16 +9215,16 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
         padding: .55rem 1.1rem;
         border-radius: 2rem;
         color: #fff;
-        background: #0079b8;
+        background: #1b5e49;
         font-size: .87rem;
         font-weight: 700;
         text-align: center;
         text-decoration: none;
-        box-shadow: 0 3px 8px rgba(0, 95, 155, .2);
+        box-shadow: 0 3px 8px rgba(27, 94, 73, .22);
 
         &:hover, &:focus-visible {
             color: #fff;
-            background: #005d90;
+            background: #104835;
             text-decoration: underline;
         }
     }
@@ -9289,6 +9289,19 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
         font-size: .72rem;
         color: #647780;
     }
+    .rsmax-courseutilities-account {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: .4rem 0 0;
+        padding: .18rem .65rem;
+        border: 1px solid #d9e3de;
+        border-radius: 2rem;
+        color: #3e5149;
+        background: #f7faf8;
+        font-size: .72rem;
+        line-height: 1.35;
+    }
     @media (max-width: 900px) {
         .rsmax-courseutilities-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
@@ -9297,6 +9310,23 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
         .rsmax-courseutilities-consent { padding: 1rem; }
         .rsmax-courseutilities-links { padding: 1.15rem .9rem; }
         .rsmax-courseutilities-consentaction { width: 100%; }
+    }
+}
+
+.path-admin-tool-policy {
+    .btn-primary {
+        border-color: #1b5e49;
+        background: #1b5e49;
+
+        &:hover, &:focus-visible {
+            border-color: #104835;
+            background: #104835;
+        }
+    }
+    .alert-success {
+        border-color: #b9d8cc;
+        color: #154b3b;
+        background: #e6f2ed;
     }
 }
 @media print {

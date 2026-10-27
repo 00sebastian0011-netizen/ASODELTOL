@@ -5,6 +5,21 @@
     destinations expand to a list. Hidden items are filtered server-side.
 }}
 <section class="rsmax-courseutilities" aria-label="{{#str}}coursequicktitle, theme_rsmax{{/str}}">
+    {{#policyurl}}
+        <aside class="rsmax-courseutilities-consent" role="note">
+            <div class="rsmax-courseutilities-consentcopy">
+                <h2 class="rsmax-courseutilities-consenttitle">
+                    {{#str}}courseconsenttitle, theme_rsmax{{/str}}
+                </h2>
+                <p class="rsmax-courseutilities-consenttext">
+                    {{#str}}courseconsentdescription, theme_rsmax{{/str}}
+                </p>
+            </div>
+            <a class="rsmax-courseutilities-consentaction" href="{{policyurl}}">
+                {{#str}}courseconsentaction, theme_rsmax{{/str}}
+            </a>
+        </aside>
+    {{/policyurl}}
     <nav class="rsmax-courseutilities-links" aria-labelledby="rsmax-course-quicktitle">
         <h2 class="rsmax-courseutilities-linkstitle" id="rsmax-course-quicktitle">
             {{#str}}coursequicktitle, theme_rsmax{{/str}}
@@ -32,12 +47,18 @@
                                 {{/targets}}
                             </ul>
                         </details>
+                        <span class="rsmax-courseutilities-account">
+                            {{#str}}coursequickaccountrequired, theme_rsmax{{/str}}
+                        </span>
                     {{/multiple}}
                     {{^multiple}}
                         {{#url}}
                             <a class="rsmax-courseutilities-link" href="{{url}}">
                                 <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
                             </a>
+                            <span class="rsmax-courseutilities-account">
+                                {{#str}}coursequickaccountrequired, theme_rsmax{{/str}}
+                            </span>
                         {{/url}}
                         {{^url}}
                             <span class="rsmax-courseutilities-disabled">
