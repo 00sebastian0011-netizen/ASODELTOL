@@ -1,0 +1,34 @@
+[Unit]
+Description=ASODELTOL allowlisted operational MCP
+After=network.target
+
+[Service]
+Type=simple
+User=user
+Group=user
+EnvironmentFile=/etc/asodeltol-operations.env
+WorkingDirectory=/opt/asodeltol-operations
+ExecStart=/usr/bin/python3 -B /opt/asodeltol-operations/operations_server.py
+Restart=on-failure
+RestartSec=3s
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/home/user/.local/state/asodeltol-operations
+ReadWritePaths=/home/user/htdocs/srv2085040.hstgr.cloud/public/local
+ReadWritePaths=/home/user/htdocs/moodledata
+MemoryMax=256M
+TasksMax=32
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

@@ -225,7 +225,7 @@ def validate_stage(stage: Path, changed: dict[str, str], php_binary: str) -> Non
 
 
 def prepare_component(repo: Path, site: Path, state_root: Path, component: dict[str, Any],
-                      change_base_sha: str, target_sha: str) -> dict[str, Any]:
+                      change_base_sha: str, target_sha: str, allow_critical: bool = False) -> dict[str, Any]:
     component_id = component["id"]
     component_state = load_component_state(state_root, component_id)
     state_base_sha = component_state["base_sha"]
@@ -247,7 +247,7 @@ def prepare_component(repo: Path, site: Path, state_root: Path, component: dict[
     risk, reasons = classify(component, changes)
     result["risk"] = risk
     result["reasons"] = reasons
-    if risk == "critical":
+    if risk == "critical" and not allow_critical:
         result["status"] = "manual_required"
         return result
 
@@ -425,7 +425,7 @@ def commit_state(item: dict[str, Any], state_root: Path) -> None:
 
 
 def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any],
-           requested_before: str, requested_sha: str) -> dict[str, Any]:
+           requested_before: str, requested_sha: str, allowed_critical: set[str] | None = None) -> dict[str, Any]:
     if not SHA_RE.fullmatch(requested_sha) or not SHA_RE.fullmatch(requested_before):
         raise RuntimeError("Invalid requested commit SHA")
     started = time.monotonic()
@@ -450,7 +450,8 @@ def deploy(repo: Path, site: Path, state_root: Path, policy: dict[str, Any],
     prepared: list[dict[str, Any]] = []
     results: list[dict[str, Any]] = []
     for component in policy["components"]:
-        item = prepare_component(repo, site, state_root, component, requested_before, target_sha)
+        item = prepare_component(repo, site, state_root, component, requested_before, target_sha,
+                                 component["id"] in (allowed_critical or set()))
         results.append(item)
         if item["status"] == "prepared":
             prepared.append(item)
@@ -517,6 +518,7 @@ def main() -> int:
     parser.add_argument("--initialize", action="store_true")
     parser.add_argument("--before")
     parser.add_argument("--sha")
+    parser.add_argument("--allow-critical-component", action="append", default=[])
     args = parser.parse_args()
 
     repo = Path(os.environ["ASODELTOL_REPO_DIR"]).resolve()
@@ -533,7 +535,11 @@ def main() -> int:
             commit = str(git(repo, "rev-parse", "refs/remotes/origin/main")).strip()
             result = initialise(repo, site, state_root, policy, commit)
         elif args.sha and args.before:
-            result = deploy(repo, site, state_root, policy, args.before.lower(), args.sha.lower())
+            known = {item["id"] for item in policy["components"]}
+            requested = set(args.allow_critical_component)
+            if not requested.issubset(known):
+                raise RuntimeError("Unknown critical component override")
+            result = deploy(repo, site, state_root, policy, args.before.lower(), args.sha.lower(), requested)
         else:
             parser.error("--initialize or both --before and --sha are required")
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
