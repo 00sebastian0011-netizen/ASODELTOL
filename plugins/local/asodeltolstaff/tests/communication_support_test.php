@@ -52,6 +52,36 @@ final class communication_support_test extends \advanced_testcase {
         $this->assertEquals($user->id, $messages[0]->useridfrom);
     }
 
+    public function test_support_category_is_validated_and_preserved_in_case_subject(): void {
+        global $DB;
+        $this->resetAfterTest();
+        set_config('supportuserid', get_admin()->id, 'local_asodeltolstaff');
+        $this->setUser($this->getDataGenerator()->create_user());
+        $sink = $this->redirectMessages();
+
+        $caseid = support::send('Synthetic access issue', 'Synthetic question', 'platform');
+        $case = $DB->get_record('local_asstaff_case', ['id' => $caseid], '*', MUST_EXIST);
+        $expected = get_string('supportcategory_platform', 'local_asodeltolstaff') . ': Synthetic access issue';
+        $this->assertSame($expected, $case->subject);
+        $this->assertSame($expected, $sink->get_messages()[0]->subject);
+    }
+
+    public function test_support_rejects_unknown_category_without_creating_case(): void {
+        global $DB;
+        $this->resetAfterTest();
+        set_config('supportuserid', get_admin()->id, 'local_asodeltolstaff');
+        $this->setUser($this->getDataGenerator()->create_user());
+        $sink = $this->redirectMessages();
+
+        try {
+            support::send('Synthetic issue', 'Synthetic question', 'forged-topic');
+            $this->fail('Unknown help topics must be rejected');
+        } catch (\invalid_parameter_exception $expected) {
+            $this->assertSame(0, $DB->count_records('local_asstaff_case'));
+            $this->assertCount(0, $sink->get_messages());
+        }
+    }
+
     public function test_support_without_recipient_fails_without_delivery(): void {
         $this->resetAfterTest();
         unset_config('supportuserid', 'local_asodeltolstaff');

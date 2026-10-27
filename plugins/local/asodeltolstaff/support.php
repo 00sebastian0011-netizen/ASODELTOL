@@ -34,7 +34,7 @@ if (!$case && \local_asodeltolstaff\support::recipient()) {
     }
     if ($data = $form->get_data()) {
         require_sesskey();
-        $id = \local_asodeltolstaff\support::send($data->subject, $data->body);
+        $id = \local_asodeltolstaff\support::send($data->subject, $data->body, $data->category);
         redirect(new moodle_url('/local/asodeltolstaff/support.php', ['caseid' => $id]),
             get_string('supportsent', 'local_asodeltolstaff', $id), null,
             \core\output\notification::NOTIFY_SUCCESS);
