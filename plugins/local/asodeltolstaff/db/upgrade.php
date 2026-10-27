@@ -97,5 +97,12 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         }
         upgrade_plugin_savepoint(true, 2026102506, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102700) {
+        // Accounts are provisioned by staff. New manual users keep
+        // policyagreed=0 and tool_policy requests the compulsory consent on
+        // their first login, avoiding the duplicate pre-signup consent path.
+        set_config('registerauth', '');
+        upgrade_plugin_savepoint(true, 2026102700, 'local', 'asodeltolstaff');
+    }
     return true;
 }

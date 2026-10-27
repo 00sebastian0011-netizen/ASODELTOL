@@ -1,52 +1,37 @@
-# Autorregistro: casilla en español y enlace público a la política
+# Cuentas manuales y consentimiento obligatorio
 
-## Cambio puntual
+## Comportamiento
 
-En `local_asodeltolstaff`, `extend_signup_form` agrega una casilla
-`asodeltol_policy_consent` **desmarcada por defecto**, independiente del campo
-nativo `policyagreed` que Moodle agrega **después** del callback local.
+Las cuentas se crean manualmente por personal autorizado. La actualización
+`2026102700` de `local_asodeltolstaff` desactiva el autorregistro mediante la
+configuración nativa `registerauth` y no modifica Moodle core.
 
-- Texto: «He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL».
-- Enlace separado y visible: «Leer la Política de Tratamiento de Datos Personales de ASODELTOL».
-- URL generada mediante `moodle_url('/admin/tool/policy/view.php', ['versionid' => ...])`
-  tomando la versión activa y obligatoria de `tool_policy`. La página nativa de
-  consulta admite visitantes sin sesión cuando la versión está activa.
-- Se prefiere una única política activa obligatoria de tipo privacidad; si no
-  existe, solo se usa la política obligatoria si es única. Ante ambigüedad,
-  no se inventa un destino ni se enlazan borradores.
-- `validate_extend_signup_form` impide continuar sin la aceptación, incluso
-  si se omite la validación JavaScript. `post_signup_requests` verifica
-  nuevamente antes del alta y conserva el campo nativo `policyagreed` para
-  la aceptación versionada por el observador de `tool_policy`.
+El plugin no agrega campos de consentimiento al formulario de alta. La única
+autoridad de consentimiento es `tool_policy`:
 
-El cambio **no** modifica el núcleo, políticas publicadas, cuentas ni esquema.
-No desactiva la pantalla previa de aceptación del gestor nativo
-`tool_policy`; la posible doble solicitud debe comprobarse antes del cierre.
+- la política debe estar activa, ser obligatoria y aplicar a usuarios autenticados;
+- cada cuenta manual nueva conserva `policyagreed=0`;
+- en el primer inicio de sesión Moodle muestra el documento y bloquea el acceso
+  hasta que el usuario marque la aceptación;
+- la aceptación queda versionada en `tool_policy_acceptances`;
+- los ingresos posteriores no vuelven a solicitar la misma versión ya aceptada.
 
-## Comprobación en el dominio oficial
+## Prueba local realizada
 
-1. Con ventana privada, abrir
-   `https://aulaasodeltol.online/login/signup.php`.
-2. Comprobar que exista exactamente un
-   `input[name="asodeltol_policy_consent"][type="checkbox"]` visible,
-   desmarcado y con texto en español.
-3. Abrir el enlace «Leer la Política...» en una nueva ventana privada **sin
-   iniciar sesión**; debe mostrar el texto de la versión publicada con HTTP 200,
-   sin regresar al formulario de registro.
-4. Dejar la casilla sin marcar: el servidor debe rechazar la creación de cuenta.
-   No ejecutar altas reales para probarlo; usar un entorno de prueba aislado
-   con datos sintéticos autorizados.
-5. En staging, con cuenta sintética, verificar el alta consentida y la versión
-   y fecha de aceptación registradas por la API nativa `tool_policy`.
-6. Comprobar si `tool_policy_pre_signup_requests` ya requirió aceptar la
-   misma política antes de abrir el formulario; no declarar ausencia de
-   consentimiento duplicado sin observar todo el recorrido.
+Con el usuario sintético `qa_policy_firstlogin_20261027` se verificó que:
 
-## Criterio de despliegue
+1. antes del primer acceso tenía `policyagreed=0` y ninguna aceptación;
+2. Moodle mostró la versión 2 de la política al iniciar sesión;
+3. no permitió continuar con la casilla sin marcar;
+4. después de aceptar registró `status=1`, idioma `es` y `policyagreed=1`;
+5. el segundo inicio de sesión entró directamente al área personal.
 
-La rama y el PR contienen solo cambios de código propio y pruebas.
-Tras el merge, validar el hash efectivo de
-`public/local/asodeltolstaff/lib.php` en el **DocumentRoot del dominio
-oficial** y purgar cachés. No confundir un PR fusionado con un despliegue
-comprobado. No modificar `config.php`, Moodle core ni la política activa
-para instalar este ajuste.
+La cuenta y la política usadas en esta comprobación pertenecen exclusivamente
+al entorno local `http://127.0.0.1:8000`.
+
+## Despliegue
+
+El merge no equivale a un despliegue. Al instalar la versión `0.6.0`, Moodle
+desactivará el autorregistro. Antes de actualizar producción se debe confirmar
+que existe una política activa y obligatoria en `tool_policy`; después se deben
+purgar cachés y validar el primer acceso con una cuenta manual sintética.
