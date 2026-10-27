@@ -1,20 +1,51 @@
-# AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
+# POLÍTICA DE TRATAMIENTO DE DATOS PERSONALES DE ASODELTOL
 
-**Estado: APROBADA PARA EL ENTORNO LOCAL DE VALIDACIÓN.**
+**Ley Estatutaria 1581 de 2012 · Decreto 1377 de 2013 · Decreto Único Reglamentario 1074 de 2015**
 
-**Ley Estatutaria 1581 de 2012 · Decreto Reglamentario 1377 de 2013 · Decreto Único 1074 de 2015 (Habeas Data)**
+## Responsable y alcance
 
-En cumplimiento de las disposiciones contenidas en la **Ley Estatutaria 1581 de 2012** «Por la cual se dictan disposiciones generales para la protección de datos personales» y su **Decreto Reglamentario 1377 de 2013** (compilado en el Decreto Único Reglamentario 1074 de 2015), como trabajador beneficiario inscrito en el marco del programa de **Formación Continua Especializada del Servicio Nacional de Aprendizaje (SENA) — Convocatoria DSNFT-0001-2026**, ejecutado por **ASOCODEM** en alianza con la **Fundación Prospectiva**, declaro que he sido informado(a) de manera clara y expresa sobre las siguientes condiciones:
+ASODELTOL, mediante el Aula Virtual ASODELTOL disponible en
+`https://aulaasodeltol.online/`, es responsable del tratamiento de los datos
+personales que las personas usuarias suministren o generen durante el uso de la
+plataforma. Esta política aplica a participantes, docentes, personal
+administrativo y demás usuarios autenticados del Aula Virtual ASODELTOL.
 
-**1. Finalidad del Tratamiento:** Los datos personales recolectados (nombres, apellidos, tipo y número de documento de identidad, correo electrónico, número telefónico, municipio/departamento de residencia, caracterización poblacional, registros de asistencia, calificaciones, evidencias académicas y grabaciones de sesiones sincrónicas) serán tratados exclusivamente para fines académicos, administrativos, estadísticos, de seguimiento, auditoría de interventoría, reporte al SENA y certificación de la Acción de Formación.
+## Finalidades del tratamiento
 
-**2. Transferencia y Transmisión Institucional:** Autorizo que mis datos personales y registros de avance académico sean compartidos con el **Servicio Nacional de Aprendizaje (SENA)**, la entidad de interventoría designada, **ASOCODEM** y la **Fundación Prospectiva**, en estricto cumplimiento de las obligaciones contractuales de la Convocatoria DSNFT-0001-2026 (Anexos 12 y 14).
+Los datos personales podrán ser tratados para administrar el acceso a la
+plataforma; desarrollar procesos de formación; gestionar cursos, actividades,
+calificaciones, evidencias y certificaciones; brindar soporte; comunicarse con
+las personas usuarias; atender obligaciones legales; prevenir usos no
+autorizados; y producir reportes institucionales, estadísticos y de mejora del
+servicio con las salvaguardas aplicables.
 
-**3. Derechos del Titular (Art. 8 Ley 1581 de 2012):** Como titular de los datos personales tengo derecho a conocer, actualizar, rectificar y solicitar la supresión de mis datos (cuando no medie un deber legal o contractual de permanecer en la base de datos del convenio), así como a conocer la política de tratamiento y revocar la autorización.
+## Datos y seguridad
 
-**4. Medidas de Seguridad y Confidencialidad:** Los responsables y encargados del tratamiento garantizan la reserva, integridad y seguridad de la información personal alojada en la plataforma LMS bajo protocolos cifrados (HTTPS/TLS) y controles de acceso por rol.
+El tratamiento puede comprender datos de identificación, contacto, perfil,
+matrícula, actividad académica, participación, calificaciones y evidencias
+generadas dentro de la plataforma. ASODELTOL adopta medidas técnicas,
+administrativas y organizacionales razonables para preservar la
+confidencialidad, integridad y disponibilidad de la información, incluidos
+controles de acceso por rol y comunicaciones protegidas mediante HTTPS/TLS.
 
-**Por favor seleccione a continuación su decisión frente al consentimiento informado y haga clic en «Guardar mi elección»:**
+## Derechos de las personas titulares
 
-- **SÍ AUTORIZO:** de manera libre, previa, expresa, voluntaria e informada el tratamiento de mis datos personales conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013.
-- **NO AUTORIZO:** el tratamiento de mis datos personales.
+La persona titular puede conocer, actualizar, rectificar o solicitar la
+supresión de sus datos cuando proceda; solicitar prueba de la autorización;
+conocer el uso dado a la información; presentar quejas ante la Superintendencia
+de Industria y Comercio; y revocar la autorización cuando no exista un deber
+legal o contractual que impida hacerlo.
+
+Las solicitudes relacionadas con protección de datos personales pueden
+presentarse a través del canal de soporte institucional configurado para el
+Aula Virtual ASODELTOL: `dweb08700@gmail.com`.
+
+## Autorización
+
+Al seleccionar **«Sí autorizo»**, autorizo de manera previa, expresa,
+informada y voluntaria a ASODELTOL para tratar mis datos personales conforme a
+esta política y a la normativa colombiana aplicable. Al seleccionar **«No
+autorizo»**, manifiesto que no otorgo dicha autorización; reconozco que, cuando
+el tratamiento sea necesario para prestar el servicio solicitado o cumplir una
+obligación aplicable, la plataforma podrá no permitir continuar con las
+funcionalidades que dependan de ese tratamiento.
