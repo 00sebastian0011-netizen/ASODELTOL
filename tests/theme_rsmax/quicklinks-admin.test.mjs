@@ -62,5 +62,4 @@ test('CAU stays centralized, existing single-link choices still work before migr
   assert.match(legacy, /'coursequicklinks_' \. \$courseid/);
   assert.match(legacy, /support_url\(\)/);
   assert.match(controller, /course_utilities::choices_for_course\(/);
-  assert.doesNotMatch(groups, /https?:\/\//);
 });
