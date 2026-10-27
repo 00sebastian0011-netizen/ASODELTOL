@@ -242,7 +242,9 @@ final class course_utilities_test extends \advanced_testcase {
         $this->assertFalse($data['manageurl']);
 
         // Hidden content cannot leak through a quick-link list.
+        $this->setAdminUser();
         set_coursemodule_visible((int) $cmsecond->id, 0);
+        $this->setUser($student);
         $data = \theme_rsmax\local\course_utilities::export($course);
         $category = array_values(array_filter($data['items'],
             static fn(array $item): bool => $item['key'] === 'materials'));
