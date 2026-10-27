@@ -57,8 +57,9 @@ function local_asodeltolstaff_signup_policy_url(): ?moodle_url {
 }
 
 /**
- * Add the explicit ASODELTOL authorisation checkbox when a published native
- * policy exists. The native tool_policy handler remains the source of record.
+ * Replace the native tool_policy signup control with one Spanish control.
+ * The element keeps Moodle's policyagreed name so the native handler remains
+ * the source of the versioned acceptance record.
  *
  * @param MoodleQuickForm $mform
  */
@@ -70,10 +71,13 @@ function local_asodeltolstaff_extend_signup_form($mform): void {
 
     $label = 'He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL';
     $link = html_writer::link($url, 'Ver política', ['target' => '_blank', 'rel' => 'noopener']);
-    $mform->addElement('checkbox', 'asodeltol_policy_consent', '', $label . ' (' . $link . ')');
-    $mform->setType('asodeltol_policy_consent', PARAM_BOOL);
-    $mform->setDefault('asodeltol_policy_consent', 0);
-    $mform->addRule('asodeltol_policy_consent', 'Debe aceptar la política para crear la cuenta.', 'required', null, 'client');
+    if ($mform->elementExists('policyagreed')) {
+        $mform->removeElement('policyagreed');
+    }
+    $mform->addElement('checkbox', 'policyagreed', '', $label . ' (' . $link . ')');
+    $mform->setType('policyagreed', PARAM_BOOL);
+    $mform->setDefault('policyagreed', 0);
+    $mform->addRule('policyagreed', 'Debe aceptar la política para crear la cuenta.', 'required', null, 'client');
 }
 
 /**
@@ -83,8 +87,8 @@ function local_asodeltolstaff_extend_signup_form($mform): void {
  * @return array
  */
 function local_asodeltolstaff_validate_extend_signup_form(array $data): array {
-    if (local_asodeltolstaff_signup_policy_url() && empty($data['asodeltol_policy_consent'])) {
-        return ['asodeltol_policy_consent' => 'Debe aceptar la política para crear la cuenta.'];
+    if (local_asodeltolstaff_signup_policy_url() && empty($data['policyagreed'])) {
+        return ['policyagreed' => 'Debe aceptar la política para crear la cuenta.'];
     }
     return [];
 }
@@ -98,8 +102,8 @@ function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
     if (!local_asodeltolstaff_signup_policy_url()) {
         return;
     }
-    if (empty($data->asodeltol_policy_consent)) {
-        throw new \moodle_exception('invalidparameter', 'error', '', 'asodeltol_policy_consent');
+    if (empty($data->policyagreed)) {
+        throw new \moodle_exception('invalidparameter', 'error', '', 'policyagreed');
     }
     // auth_email creates the user after this callback; tool_policy's native
     // user-created observer persists the versioned acceptance from policyagreed.
