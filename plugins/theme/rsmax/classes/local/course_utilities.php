@@ -90,6 +90,11 @@ final class course_utilities {
         $modinfo = get_fast_modinfo($course);
         $options = [];
         foreach (self::LINKS as $key => [$label, $icon]) {
+            if ($key === 'support') {
+                // CAU is institutional, not an activity selected by each course.
+                $options[$key] = [0 => get_string('coursequickautomatic', 'theme_rsmax')];
+                continue;
+            }
             $choices = [
                 0 => get_string('coursequickautomatic', 'theme_rsmax'),
                 -1 => get_string('coursequickdisabled', 'theme_rsmax'),
@@ -118,6 +123,9 @@ final class course_utilities {
                 throw new \invalid_parameter_exception('Invalid link choice: ' . $key);
             }
             $id = (int) $raw;
+            if ($key === 'support' && $id !== 0) {
+                throw new \invalid_parameter_exception('CAU is centrally configured');
+            }
             if ($id < -1 || ($id > 0 && (!isset($modinfo->cms[$id])
                     || !self::eligible_module($modinfo->cms[$id], $key)
                     || empty($modinfo->cms[$id]->uservisible)))) {
@@ -159,6 +167,9 @@ final class course_utilities {
                 continue;
             }
             [$id, $key, $url] = $parts;
+            if ($key === 'support') {
+                continue; // Legacy per-course CAU URLs cannot replace the institutional service.
+            }
             if (isset(self::LINKS[$key]) && self::safe_local_path($url)) {
                 $overrides[$key] = $url;
             }
@@ -229,6 +240,9 @@ final class course_utilities {
         $choices = self::choices_for_course((int) $course->id);
         if ($choices !== null) {
             foreach ($choices as $key => $id) {
+                if ($key === 'support') {
+                    continue; // Keep the one CAU destination selected by support_url().
+                }
                 if ($id === -1) {
                     unset($destinations[$key]);
                 } else if ($id > 0) {
@@ -245,6 +259,9 @@ final class course_utilities {
             // Legacy entries are accepted only if they resolve to a real module in THIS course.
             foreach (self::configured_for_course((string) get_config('theme_rsmax', 'coursequicklinks'),
                     (int) $course->id) as $key => $path) {
+                if ($key === 'support') {
+                    continue;
+                }
                 if (!preg_match('~^/mod/[a-z0-9_]+/view\.php\?id=(\d+)$~i', $path, $matches)) {
                     continue;
                 }
