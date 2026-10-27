@@ -13,12 +13,10 @@ const provider = read('plugins/theme/rsmax/classes/local/course_utilities.php');
 const layout = read('plugins/theme/rsmax/layout/drawers.php');
 const strings = read('plugins/theme/rsmax/lang/es/theme_rsmax.php');
 
-test('login preserves Boost main content and announces gratuity for three seconds', () => {
-  assert.match(login, /Las acciones de formación ejecutadas en el marco de la convocatoria DNSFT-0001-FCE/);
+test('login preserves Boost main content without an institutional notice', () => {
   assert.match(login, /\{\{\{ output\.main_content \}\}\}/);
-  assert.match(login, /role="status"/);
-  assert.match(css, /rsmax-login-free-3s\s+3s/);
-  assert.match(css, /pointer-events:\s*none/);
+  assert.doesNotMatch(login, /rsmax-login-free-notice|coursefreeannouncement|DNSFT/);
+  assert.doesNotMatch(css, /rsmax-login-free-notice|rsmax-login-free-3s/);
 });
 
 test('quick links follow the current user through course and activity pages', () => {
@@ -32,19 +30,17 @@ test('quick links follow the current user through course and activity pages', ()
   assert.doesNotMatch(provider, /prospectiva\.edu\.co|google\.com\/spreadsheets/);
 });
 
-test('institutional notices reach authenticated RSMax pages without an Interventoria role check', () => {
-  assert.match(layout, /\$sitenotices\s*=\s*\$utilitiesenabled\s*&&\s*isloggedin\(\)/);
-  assert.match(drawers, /\{\{#sitenotices\}\}\{\{> theme_rsmax\/institutional_notices \}\}/);
+test('gratuity notice is contextual to the actual front page and course home', () => {
+  assert.match(layout, /\$PAGE->pagelayout === 'frontpage' \|\| \$oncoursehome/);
+  assert.match(drawers, /\{\{#institutionalnotice\}\}\{\{> theme_rsmax\/institutional_notices \}\}/);
   assert.match(notices, /coursefreeannouncement/);
-  assert.match(notices, /courseconsenttitle/);
-  assert.doesNotMatch(course, /courseconsenttitle/);
+  assert.doesNotMatch(notices, /courseconsenttitle|policyurl|courseconsentaction/);
+  assert.doesNotMatch(layout, /\$sitenotices/);
 });
 
-test('consent is delegated to Moodle tool_policy, not faked by the theme', () => {
+test('consent is delegated to Moodle tool_policy, not repeated by the theme', () => {
   assert.match(provider, /sitepolicyhandler/);
   assert.match(provider, /admin\/tool\/policy\/user\.php/);
-  assert.match(notices, /\{\{#policyurl\}\}/);
-  assert.match(notices, /\{\{\^policyurl\}\}/);
-  assert.match(strings, /courseconsentmissing/);
+  assert.doesNotMatch(notices, /policyurl|courseconsentmissing|courseconsenttitle/);
   assert.doesNotMatch(provider, /INSERT INTO|user_info_data/);
 });

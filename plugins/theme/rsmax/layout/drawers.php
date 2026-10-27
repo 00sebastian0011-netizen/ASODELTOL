@@ -180,11 +180,10 @@ if ($oncoursehome && !empty($settings->courseheader) && !$PAGE->user_is_editing(
     $extraclasses[] = 'rsmax-hascoursehero';
     $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 }
-// Institutional notices are transversal, independent of course or audit role.
+// The gratuity notice belongs to the public site home and a course's main page only.
+// Consent itself is intentionally left to Moodle's native tool_policy flow.
 $utilitiesenabled = !isset($settings->courseutilitiesenabled) || !empty($settings->courseutilitiesenabled);
-$sitenotices = $utilitiesenabled && isloggedin() && !isguestuser()
-    ? ['policyurl' => \theme_rsmax\local\course_utilities::policy_url()]
-    : false;
+$institutionalnotice = $utilitiesenabled && ($PAGE->pagelayout === 'frontpage' || $oncoursehome);
 
 // Activity destinations must remain within the viewer's current course.
 $courseutilities = false;
@@ -394,7 +393,7 @@ $templatecontext = [
     'dashboard' => $dashboard,
     'coursehero' => $coursehero,
     'courseutilities' => $courseutilities,
-    'sitenotices' => $sitenotices,
+    'institutionalnotice' => $institutionalnotice,
     'assistantholder' => $assistantholder,
     'homehero' => $homehero,
 ];

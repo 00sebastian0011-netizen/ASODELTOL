@@ -1,25 +1,10 @@
 {{!
     This file is part of Moodle - http://moodle.org/
     @template theme_rsmax/institutional_notices
-    Site-wide institutional information, never a consent recording mechanism.
+    Contextual institutional information. Consent remains entirely in tool_policy.
 }}
-<section class="rsmax-courseutilities rsmax-site-notices" aria-label="{{#str}}courseconsenttitle, theme_rsmax{{/str}}">
-    <p class="rsmax-courseutilities-free">{{#str}}coursefreeannouncement, theme_rsmax{{/str}}</p>
-    <section class="rsmax-courseutilities-consent" aria-labelledby="rsmax-course-consent-title">
-        <div class="rsmax-courseutilities-consentcopy">
-            <h2 class="rsmax-courseutilities-consenttitle" id="rsmax-course-consent-title">
-                <i class="fa fa-shield-alt" aria-hidden="true"></i>
-                {{#str}}courseconsenttitle, theme_rsmax{{/str}}
-            </h2>
-            <p class="rsmax-courseutilities-consenttext">{{#str}}courseconsentdescription, theme_rsmax{{/str}}</p>
-        </div>
-        {{#policyurl}}
-            <a class="rsmax-courseutilities-consentaction" href="{{policyurl}}">
-                {{#str}}courseconsentaction, theme_rsmax{{/str}}
-            </a>
-        {{/policyurl}}
-        {{^policyurl}}
-            <span class="rsmax-courseutilities-pending">{{#str}}courseconsentmissing, theme_rsmax{{/str}}</span>
-        {{/policyurl}}
-    </section>
+<aside class="rsmax-institutional-notice" role="note">
+    <i class="fa fa-info-circle" aria-hidden="true"></i>
+    <p>{{#str}}coursefreeannouncement, theme_rsmax{{/str}}</p>
+</aside>
 </section>
