@@ -84,34 +84,8 @@ function local_asodeltolstaff_signup_policy_url(): ?moodle_url {
  * @param MoodleQuickForm $mform
  */
 function local_asodeltolstaff_extend_signup_form($mform): void {
-    $url = local_asodeltolstaff_signup_policy_url();
-    if (!$url) {
-        return;
-    }
-
-    $link = html_writer::link(
-        $url,
-        'Leer la Política de Tratamiento de Datos Personales de ASODELTOL',
-        ['target' => '_blank', 'rel' => 'noopener noreferrer']
-    );
-    // A separate static element keeps the link clickable: form checkbox labels
-    // may escape HTML, rendering an embedded <a> as plain text.
-    $mform->addElement('static', 'asodeltol_policy_link', '', $link);
-    $mform->addElement(
-        'checkbox',
-        'asodeltol_policy_consent',
-        '',
-        'He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL.'
-    );
-    $mform->setType('asodeltol_policy_consent', PARAM_BOOL);
-    $mform->setDefault('asodeltol_policy_consent', 0);
-    $mform->addRule(
-        'asodeltol_policy_consent',
-        'Debe aceptar la política para crear la cuenta.',
-        'required',
-        null,
-        'client'
-    );
+    // Accounts are provisioned manually. Native tool_policy handles the only
+    // compulsory consent screen on the user's first login.
 }
 
 /**
@@ -121,9 +95,6 @@ function local_asodeltolstaff_extend_signup_form($mform): void {
  * @return array
  */
 function local_asodeltolstaff_validate_extend_signup_form(array $data): array {
-    if (local_asodeltolstaff_signup_policy_url() && empty($data['asodeltol_policy_consent'])) {
-        return ['asodeltol_policy_consent' => 'Debe aceptar la política para crear la cuenta.'];
-    }
     return [];
 }
 
@@ -133,12 +104,6 @@ function local_asodeltolstaff_validate_extend_signup_form(array $data): array {
  * @param stdClass $data
  */
 function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
-    if (!local_asodeltolstaff_signup_policy_url()) {
-        return;
-    }
-    if (empty($data->asodeltol_policy_consent)) {
-        throw new \moodle_exception('invalidparameter', 'error', '', 'asodeltol_policy_consent');
-    }
-    // tool_policy's native user-created observer records the current version.
-    $data->policyagreed = 1;
+    // No-op: self-registration is disabled and consent is recorded by the
+    // native tool_policy handler after login.
 }

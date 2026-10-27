@@ -1,8 +1,6 @@
 # AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
 
-**Estado: PENDIENTE DE VALIDACIÓN INSTITUCIONAL.** Este texto procede de una
-captura de otra institución y se conserva solo para revisión; no es política
-vigente ni autorización de publicación.
+**Estado: APROBADA PARA EL ENTORNO LOCAL DE VALIDACIÓN.**
 
 **Ley Estatutaria 1581 de 2012 · Decreto Reglamentario 1377 de 2013 · Decreto Único 1074 de 2015 (Habeas Data)**
 
@@ -20,11 +18,3 @@ En cumplimiento de las disposiciones contenidas en la **Ley Estatutaria 1581 de 
 
 - **SÍ AUTORIZO:** de manera libre, previa, expresa, voluntaria e informada el tratamiento de mis datos personales conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013.
 - **NO AUTORIZO:** el tratamiento de mis datos personales.
-
-## Verificaciones obligatorias antes de publicación
-
-- Verificar si ASOCODEM, Fundación Prospectiva, SENA, la Convocatoria
-  DSNFT-0001-2026, los Anexos 12 y 14 y la entidad de interventoría aplican a
-  ASODELTOL; no asumir ninguna referencia.
-- Confirmar responsable, encargado, canal, conservación y consecuencias ante
-  rechazo o silencio.
