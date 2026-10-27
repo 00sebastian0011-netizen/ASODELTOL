@@ -378,4 +378,5 @@ $string['coursequickhelpworkshops_help'] = 'Crea una Tarea, Cuestionario, activi
 $string['coursequickhelplive'] = 'Sesiones sincrónicas';
 $string['coursequickhelplive_help'] = 'Selecciona una actividad de videoconferencia BigBlueButton/Zoom o un recurso URL del curso con el enlace de acceso aprobado.';
 $string['coursequickhelpsupport'] = 'Centro de Atención (CAU)';
-$string['coursequickhelpsupport_help'] = 'Si ASODELTOL Staff tiene soporte configurado, puedes dejar Automático. Como alternativa, elige una Página o URL de Moodle que tenga el canal de atención real.';
+$string['coursequickhelpsupport_help'] = 'El CAU usa el mismo formulario institucional de Ayuda y soporte. El administrador debe configurar el destinatario de ASODELTOL Staff.';
+$string['coursequicksupportcentral'] = 'Gestionado de forma central por ASODELTOL Staff. Si el destinatario no está configurado, el enlace CAU permanece inactivo.';
