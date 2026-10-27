@@ -1,7 +1,8 @@
 {{!
     This file is part of Moodle - http://moodle.org/
     @template theme_rsmax/course_utilities
-    Display-only institutional notice and links. Disabled entries are not anchors.
+    Native course destinations only. A single destination is a link; multiple
+    destinations expand to a list. Hidden items are filtered server-side.
 }}
 <section class="rsmax-courseutilities" aria-label="{{#str}}coursequicktitle, theme_rsmax{{/str}}">
     <nav class="rsmax-courseutilities-links" aria-labelledby="rsmax-course-quicktitle">
@@ -19,17 +20,32 @@
         <div class="rsmax-courseutilities-grid">
             {{#items}}
                 <div class="rsmax-courseutilities-item">
-                    {{#url}}
-                        <a class="rsmax-courseutilities-link" href="{{url}}">
-                            <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
-                        </a>
-                    {{/url}}
-                    {{^url}}
-                        <span class="rsmax-courseutilities-disabled">
-                            <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
-                        </span>
-                        <span class="rsmax-courseutilities-help">{{#str}}coursequickmissing, theme_rsmax{{/str}}</span>
-                    {{/url}}
+                    {{#multiple}}
+                        <details class="rsmax-courseutilities-multiple">
+                            <summary class="rsmax-courseutilities-link">
+                                <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                            </summary>
+                            <ul class="rsmax-courseutilities-targets">
+                                {{#targets}}
+                                    <li><a href="{{url}}">{{label}}</a></li>
+                                {{/targets}}
+                            </ul>
+                        </details>
+                    {{/multiple}}
+                    {{^multiple}}
+                        {{#url}}
+                            <a class="rsmax-courseutilities-link" href="{{url}}">
+                                <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
+                            </a>
+                        {{/url}}
+                        {{^url}}
+                            <span class="rsmax-courseutilities-disabled">
+                                <i class="fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span>
+                            </span>
+                            <span class="rsmax-courseutilities-help">{{#str}}coursequickmissing, theme_rsmax{{/str}}</span>
+                        {{/url}}
+                    {{/multiple}}
                 </div>
             {{/items}}
         </div>

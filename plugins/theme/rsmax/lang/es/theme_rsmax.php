@@ -362,7 +362,9 @@ $string['coursequicklive'] = 'Sesiones sincrónicas';
 $string['coursequicksupport'] = 'Centro de Atención (CAU)';
 
 $string['coursequickadmin'] = 'Administrar enlaces rápidos';
-$string['coursequickintro'] = 'Selecciona qué actividad del curso abrirá cada botón. Para subir archivos o crear talleres, entra al curso, activa el modo de edición, añade una actividad o recurso y vuelve aquí para seleccionarlo. No hace falta copiar enlaces ni modificar código.';
+$string['coursequickintro'] = 'Asigna una o varias secciones, archivos o actividades existentes a cada categoría. Si hay un destino, se abre directamente; si hay varios, se mostrará una lista. El orden se guarda según la selección. Para reordenar, retira un elemento y vuelve a elegirlo. La gestión de contenidos se hace en el curso; no se copian archivos ni se crean enlaces externos.';
+$string['coursequicksection'] = 'Sección';
+$string['coursequickactivity'] = 'Actividad o recurso';
 $string['coursequickcreate'] = 'Volver al curso para crear o subir contenido';
 $string['coursequicksaved'] = 'Enlaces rápidos guardados. Los estudiantes solo podrán abrir actividades autorizadas para ellos.';
 $string['coursequickautomatic'] = 'Automático (detectar actividad disponible)';

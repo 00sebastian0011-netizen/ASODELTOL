@@ -362,7 +362,9 @@ $string['coursequicklive'] = 'Live sessions';
 $string['coursequicksupport'] = 'Support centre';
 
 $string['coursequickadmin'] = 'Manage quick links';
-$string['coursequickintro'] = 'Select which real course activity opens each button. To upload files or create an assignment, return to the course, enable editing, add an activity or resource, then select it here. No URLs or code changes are required.';
+$string['coursequickintro'] = 'Assign one or more existing sections, files or activities to each category. One choice opens directly; multiple choices appear in a list. Selection order is preserved. To reorder, remove an item and select it again. Manage actual content in the course; no files or external links are created.';
+$string['coursequicksection'] = 'Section';
+$string['coursequickactivity'] = 'Activity or resource';
 $string['coursequickcreate'] = 'Return to course to create or upload content';
 $string['coursequicksaved'] = 'Quick links saved. Learners can only open activities that Moodle authorizes for them.';
 $string['coursequickautomatic'] = 'Automatic (find an available activity)';

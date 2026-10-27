@@ -161,4 +161,105 @@ final class course_utilities_test extends \advanced_testcase {
         $this->expectException(\invalid_parameter_exception::class);
         \theme_rsmax\local\course_utilities::validate_choices($course, ['support' => -1]);
     }
+
+    public function test_multi_groups_select_sections_and_two_resources_in_order(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $othercourse = $generator->create_course();
+        $folder = $generator->create_module('folder', ['course' => $course->id]);
+        $page = $generator->create_module('page', ['course' => $course->id]);
+        $foreign = $generator->create_module('folder', ['course' => $othercourse->id]);
+        $first = get_coursemodule_from_instance('folder', $folder->id, $course->id);
+        $second = get_coursemodule_from_instance('page', $page->id, $course->id);
+        $foreigncm = get_coursemodule_from_instance('folder', $foreign->id, $othercourse->id);
+
+        $options = \theme_rsmax\local\course_quicklink_groups::options($course);
+        $this->assertArrayHasKey('cm:' . $first->id, $options);
+        $this->assertArrayHasKey('cm:' . $second->id, $options);
+        $sections = array_values(array_filter(array_keys($options),
+            static fn(string $id): bool => str_starts_with($id, 'section:')));
+        $this->assertNotEmpty($sections);
+
+        $selected = ['cm:' . $second->id, $sections[0], 'cm:' . $first->id];
+        \theme_rsmax\local\course_quicklink_groups::save($course, ['materials' => $selected]);
+        $stored = \theme_rsmax\local\course_quicklink_groups::selected((int) $course->id);
+        $this->assertSame($selected, $stored['materials']);
+        $this->assertSame([], $stored['announcements']);
+        $this->assertNull(\theme_rsmax\local\course_quicklink_groups::selected((int) $othercourse->id));
+
+        $this->expectException(\invalid_parameter_exception::class);
+        \theme_rsmax\local\course_quicklink_groups::validate($course, [
+            'materials' => ['cm:' . $foreigncm->id],
+        ]);
+    }
+
+    public function test_multi_group_denies_forged_section_duplicates_and_cau_override(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        foreach ([
+            ['materials' => ['section:99999999']],
+            ['materials' => ['cm:99999999']],
+            ['materials' => ['https://outside.invalid/']],
+            ['materials' => ['cm:1', 'cm:1']],
+            ['support' => ['cm:1']],
+        ] as $submitted) {
+            try {
+                \theme_rsmax\local\course_quicklink_groups::validate($course, $submitted);
+                $this->fail('Forged or duplicate selections must be rejected.');
+            } catch (\invalid_parameter_exception $expected) {
+                $this->assertNotEmpty($expected->getMessage());
+            }
+        }
+    }
+
+    public function test_multiple_destinations_render_for_authorized_student_only(): void {
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $first = $generator->create_module('folder', ['course' => $course->id]);
+        $second = $generator->create_module('page', ['course' => $course->id]);
+        $cmfirst = get_coursemodule_from_instance('folder', $first->id, $course->id);
+        $cmsecond = get_coursemodule_from_instance('page', $second->id, $course->id);
+        $student = $generator->create_user();
+        $generator->enrol_user($student->id, $course->id, 'student');
+
+        $this->setAdminUser();
+        \theme_rsmax\local\course_quicklink_groups::save($course, [
+            'materials' => ['cm:' . $cmfirst->id, 'cm:' . $cmsecond->id],
+        ]);
+
+        $this->setUser($student);
+        $data = \theme_rsmax\local\course_utilities::export($course);
+        $category = array_values(array_filter($data['items'],
+            static fn(array $item): bool => $item['key'] === 'materials'));
+        $this->assertCount(1, $category);
+        $this->assertTrue($category[0]['multiple']);
+        $this->assertFalse($category[0]['url']);
+        $this->assertCount(2, $category[0]['targets']);
+        $this->assertFalse($data['manageurl']);
+
+        // Hidden content cannot leak through a quick-link list.
+        $this->setAdminUser();
+        set_coursemodule_visible((int) $cmsecond->id, 0);
+        $this->setUser($student);
+        $data = \theme_rsmax\local\course_utilities::export($course);
+        $category = array_values(array_filter($data['items'],
+            static fn(array $item): bool => $item['key'] === 'materials'));
+        $this->assertFalse($category[0]['multiple']);
+        $this->assertCount(1, $category[0]['targets']);
+        $this->assertNotEmpty($category[0]['url']);
+    }
+
+    public function test_student_cannot_save_multi_target_groups(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $student = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
+        $this->setUser($student);
+        $this->expectException(\required_capability_exception::class);
+        \theme_rsmax\local\course_quicklink_groups::save($course, ['materials' => []]);
+    }
 }

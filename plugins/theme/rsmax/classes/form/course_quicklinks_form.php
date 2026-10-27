@@ -11,7 +11,7 @@ namespace theme_rsmax\form;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Six course-specific selectors backed by Moodle activities (not free-form URLs).
+ * Multiple native course destinations per category, with one central CAU.
  *
  * @package theme_rsmax
  */
@@ -22,21 +22,20 @@ final class course_quicklinks_form extends \moodleform {
         $form->addElement('hidden', 'courseid', (int) $this->_customdata['courseid']);
         $form->setType('courseid', PARAM_INT);
 
-        foreach (\theme_rsmax\local\course_utilities::keys() as $key) {
+        foreach (\theme_rsmax\local\course_quicklink_groups::keys() as $key) {
             $field = 'ql_' . $key;
-            if ($key === 'support') {
-                // Centralised CAU remains visible but has no misleading course-level selector.
-                $form->addElement('static', 'supportinfo', get_string('coursequicksupport', 'theme_rsmax'),
-                    get_string('coursequicksupportcentral', 'theme_rsmax'));
-                $form->addElement('hidden', $field, 0);
-                $form->setType($field, PARAM_INT);
-                continue;
-            }
-            $form->addElement('select', $field,
-                get_string('coursequick' . $key, 'theme_rsmax'), $options[$key]);
-            $form->setType($field, PARAM_INT);
+            $form->addElement('autocomplete', $field,
+                get_string('coursequick' . $key, 'theme_rsmax'), $options, [
+                    'multiple' => true,
+                    'tags' => false,
+                ]);
+            $form->setType($field, PARAM_RAW_TRIMMED);
             $form->addHelpButton($field, 'coursequickhelp' . $key, 'theme_rsmax');
         }
+
+        $form->addElement('static', 'supportinfo',
+            get_string('coursequicksupport', 'theme_rsmax'),
+            get_string('coursequicksupportcentral', 'theme_rsmax'));
 
         $this->add_action_buttons(true, get_string('savechanges'));
     }

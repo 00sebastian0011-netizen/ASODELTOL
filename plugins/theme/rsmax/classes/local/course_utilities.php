@@ -282,6 +282,9 @@ final class course_utilities {
             ];
         }
 
+        // Explicit multi-target selections override only their own course's legacy shortcuts.
+        $items = course_quicklink_groups::apply($course, $items, $modinfo);
+
         // Keep this field for legacy callers; display now belongs to site notice.
         return [
             'items' => $items,
