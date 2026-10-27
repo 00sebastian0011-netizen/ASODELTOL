@@ -146,19 +146,19 @@ final class course_utilities_test extends \advanced_testcase {
         $student = $generator->create_user();
         $generator->enrol_user($student->id, $course->id, 'student');
         $this->setUser($student);
-        if (!has_capability('moodle/site:sendmessage', \\context_system::instance())) {
+        if (!has_capability('moodle/site:sendmessage', \context_system::instance())) {
             $this->markTestSkipped('Learner cannot access Moodle messaging in this test environment.');
         }
 
         // Previously disabling a course link must never disable the shared institutional CAU.
         set_config('coursequicklinks_' . $course->id, '{"support":-1}', 'theme_rsmax');
-        $data = \\theme_rsmax\\local\\course_utilities::export($course);
+        $data = \theme_rsmax\local\course_utilities::export($course);
         $support = array_values(array_filter($data['items'],
             static fn(array $item): bool => $item['key'] === 'support'));
         $this->assertCount(1, $support);
-        $this->assertSame((new \\moodle_url('/local/asodeltolstaff/support.php'))->out(false), $support[0]['url']);
+        $this->assertSame((new \moodle_url('/local/asodeltolstaff/support.php'))->out(false), $support[0]['url']);
 
-        $this->expectException(\\invalid_parameter_exception::class);
-        \\theme_rsmax\\local\\course_utilities::validate_choices($course, ['support' => -1]);
+        $this->expectException(\invalid_parameter_exception::class);
+        \theme_rsmax\local\course_utilities::validate_choices($course, ['support' => -1]);
     }
 }
