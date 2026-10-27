@@ -128,4 +128,37 @@ final class course_utilities_test extends \advanced_testcase {
             $this->assertFalse($context['manageurl']);
         }
     }
+
+    public function test_cau_uses_shared_staff_support_even_with_legacy_override(): void {
+        $this->resetAfterTest();
+        if (!class_exists('\\local_asodeltolstaff\\support')) {
+            $this->markTestSkipped('ASODELTOL Staff is not installed in this test environment.');
+        }
+        $admins = get_admins();
+        if (!$admins) {
+            $this->markTestSkipped('No valid Moodle site administrator available for CAU test.');
+        }
+
+        $recipient = reset($admins);
+        set_config('supportuserid', (int) $recipient->id, 'local_asodeltolstaff');
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $student = $generator->create_user();
+        $generator->enrol_user($student->id, $course->id, 'student');
+        $this->setUser($student);
+        if (!has_capability('moodle/site:sendmessage', \\context_system::instance())) {
+            $this->markTestSkipped('Learner cannot access Moodle messaging in this test environment.');
+        }
+
+        // Previously disabling a course link must never disable the shared institutional CAU.
+        set_config('coursequicklinks_' . $course->id, '{"support":-1}', 'theme_rsmax');
+        $data = \\theme_rsmax\\local\\course_utilities::export($course);
+        $support = array_values(array_filter($data['items'],
+            static fn(array $item): bool => $item['key'] === 'support'));
+        $this->assertCount(1, $support);
+        $this->assertSame((new \\moodle_url('/local/asodeltolstaff/support.php'))->out(false), $support[0]['url']);
+
+        $this->expectException(\\invalid_parameter_exception::class);
+        \\theme_rsmax\\local\\course_utilities::validate_choices($course, ['support' => -1]);
+    }
 }
