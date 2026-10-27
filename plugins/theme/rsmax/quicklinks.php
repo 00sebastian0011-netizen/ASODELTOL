@@ -24,17 +24,19 @@ $PAGE->set_pagelayout('incourse');
 $PAGE->set_title(get_string('coursequickadmin', 'theme_rsmax'));
 $PAGE->set_heading(format_string($course->fullname));
 
-$options = \theme_rsmax\local\course_utilities::options_for_course($course);
+$options = \theme_rsmax\local\course_quicklink_groups::options($course);
 $form = new \theme_rsmax\form\course_quicklinks_form($url, [
     'courseid' => $courseid,
     'options' => $options,
 ]);
 
-$selected = \theme_rsmax\local\course_utilities::choices_for_course($courseid) ?? [];
+$selected = \theme_rsmax\local\course_quicklink_groups::selected($courseid);
+$legacy = \theme_rsmax\local\course_utilities::choices_for_course($courseid);
 $defaults = (object) ['courseid' => $courseid];
-foreach (\theme_rsmax\local\course_utilities::keys() as $key) {
-    // Ignore saved legacy per-course CAU targets: support is configured once for the site.
-    $defaults->{'ql_' . $key} = $key === 'support' ? 0 : ($selected[$key] ?? 0);
+foreach (\theme_rsmax\local\course_quicklink_groups::keys() as $key) {
+    // Existing single-target configuration remains active until this editor is saved.
+    $oldid = $legacy[$key] ?? 0;
+    $defaults->{'ql_' . $key} = $selected[$key] ?? ($oldid > 0 ? ['cm:' . $oldid] : []);
 }
 $form->set_data($defaults);
 
@@ -45,10 +47,10 @@ if ($form->is_cancelled()) {
 if ($data = $form->get_data()) {
     require_sesskey();
     $submitted = [];
-    foreach (\theme_rsmax\local\course_utilities::keys() as $key) {
-        $submitted[$key] = $data->{'ql_' . $key};
+    foreach (\theme_rsmax\local\course_quicklink_groups::keys() as $key) {
+        $submitted[$key] = $data->{'ql_' . $key} ?? [];
     }
-    \theme_rsmax\local\course_utilities::save($course, $submitted);
+    \theme_rsmax\local\course_quicklink_groups::save($course, $submitted);
     redirect(new moodle_url('/course/view.php', ['id' => $courseid]),
         get_string('coursequicksaved', 'theme_rsmax'), null,
         \core\output\notification::NOTIFY_SUCCESS);
