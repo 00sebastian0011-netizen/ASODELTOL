@@ -39,3 +39,69 @@ function local_asodeltolstaff_extend_navigation_course(
         'local_asodeltolstaff'
     );
 }
+
+/**
+ * Return the published native policy URL, never a guessed or pending URL.
+ *
+ * @return moodle_url|null
+ */
+function local_asodeltolstaff_signup_policy_url(): ?moodle_url {
+    global $CFG;
+
+    if (($CFG->sitepolicyhandler ?? '') !== 'tool_policy') {
+        return null;
+    }
+    $manager = new \core_privacy\local\sitepolicy\manager();
+    $url = $manager->get_embed_url(false);
+    return $url instanceof moodle_url ? $url : null;
+}
+
+/**
+ * Add the explicit ASODELTOL authorisation checkbox when a published native
+ * policy exists. The native tool_policy handler remains the source of record.
+ *
+ * @param MoodleQuickForm $mform
+ */
+function local_asodeltolstaff_extend_signup_form($mform): void {
+    $url = local_asodeltolstaff_signup_policy_url();
+    if (!$url) {
+        return;
+    }
+
+    $label = 'He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL';
+    $link = html_writer::link($url, 'Ver política', ['target' => '_blank', 'rel' => 'noopener']);
+    $mform->addElement('checkbox', 'asodeltol_policy_consent', '', $label . ' (' . $link . ')');
+    $mform->setType('asodeltol_policy_consent', PARAM_BOOL);
+    $mform->setDefault('asodeltol_policy_consent', 0);
+    $mform->addRule('asodeltol_policy_consent', 'Debe aceptar la política para crear la cuenta.', 'required', null, 'client');
+}
+
+/**
+ * Server-side validation; client-side checkbox state is not trusted.
+ *
+ * @param array $data
+ * @return array
+ */
+function local_asodeltolstaff_validate_extend_signup_form(array $data): array {
+    if (local_asodeltolstaff_signup_policy_url() && empty($data['asodeltol_policy_consent'])) {
+        return ['asodeltol_policy_consent' => 'Debe aceptar la política para crear la cuenta.'];
+    }
+    return [];
+}
+
+/**
+ * Ensure the native user-created event records acceptance in tool_policy.
+ *
+ * @param stdClass $data
+ */
+function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
+    if (!local_asodeltolstaff_signup_policy_url()) {
+        return;
+    }
+    if (empty($data->asodeltol_policy_consent)) {
+        throw new \moodle_exception('invalidparameter', 'error', '', 'asodeltol_policy_consent');
+    }
+    // auth_email creates the user after this callback; tool_policy's native
+    // user-created observer persists the versioned acceptance from policyagreed.
+    $data->policyagreed = 1;
+}
