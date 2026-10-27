@@ -50,4 +50,13 @@ class OperationsMcpTest(unittest.TestCase):
         self.assertIn("maintenance.php", backup)
         self.assertIn("maintenance.php", rollback)
 
+    def test_admin_bridge_is_local_and_has_no_public_endpoint(self):
+        bridge = source.parents[1] / "desktop-mcp" / "server.py"
+        installer = source.parent / "install-operations.sh"
+        text = bridge.read_text(encoding="utf-8")
+        self.assertIn('"ssh_execute"', text)
+        self.assertIn('"ssh_session_status"', text)
+        self.assertNotIn("http://", text)
+        self.assertIn("--enable-admin-ssh", installer.read_text(encoding="utf-8"))
+
 if __name__ == "__main__": unittest.main()

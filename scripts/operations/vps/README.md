@@ -34,3 +34,18 @@ parámetros; no existe una herramienta de shell, sudo ni rutas arbitrarias.
 El respaldo guarda dump coherente de la base y archivo del plugin con hashes en
 `/home/user/.local/state/asodeltol-operations/backups`. `rollback` sólo acepta
 uno de esos identificadores verificados.
+
+## Acceso administrativo de Codex
+
+No se publica un endpoint MCP. Codex ejecuta el puente local de
+`../desktop-mcp/`, que abre SSH cifrado al alias `asodeltol-vps-admin`. El VPS
+acepta una clave dedicada y registra cada orden mediante `asodeltol-agent-command`.
+La habilitación administrativa es opt-in, exclusivamente durante la instalación:
+
+```bash
+ASODELTOL_AGENT_SSH_PUBLIC_KEY='ssh-ed25519 AAAA... comentario' ./install-operations.sh --enable-admin-ssh
+```
+
+Esto crea una entrada marcada en `user/.ssh/authorized_keys` y sudo sin
+contraseña para `user`. Revóquelo inmediatamente con `./revoke-admin-ssh.sh`.
+No cambia `sshd`, Nginx, firewall, diagnóstico ni el servicio de despliegue.

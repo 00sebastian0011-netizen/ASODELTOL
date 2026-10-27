@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# sshd ForceCommand for the dedicated MCP key. It audits every noninteractive command.
+set -euo pipefail
+[[ -n "${SSH_ORIGINAL_COMMAND:-}" ]] || { echo 'Interactive shells are disabled for this key.' >&2; exit 126; }
+logger -p authpriv.notice -t asodeltol-agent -- "ssh command user=${USER} command=${SSH_ORIGINAL_COMMAND:0:2048}"
+exec /bin/bash -lc "$SSH_ORIGINAL_COMMAND"
