@@ -89,4 +89,4 @@ foreach ($layouts as $name => $regions) {
 // It is only drawn on the course page while editing; theme_rsmax\local\enrol_landing shows it there.
 $THEME->layouts['course']['regions'][] = 'enrol-page';
 
-$THEME->sheets = array_merge((array)($THEME->sheets ?? []), ["custom-login"]);
+$THEME->sheets = array_merge((array)($THEME->sheets ?? []), ["custom-login", "institutional-notices"]);
