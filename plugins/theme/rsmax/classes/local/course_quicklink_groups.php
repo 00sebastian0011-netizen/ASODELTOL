@@ -65,8 +65,15 @@ final class course_quicklink_groups {
         return $selected;
     }
 
+    /** Load Moodle's canonical section-name helper before the editor renders. */
+    private static function ensure_course_lib(): void {
+        global $CFG;
+        require_once($CFG->dirroot . '/course/lib.php');
+    }
+
     /** The available editor options are built from this course, never user URLs. */
     public static function options(\stdClass $course): array {
+        self::ensure_course_lib();
         $modinfo = get_fast_modinfo($course);
         $options = [];
         foreach ($modinfo->get_section_info_all() as $section) {
@@ -138,6 +145,7 @@ final class course_quicklink_groups {
      * @return array<array{url: string, label: string}>
      */
     private static function visible_targets(\stdClass $course, array $tokens, $modinfo): array {
+        self::ensure_course_lib();
         $sections = [];
         foreach ($modinfo->get_section_info_all() as $section) {
             $sections[(int) $section->id] = $section;
