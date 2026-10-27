@@ -41,7 +41,10 @@ function local_asodeltolstaff_extend_navigation_course(
 }
 
 /**
- * Return the published native policy URL, never a guessed or pending URL.
+ * URL for an active, compulsory privacy policy, readable without login.
+ *
+ * Prefer the unique privacy policy. If there is a single compulsory policy of
+ * another type, use that; never invent a URL or expose an unpublished version.
  *
  * @return moodle_url|null
  */
@@ -51,15 +54,32 @@ function local_asodeltolstaff_signup_policy_url(): ?moodle_url {
     if (($CFG->sitepolicyhandler ?? '') !== 'tool_policy') {
         return null;
     }
-    $manager = new \core_privacy\local\sitepolicy\manager();
-    $url = $manager->get_embed_url(false);
-    return $url instanceof moodle_url ? $url : null;
+
+    $versions = \tool_policy\api::list_current_versions(\tool_policy\policy_version::AUDIENCE_LOGGEDIN);
+    $compulsory = array_values(array_filter($versions, static function($version): bool {
+        return (int) $version->optional === \tool_policy\policy_version::AGREEMENT_COMPULSORY;
+    }));
+    $privacy = array_values(array_filter($compulsory, static function($version): bool {
+        return (int) $version->type === \tool_policy\policy_version::TYPE_PRIVACY;
+    }));
+
+    if (count($privacy) === 1) {
+        $version = $privacy[0];
+    } else if (count($compulsory) === 1) {
+        $version = $compulsory[0];
+    } else {
+        return null;
+    }
+
+    // The native document viewer allows anonymous access to active versions.
+    return new moodle_url('/admin/tool/policy/view.php', ['versionid' => (int) $version->id]);
 }
 
 /**
- * Replace the native tool_policy signup control with one Spanish control.
- * The element keeps Moodle's policyagreed name so the native handler remains
- * the source of the versioned acceptance record.
+ * Show one separate, real checkbox and a public link on the signup form.
+ *
+ * The native tool_policy signup_form() is invoked AFTER this callback, so
+ * never add or remove Moodle's own "policyagreed" field here.
  *
  * @param MoodleQuickForm $mform
  */
@@ -69,15 +89,29 @@ function local_asodeltolstaff_extend_signup_form($mform): void {
         return;
     }
 
-    $label = 'He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL';
-    $link = html_writer::link($url, 'Ver política', ['target' => '_blank', 'rel' => 'noopener']);
-    if ($mform->elementExists('policyagreed')) {
-        $mform->removeElement('policyagreed');
-    }
-    $mform->addElement('checkbox', 'policyagreed', '', $label . ' (' . $link . ')');
-    $mform->setType('policyagreed', PARAM_BOOL);
-    $mform->setDefault('policyagreed', 0);
-    $mform->addRule('policyagreed', 'Debe aceptar la política para crear la cuenta.', 'required', null, 'client');
+    $link = html_writer::link(
+        $url,
+        'Leer la Política de Tratamiento de Datos Personales de ASODELTOL',
+        ['target' => '_blank', 'rel' => 'noopener noreferrer']
+    );
+    // A separate static element keeps the link clickable: form checkbox labels
+    // may escape HTML, rendering an embedded <a> as plain text.
+    $mform->addElement('static', 'asodeltol_policy_link', '', $link);
+    $mform->addElement(
+        'checkbox',
+        'asodeltol_policy_consent',
+        '',
+        'He leído y acepto la Política de Tratamiento de Datos Personales de ASODELTOL.'
+    );
+    $mform->setType('asodeltol_policy_consent', PARAM_BOOL);
+    $mform->setDefault('asodeltol_policy_consent', 0);
+    $mform->addRule(
+        'asodeltol_policy_consent',
+        'Debe aceptar la política para crear la cuenta.',
+        'required',
+        null,
+        'client'
+    );
 }
 
 /**
@@ -87,14 +121,14 @@ function local_asodeltolstaff_extend_signup_form($mform): void {
  * @return array
  */
 function local_asodeltolstaff_validate_extend_signup_form(array $data): array {
-    if (local_asodeltolstaff_signup_policy_url() && empty($data['policyagreed'])) {
-        return ['policyagreed' => 'Debe aceptar la política para crear la cuenta.'];
+    if (local_asodeltolstaff_signup_policy_url() && empty($data['asodeltol_policy_consent'])) {
+        return ['asodeltol_policy_consent' => 'Debe aceptar la política para crear la cuenta.'];
     }
     return [];
 }
 
 /**
- * Ensure the native user-created event records acceptance in tool_policy.
+ * Use Moodle's native user-created observer to record versioned acceptance.
  *
  * @param stdClass $data
  */
@@ -102,10 +136,9 @@ function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
     if (!local_asodeltolstaff_signup_policy_url()) {
         return;
     }
-    if (empty($data->policyagreed)) {
-        throw new \moodle_exception('invalidparameter', 'error', '', 'policyagreed');
+    if (empty($data->asodeltol_policy_consent)) {
+        throw new \moodle_exception('invalidparameter', 'error', '', 'asodeltol_policy_consent');
     }
-    // auth_email creates the user after this callback; tool_policy's native
-    // user-created observer persists the versioned acceptance from policyagreed.
+    // tool_policy's native user-created observer records the current version.
     $data->policyagreed = 1;
 }
