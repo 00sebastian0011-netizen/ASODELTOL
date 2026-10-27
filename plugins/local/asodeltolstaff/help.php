@@ -8,6 +8,13 @@ $PAGE->set_title(get_string('platformhelp', 'local_asodeltolstaff'));
 $PAGE->set_heading(get_string('platformhelp', 'local_asodeltolstaff'));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('platformhelp', 'local_asodeltolstaff'));
+// A direct CAU link remains discoverable when the primary nav collapses on mobile.
+if (has_capability('moodle/site:sendmessage', context_system::instance())
+        && \local_asodeltolstaff\support::recipient() !== null) {
+    echo html_writer::link(new moodle_url('/local/asodeltolstaff/support.php'),
+        get_string('supportchannel', 'local_asodeltolstaff'),
+        ['class' => 'btn btn-primary mb-3']);
+}
 echo html_writer::start_div('container-fluid', ['id' => 'asodeltol-user-guide']);
 foreach (['access', 'submission', 'grades', 'communication', 'account'] as $section) {
     echo $OUTPUT->heading(get_string('guide_' . $section . '_title', 'local_asodeltolstaff'), 3);
