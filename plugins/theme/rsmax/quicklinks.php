@@ -33,7 +33,8 @@ $form = new \theme_rsmax\form\course_quicklinks_form($url, [
 $selected = \theme_rsmax\local\course_utilities::choices_for_course($courseid) ?? [];
 $defaults = (object) ['courseid' => $courseid];
 foreach (\theme_rsmax\local\course_utilities::keys() as $key) {
-    $defaults->{'ql_' . $key} = $selected[$key] ?? 0;
+    // Ignore saved legacy per-course CAU targets: support is configured once for the site.
+    $defaults->{'ql_' . $key} = $key === 'support' ? 0 : ($selected[$key] ?? 0);
 }
 $form->set_data($defaults);
 
