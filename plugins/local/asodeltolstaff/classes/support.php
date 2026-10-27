@@ -61,6 +61,7 @@ final class support {
             }
             $DB->set_field('local_asstaff_case', 'notificationid', $id, ['id' => $caseid]);
             $transaction->allow_commit();
+            self::send_cau_email($recipient, $caseid, $subject, $body);
             return (int) $caseid;
         } catch (\Throwable $error) {
             if (isset($transaction)) {
@@ -70,6 +71,22 @@ final class support {
         } finally {
             $lock->release();
         }
+    }
+
+    /** Send an optional CAU copy after the internal ASO case and notification are durable. */
+    private static function send_cau_email(\stdClass $recipient, int $caseid, string $subject, string $body): bool {
+        $email = trim((string) get_config('local_asodeltolstaff', 'supportemail'));
+        if ($email === '') {
+            return true;
+        }
+        if (!validate_email($email)) {
+            debugging('Invalid configured ASODELTOL CAU notification address.', DEBUG_DEVELOPER);
+            return false;
+        }
+        $target = (object) ['id' => -$caseid, 'email' => $email, 'firstname' => 'CAU', 'lastname' => 'ASODELTOL',
+            'maildisplay' => 0, 'mailformat' => 1];
+        $mailbody = get_string('supportreference', 'local_asodeltolstaff', $caseid) . ': ' . $body;
+        return email_to_user($target, $recipient, $subject, $mailbody, $mailbody);
     }
 
     /** A support case is visible only to its requester or its assigned administrator. */
