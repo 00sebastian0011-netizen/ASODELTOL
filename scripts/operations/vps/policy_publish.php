@@ -9,7 +9,7 @@ require_once($CFG->dirroot . '/admin/tool/policy/classes/policy_version.php');
 $source = getenv('ASODELTOL_POLICY_SOURCE');
 if (!$source || !is_file($source)) { throw new RuntimeException('policy_source_missing'); }
 $markdown = file_get_contents($source);
-if ($markdown === false || !str_contains($markdown, 'AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES')) { throw new RuntimeException('policy_source_invalid'); }
+if ($markdown === false || !str_contains($markdown, 'TRATAMIENTO DE DATOS PERSONALES')) { throw new RuntimeException('policy_source_invalid'); }
 $content = trim(preg_replace('/^# .*?\R+/', '', $markdown));
 $existing = $DB->get_records('tool_policy_versions', ['type' => \tool_policy\policy_version::TYPE_PRIVACY], 'id DESC');
 $policyid = 0;
