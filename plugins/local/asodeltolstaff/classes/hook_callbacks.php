@@ -7,11 +7,16 @@ final class hook_callbacks {
         if (!isloggedin() || isguestuser()) {
             return;
         }
-        $hook->get_primaryview()->add(get_string('platformhelp', 'local_asodeltolstaff'),
-            new \moodle_url('/local/asodeltolstaff/help.php'), \navigation_node::TYPE_CUSTOM,
-            null, 'asodeltol_platform_help');
-        if (has_capability('moodle/site:sendmessage', \context_system::instance())) {
-            $hook->get_primaryview()->add(get_string('supportchannel', 'local_asodeltolstaff'),
+        // One discoverable native dropdown: the guide explains Moodle; CAU records cases.
+        // The reports link stays separate, and unrelated IA tools are not touched.
+        $guideurl = new \moodle_url('/local/asodeltolstaff/help.php');
+        $help = $hook->get_primaryview()->add(get_string('helpandsupport', 'local_asodeltolstaff'),
+            $guideurl, \navigation_node::TYPE_CUSTOM, null, 'asodeltol_help_support');
+        $help->add(get_string('platformhelp', 'local_asodeltolstaff'),
+            $guideurl, \navigation_node::TYPE_CUSTOM, null, 'asodeltol_platform_help');
+        if (has_capability('moodle/site:sendmessage', \context_system::instance())
+                && support::recipient() !== null) {
+            $help->add(get_string('supportchannel', 'local_asodeltolstaff'),
                 new \moodle_url('/local/asodeltolstaff/support.php'), \navigation_node::TYPE_CUSTOM,
                 null, 'asodeltol_support');
         }
