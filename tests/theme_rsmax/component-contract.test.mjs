@@ -12,6 +12,8 @@ const drawers = read('plugins/theme/rsmax/templates/drawers.mustache');
 const provider = read('plugins/theme/rsmax/classes/local/course_utilities.php');
 const layout = read('plugins/theme/rsmax/layout/drawers.php');
 const strings = read('plugins/theme/rsmax/lang/es/theme_rsmax.php');
+const renderer = read('plugins/theme/rsmax/classes/output/tool_policy_renderer.php');
+const scss = read('plugins/theme/rsmax/scss/post.scss');
 
 test('login preserves Boost main content without an institutional notice', () => {
   assert.match(login, /\{\{\{ output\.main_content \}\}\}/);
@@ -28,6 +30,8 @@ test('quick links follow the current user through course and activity pages', ()
   assert.match(provider, /empty\(\$cm->uservisible\)/);
   assert.match(provider, /safe_local_path/);
   assert.doesNotMatch(provider, /prospectiva\.edu\.co|google\.com\/spreadsheets/);
+  assert.match(course, /coursequickaccountrequired/);
+  assert.match(strings, /Requiere cuenta de ASODELTOL/);
 });
 
 test('gratuity notice is contextual to the actual front page and course home', () => {
@@ -40,7 +44,14 @@ test('gratuity notice is contextual to the actual front page and course home', (
 
 test('consent is delegated to Moodle tool_policy, not repeated by the theme', () => {
   assert.match(provider, /sitepolicyhandler/);
+  assert.match(provider, /get_current_versions_ids/);
   assert.match(provider, /admin\/tool\/policy\/user\.php/);
+  assert.match(course, /\{\{#policyurl\}\}/);
+  assert.match(renderer, /instanceof page_agreedocs/);
+  assert.match(renderer, /acceptancessavedsucessfully/);
+  assert.match(strings, /Su elección ha sido guardada/);
+  assert.match(scss, /\.path-admin-tool-policy/);
+  assert.match(scss, /#1b5e49/);
   assert.doesNotMatch(notices, /policyurl|courseconsentmissing|courseconsenttitle/);
   assert.doesNotMatch(provider, /INSERT INTO|user_info_data/);
 });
