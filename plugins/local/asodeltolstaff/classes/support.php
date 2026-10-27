@@ -3,6 +3,27 @@ namespace local_asodeltolstaff;
 
 /** Private support cases and native notifications; no invented SLA or external recipient. */
 final class support {
+    /** Fixed institutional help topics accepted by the CAU form. */
+    public static function categories(): array {
+        return [
+            'pedagogical' => get_string('supportcategory_pedagogical', 'local_asodeltolstaff'),
+            'evaluations' => get_string('supportcategory_evaluations', 'local_asodeltolstaff'),
+            'pqrs' => get_string('supportcategory_pqrs', 'local_asodeltolstaff'),
+            'certificates' => get_string('supportcategory_certificates', 'local_asodeltolstaff'),
+            'platform' => get_string('supportcategory_platform', 'local_asodeltolstaff'),
+        ];
+    }
+
+    /** Prefix a subject with its validated help topic without accepting free-form categories. */
+    public static function categorized_subject(string $category, string $subject): string {
+        $category = trim($category);
+        $categories = self::categories();
+        if (!array_key_exists($category, $categories)) {
+            throw new \invalid_parameter_exception('Invalid support category');
+        }
+        return $categories[$category] . ': ' . $subject;
+    }
+
     public static function recipient(): ?\stdClass {
         $id = (int) get_config('local_asodeltolstaff', 'supportuserid');
         if (!$id || !is_siteadmin($id)) {
@@ -12,13 +33,16 @@ final class support {
         return $user && !$user->deleted && !$user->suspended ? $user : null;
     }
 
-    public static function send(string $subject, string $body): int {
+    public static function send(string $subject, string $body, ?string $category = null): int {
         global $USER;
         require_login();
         require_capability('moodle/site:sendmessage', \context_system::instance());
         \core_user::require_active_user($USER);
         $subject = trim(clean_param($subject, PARAM_TEXT));
         $body = trim(clean_param($body, PARAM_TEXT));
+        if ($category !== null) {
+            $subject = self::categorized_subject($category, $subject);
+        }
         if ($subject === '' || $body === '' || \core_text::strlen($subject) > 160 || \core_text::strlen($body) > 4000) {
             throw new \invalid_parameter_exception('Support subject/body invalid');
         }
