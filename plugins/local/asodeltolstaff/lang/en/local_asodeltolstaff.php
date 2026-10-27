@@ -125,7 +125,8 @@ $string['privacy:metadata:calendar'] = 'Consultation group, trainer and schedule
 
 $string['accessreportmeaning'] = 'Login/logout rows are independent observed site events. A missing logout stays empty; these events do not prove attendance, work duration or continuous connection.';
 
-$string['platformhelp'] = 'Platform help';
+$string['helpandsupport'] = 'Help and support';
+$string['platformhelp'] = 'Platform guide';
 $string['guide_access_title'] = 'Access the course';
 $string['guide_access'] = 'Open My courses and select your course. If a unit is unavailable, check the conditions displayed in the course and contact your trainer.';
 $string['guide_submission_title'] = 'Submit activities';
@@ -150,7 +151,7 @@ $string['overallprogress'] = 'Progress';
 $string['completedactivities'] = 'Completed / tracked activities';
 $string['embeddedvideo'] = 'Embedded MP4 video';
 $string['practiceactivity'] = 'Ungraded practice activity';
-$string['supportchannel'] = 'Platform support';
+$string['supportchannel'] = 'Support centre (CAU)';
 $string['activitypublishedsubject'] = 'A new activity is available';
 $string['activitypublishedbody'] = 'A new pending activity is available in your group: {$a}';
 $string['messageprovider:activitypublished'] = 'New group activity';
