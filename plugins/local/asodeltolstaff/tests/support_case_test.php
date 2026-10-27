@@ -31,6 +31,17 @@ final class support_case_test extends \advanced_testcase {
         $this->assertCount(1, $sink->get_messages());
     }
 
+    public function test_cau_email_is_optional_and_does_not_replace_the_internal_case(): void {
+        global $DB;
+        $this->requester();
+        set_config('supportemail', '', 'local_asodeltolstaff');
+        $this->redirectMessages();
+        $id = support::send('Synthetic CAU request', 'Synthetic CAU body');
+        $case = $DB->get_record('local_asstaff_case', ['id' => $id], '*', MUST_EXIST);
+        $this->assertSame(get_admin()->id, (int) $case->recipientid);
+        $this->assertSame('open', $case->status);
+    }
+
     public function test_another_user_cannot_view_or_respond(): void {
         global $DB;
         $this->requester();
