@@ -24,6 +24,14 @@ final class course_quicklinks_form extends \moodleform {
 
         foreach (\theme_rsmax\local\course_utilities::keys() as $key) {
             $field = 'ql_' . $key;
+            if ($key === 'support') {
+                // Centralised CAU remains visible but has no misleading course-level selector.
+                $form->addElement('static', 'supportinfo', get_string('coursequicksupport', 'theme_rsmax'),
+                    get_string('coursequicksupportcentral', 'theme_rsmax'));
+                $form->addElement('hidden', $field, 0);
+                $form->setType($field, PARAM_INT);
+                continue;
+            }
             $form->addElement('select', $field,
                 get_string('coursequick' . $key, 'theme_rsmax'), $options[$key]);
             $form->setType($field, PARAM_INT);

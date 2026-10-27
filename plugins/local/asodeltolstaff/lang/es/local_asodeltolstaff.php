@@ -125,7 +125,8 @@ $string['privacy:metadata:calendar'] = 'El subsistema Calendario de Moodle almac
 
 $string['accessreportmeaning'] = 'Los ingresos y salidas son eventos independientes observados en el sitio. Una salida no registrada queda vacía; estos eventos no prueban asistencia, tiempo trabajado ni conexión continua.';
 
-$string['platformhelp'] = 'Ayuda de la plataforma';
+$string['helpandsupport'] = 'Ayuda y soporte';
+$string['platformhelp'] = 'Guía de la plataforma';
 $string['guide_access_title'] = 'Acceso al diplomado';
 $string['guide_access'] = 'Abre Mis cursos y selecciona el diplomado. Si una unidad no está disponible, consulta las condiciones que muestra el curso y comunícate con tu capacitador.';
 $string['guide_submission_title'] = 'Entrega de actividades';
@@ -150,7 +151,7 @@ $string['overallprogress'] = 'Avance';
 $string['completedactivities'] = 'Actividades finalizadas / con seguimiento';
 $string['embeddedvideo'] = 'Video MP4 integrado';
 $string['practiceactivity'] = 'Actividad de práctica sin calificación';
-$string['supportchannel'] = 'Soporte de la plataforma';
+$string['supportchannel'] = 'Centro de Atención (CAU)';
 $string['activitypublishedsubject'] = 'Hay una actividad nueva';
 $string['activitypublishedbody'] = 'Hay una nueva actividad pendiente disponible para tu grupo: {$a}';
 $string['messageprovider:activitypublished'] = 'Nueva actividad del grupo';

@@ -378,4 +378,5 @@ $string['coursequickhelpworkshops_help'] = 'Create an Assignment, Quiz, H5P acti
 $string['coursequickhelplive'] = 'Live sessions';
 $string['coursequickhelplive_help'] = 'Select a BigBlueButton/Zoom video conference activity or a Moodle URL resource containing an authorized joining link.';
 $string['coursequickhelpsupport'] = 'Support centre';
-$string['coursequickhelpsupport_help'] = 'If ASODELTOL Staff has support configured, leave Automatic. Otherwise choose a Moodle Page or URL with the real support channel.';
+$string['coursequickhelpsupport_help'] = 'CAU uses the same institutional form as Help and support. A site administrator must configure the ASODELTOL Staff recipient.';
+$string['coursequicksupportcentral'] = 'Managed centrally by ASODELTOL Staff. CAU remains unavailable until a recipient is configured.';
