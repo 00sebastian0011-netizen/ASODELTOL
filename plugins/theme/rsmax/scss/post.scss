@@ -9322,3 +9322,56 @@ body .block-aicourserecommender .aicr-mic:not(.aicr-recording) {
         width: 100%;
     }
 }
+
+
+// Explicit multi-target quick-link groups (semantic details/summary, no JavaScript).
+.rsmax-courseutilities-multiple {
+    position: relative;
+    min-width: 0;
+
+    summary.rsmax-courseutilities-link {
+        cursor: pointer;
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:focus-visible {
+            outline: 3px solid #064e75;
+            outline-offset: 3px;
+        }
+    }
+
+    &[open] summary.rsmax-courseutilities-link {
+        border-radius: 1.1rem 1.1rem .3rem .3rem;
+    }
+}
+
+.rsmax-courseutilities-targets {
+    text-align: left;
+    margin: .5rem 0 0;
+    padding: .45rem .65rem;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #d6dfe5;
+    border-radius: .65rem;
+    box-shadow: 0 3px 12px rgba(20, 35, 45, .06);
+
+    li + li {
+        border-top: 1px solid #e5e9ec;
+    }
+
+    a {
+        display: block;
+        padding: .7rem .4rem;
+        color: #0a567b;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+
+        &:hover, &:focus-visible {
+            background: #f2f8fb;
+            text-decoration: underline;
+        }
+    }
+}
