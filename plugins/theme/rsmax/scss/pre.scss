@@ -23,6 +23,10 @@ $rsmax-footer-bg: null !default;
 $rsmax-footer-text: null !default;
 // The course index follows the header of the activities unless a colour is chosen for it.
 $rsmax-index-bg: null !default;
+// ASODELTOL course index: olive at the top, institutional green at the bottom.
+// Both stops keep at least 4.5:1 contrast with the light index text.
+$rsmax-index-gradient-start: #566a40 !default;
+$rsmax-index-gradient-end: #104b38 !default;
 // Boost's is 285px: section names rarely fit in it.
 $drawer-left-width: 320px !default;
 $rsmax-logo-height: 36px !default;

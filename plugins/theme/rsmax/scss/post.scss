@@ -4752,14 +4752,20 @@ body:not(.editing) .course-content {
 // The menu of the site on a phone is a left panel too: it has a look of its own, further down.
 .drawer.drawer-left:not(.drawer-primary) {
     border: 0;
-    color: rgba($rsmax-index-fg, .78);
-    background: $rsmax-index;
+    color: rgba($rsmax-index-fg, .88);
+    background-color: $rsmax-index-gradient-end;
+    background-image: linear-gradient(
+        180deg,
+        $rsmax-index-gradient-start 0%,
+        $rsmax-index-gradient-end 100%
+    );
     scrollbar-color: rgba($rsmax-index-fg, .25) transparent;
     scrollbar-width: thin;
 
     .drawerheader {
         border-bottom: 1px solid rgba($rsmax-index-fg, .1);
-        background: $rsmax-index;
+        // This header is sticky in Boost, so it needs an opaque stop while the index scrolls.
+        background: $rsmax-index-gradient-start;
 
         .drawerheading #courseindexdrawerheading .courseindex-link {
             margin-left: 0 !important; /* stylelint-disable-line declaration-no-important */
@@ -4797,7 +4803,7 @@ body:not(.editing) .course-content {
     .courseindex-collapsemenu,
     .collapseall,
     .expandall {
-        color: rgba($rsmax-index-fg, .55);
+        color: rgba($rsmax-index-fg, .88);
 
         &:hover,
         &:focus {
@@ -4810,7 +4816,7 @@ body:not(.editing) .course-content {
         padding: .45rem .6rem;
         border: 0;
         border-radius: .7rem;
-        color: rgba($rsmax-index-fg, .74);
+        color: rgba($rsmax-index-fg, .88);
         transition: background-color .12s ease, color .12s ease;
 
         .courseindex-link,
@@ -4839,7 +4845,7 @@ body:not(.editing) .course-content {
         &.dimmed,
         &.dimmed .courseindex-link,
         &.dimmed .courseindex-chevron {
-            color: rgba($rsmax-index-fg, .42);
+            color: rgba($rsmax-index-fg, .82);
         }
 
         &.active {
