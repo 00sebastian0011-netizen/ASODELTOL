@@ -1,0 +1,7 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "asodeltol-vps-admin",
+  "version": "1.0.0",
+  "description": "Puente MCP local autenticado por SSH para la administración del VPS ASODELTOL.",
+  "extensions": {"com.openai": {"interface": {"displayName": "ASODELTOL VPS Admin", "shortDescription": "Administración SSH segura", "longDescription": "Terminal administrativa del VPS mediante una clave SSH dedicada y auditada.", "developerName": "ASODELTOL", "category": "Developer Tools", "capabilities": ["SSH", "Moodle", "VPS"], "defaultPrompt": "Administra el VPS ASODELTOL mediante SSH y registra los cambios relevantes."}}}
+}
