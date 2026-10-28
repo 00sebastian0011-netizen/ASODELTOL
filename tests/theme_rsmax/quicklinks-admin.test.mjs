@@ -63,3 +63,9 @@ test('CAU stays centralized, existing single-link choices still work before migr
   assert.match(legacy, /support_url\(\)/);
   assert.match(controller, /course_utilities::choices_for_course\(/);
 });
+
+test('editor pre-populates auto-detected modules and exposes direct modedit links', () => {
+  assert.match(legacy, /public static function default_cmids\(/);
+  assert.match(controller, /course_utilities::default_cmids\(\$course\)/);
+  assert.match(controller, /\/course\/modedit\.php/);
+});

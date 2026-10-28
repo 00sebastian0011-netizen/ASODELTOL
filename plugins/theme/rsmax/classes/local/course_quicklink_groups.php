@@ -77,11 +77,13 @@ final class course_quicklink_groups {
         $modinfo = get_fast_modinfo($course);
         $options = [];
         foreach ($modinfo->get_section_info_all() as $section) {
-            if ((int) $section->section < 1 || empty($section->visible) || empty($section->uservisible)) {
+            if (empty($section->visible) || empty($section->uservisible)) {
                 continue;
             }
             $label = get_section_name($course, $section);
-            $options['section:' . $section->id] = get_string('coursequicksection', 'theme_rsmax') . ': ' . $label;
+            if ((int) $section->section >= 1) {
+                $options['section:' . $section->id] = get_string('coursequicksection', 'theme_rsmax') . ': ' . $label;
+            }
             foreach ($modinfo->sections[(int) $section->section] ?? [] as $cmid) {
                 $cm = $modinfo->cms[$cmid] ?? null;
                 if (!self::module_available($cm)) {
