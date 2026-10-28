@@ -9,6 +9,12 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+try:
+    import grp
+    import pwd
+except ImportError:  # Windows test hosts; production probe runs on Linux.
+    grp = None
+    pwd = None
 import re
 import subprocess
 from typing import Any
@@ -20,6 +26,8 @@ VHOST = Path(os.environ.get("ASODELTOL_DIAG_VHOST", "/etc/nginx/sites-enabled/sr
 SHA = re.compile(r"^[0-9a-f]{40}$")
 SIZE = re.compile(r"^[0-9]{1,5}[KMG]?$", re.IGNORECASE)
 COMPONENTS = ("theme_rsmax", "local_asodeltolstaff")
+PLUGIN_ROOT = Path("/home/user/htdocs/srv2085040.hstgr.cloud/public")
+PHP_FPM_POOL_GLOB = "/etc/php/8.4/fpm/pool.d/*.conf"
 
 
 def checked_at() -> str:
@@ -82,7 +90,7 @@ def _disk(path: Path) -> dict[str, Any]:
         return {"available": True,
                 "free_bytes": stats.f_bavail * stats.f_frsize,
                 "total_bytes": stats.f_blocks * stats.f_frsize}
-    except OSError:
+    except (AttributeError, OSError):
         return {"available": False}
 
 
@@ -181,9 +189,104 @@ def deploy_status() -> dict[str, Any]:
             "warning": "Agent state alone is not an authenticated production smoke test."}
 
 
+def _acl(path: Path) -> dict[str, Any]:
+    """Read only the permission entries from fixed paths; never return names or content."""
+    try:
+        result = subprocess.run(["/usr/bin/getfacl", "-cp", str(path)], capture_output=True,
+                                text=True, timeout=3, check=False)
+    except (OSError, subprocess.TimeoutExpired):
+        return {"available": False}
+    if result.returncode != 0:
+        return {"available": False}
+    entries = []
+    for line in result.stdout.splitlines():
+        if line.startswith(("user::", "group::", "mask::", "other::")):
+            entries.append(line.split(":", 2)[-1])
+    return {"available": True, "entries": entries[:8]}
+
+
+def _mount(path: Path) -> dict[str, Any]:
+    try:
+        result = subprocess.run(["/usr/bin/findmnt", "-T", str(path), "-o", "FSTYPE,OPTIONS", "-n"],
+                                capture_output=True, text=True, timeout=3, check=False)
+        if result.returncode == 0 and result.stdout.strip():
+            parts = result.stdout.strip().split(None, 1)
+            return {"available": True, "fstype": parts[0], "options": parts[1].split(",")[:32] if len(parts) > 1 else []}
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+    return {"available": False}
+
+
+def _account_name(resolver: Any, value: int) -> str | None:
+    if resolver is None:
+        return None
+    try:
+        return resolver(value).pw_name if resolver is pwd.getpwuid else resolver(value).gr_name
+    except (KeyError, OSError):
+        return None
+
+
+def _php_fpm_identity() -> dict[str, Any]:
+    users, groups = set(), set()
+    try:
+        paths = sorted(Path("/etc/php/8.4/fpm/pool.d").glob("*.conf"))
+        for path in paths:
+            source = _read_small(path, 32_000) or ""
+            for key, target in (("user", users), ("group", groups)):
+                for match in re.finditer(r"^\s*" + key + r"\s*=\s*([A-Za-z0-9_-]{1,32})\s*$", source, re.MULTILINE):
+                    target.add(match.group(1))
+    except OSError:
+        pass
+    if len(users) == 1 and len(groups) <= 1:
+        return {"determinable": True, "user": next(iter(users)), "group": next(iter(groups), None)}
+    return {"determinable": False, "reason": "PHP-FPM pool identity unavailable or ambiguous"}
+
+
+def moodle_plugin_install_permissions() -> dict[str, Any]:
+    """Fixed, sanitized permission probe for the aiprovider_datacurso target."""
+    paths = [PLUGIN_ROOT, PLUGIN_ROOT / "ai", PLUGIN_ROOT / "ai" / "provider",
+             PLUGIN_ROOT / "ai" / "provider" / "datacurso"]
+    records = []
+    for path in paths:
+        try:
+            stat = path.stat()
+            mode = stat.st_mode & 0o777
+            records.append({"relative": (path.relative_to(PLUGIN_ROOT).as_posix() or "."), "exists": path.is_dir(),
+                            "uid": stat.st_uid, "gid": stat.st_gid,
+                            "owner": _account_name(pwd.getpwuid if pwd else None, stat.st_uid),
+                            "group": _account_name(grp.getgrgid if grp else None, stat.st_gid),
+                            "mode": format(mode, "04o"), "traverse": os.access(path, os.X_OK),
+                            "write_for_probe_process": os.access(path, os.W_OK),
+                            "acl": _acl(path)})
+        except PermissionError:
+            records.append({"relative": (path.relative_to(PLUGIN_ROOT).as_posix() or "."), "exists": None,
+                            "error": "access_denied", "traverse": False, "write_for_probe_process": False})
+        except OSError:
+            records.append({"relative": (path.relative_to(PLUGIN_ROOT).as_posix() or "."), "exists": False,
+                            "error": "unreadable_or_missing", "traverse": False, "write_for_probe_process": False})
+    identity = _php_fpm_identity()
+    target = records[-1]
+    if target.get("exists") is not True:
+        diagnosis = "target_missing_or_unreadable"
+    elif not target.get("traverse"):
+        diagnosis = "directory_not_traversable"
+    elif not identity["determinable"]:
+        diagnosis = "php_fpm_identity_not_determinable"
+    else:
+        diagnosis = "requires_php_fpm_identity_test; probe process permissions are not proof"
+    return {"checked_at": checked_at(), "source": "fixed_read_only_permission_probe",
+            "allowlist": ["public", "public/ai", "public/ai/provider", "public/ai/provider/datacurso"],
+            "paths": records, "php_fpm": identity,
+            "mount": _mount(paths[-1]),
+            "datacurso_present": target.get("exists") is True,
+            "diagnosis": diagnosis,
+            "limitations": ["does not impersonate PHP-FPM", "does not read config.php or ACL names"]}
+
+
 TOOLS = {
     "vps_system_health": ("Sanitized OS, uptime, disk and fixed service states; no logs or users.", system_health),
     "moodle_versions": ("Installed version files only, not live Moodle database state.", versions),
     "upload_limits": ("Static NGINX/PHP vhost limit hints; effective upload unverified.", upload_limits),
     "deployment_status": ("Sanitized GitHub deploy agent state, no file paths or contents.", deploy_status),
+    "moodle_plugin_install_permissions": ("Fixed read-only permissions for Moodle aiprovider target paths.", moodle_plugin_install_permissions),
 }

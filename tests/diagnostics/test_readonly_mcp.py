@@ -11,6 +11,8 @@ import unittest
 import urllib.error
 import urllib.request
 import sys
+import shutil
+from unittest.mock import patch
 
 SRC = Path(__file__).resolve().parents[2] / "scripts" / "diagnostics" / "vps"
 sys.path.insert(0, str(SRC))
@@ -28,12 +30,20 @@ for field, value in {
     os.environ[field] = str(value)
 import probes
 import mcp_server
+ORIGINAL_FPM_IDENTITY = probes._php_fpm_identity
+ORIGINAL_ACL = probes._acl
 
 
 class TestSanitizedProbes(unittest.TestCase):
     def setUp(self):
+        shutil.rmtree(ROOT / "site", ignore_errors=True)
+        shutil.rmtree(ROOT / "moodledata", ignore_errors=True)
+        shutil.rmtree(ROOT / "state", ignore_errors=True)
         for name in ("site", "moodledata", "state"):
             (ROOT / name).mkdir(exist_ok=True)
+        probes.PLUGIN_ROOT = ROOT / "site" / "public"
+        probes._php_fpm_identity = ORIGINAL_FPM_IDENTITY
+        probes._acl = ORIGINAL_ACL
 
     def test_versions_dont_read_config_php(self):
         folder = ROOT / "site" / "public"
@@ -67,12 +77,68 @@ class TestSanitizedProbes(unittest.TestCase):
         self.assertEqual(result["components"]["theme_rsmax"]["protected_files_count"], 2)
         self.assertEqual(result["components"]["theme_rsmax"]["base_sha"], "a" * 40)
         self.assertNotIn("private_student_data", json.dumps(result))
-        self.assertNotIn("config.php", json.dumps(result))
+        self.assertNotIn("PRIVATE_SECRET", json.dumps(result))
 
-    def test_four_allowlisted_tools(self):
+    def test_existing_tools_and_permission_probe_are_allowlisted(self):
         self.assertEqual(set(probes.TOOLS), {
             "vps_system_health", "moodle_versions", "upload_limits", "deployment_status",
+            "moodle_plugin_install_permissions",
         })
+
+    def test_permission_probe_uses_fixed_paths_and_sanitizes(self):
+        root = ROOT / "site" / "public"
+        (root / "ai" / "provider" / "datacurso").mkdir(parents=True, exist_ok=True)
+        probes.PLUGIN_ROOT = root
+        probes._php_fpm_identity = lambda: {"determinable": False, "reason": "test"}
+        probes._acl = lambda path: {"available": True, "entries": ["r-x"]}
+        result = probes.moodle_plugin_install_permissions()
+        self.assertEqual(result["datacurso_present"], True)
+        self.assertEqual([item["relative"] for item in result["paths"]],
+                         [".", "ai", "ai/provider", "ai/provider/datacurso"])
+        self.assertEqual(result["php_fpm"]["determinable"], False)
+        self.assertNotIn("PRIVATE_SECRET", json.dumps(result))
+
+    def test_permission_probe_missing_and_unwritable_targets(self):
+        root = ROOT / "site" / "public"
+        (root / "ai" / "provider").mkdir(parents=True, exist_ok=True)
+        probes.PLUGIN_ROOT = root
+        probes._php_fpm_identity = lambda: {"determinable": True, "user": "php", "group": "php"}
+        probes._acl = lambda path: {"available": True, "entries": ["---"]} if path.name == "provider" else {"available": False}
+        result = probes.moodle_plugin_install_permissions()
+        self.assertFalse(result["datacurso_present"])
+        self.assertEqual(result["diagnosis"], "target_missing_or_unreadable")
+
+    def test_permission_probe_existing_target_without_write_or_traverse(self):
+        root = ROOT / "site" / "public"
+        (root / "ai" / "provider" / "datacurso").mkdir(parents=True, exist_ok=True)
+        probes.PLUGIN_ROOT = root
+        probes._php_fpm_identity = lambda: {"determinable": True, "user": "php", "group": "php"}
+        with patch.object(probes.os, "access", return_value=False):
+            result = probes.moodle_plugin_install_permissions()
+        self.assertFalse(result["paths"][-1]["write_for_probe_process"])
+        self.assertEqual(result["diagnosis"], "directory_not_traversable")
+
+    def test_permission_probe_access_denied_is_sanitized(self):
+        probes.PLUGIN_ROOT = ROOT / "site" / "public"
+        with patch.object(type(probes.PLUGIN_ROOT), "stat", side_effect=PermissionError):
+            result = probes.moodle_plugin_install_permissions()
+        self.assertEqual(result["diagnosis"], "target_missing_or_unreadable")
+        self.assertNotIn(str(ROOT), json.dumps(result))
+
+    def test_permission_probe_acl_restriction_is_reported(self):
+        root = ROOT / "site" / "public"
+        (root / "ai" / "provider" / "datacurso").mkdir(parents=True, exist_ok=True)
+        probes.PLUGIN_ROOT = root
+        probes._php_fpm_identity = lambda: {"determinable": True, "user": "php", "group": "php"}
+        probes._acl = lambda path: {"available": True, "entries": ["r-x", "---"]}
+        result = probes.moodle_plugin_install_permissions()
+        self.assertIn("---", result["paths"][-1]["acl"]["entries"])
+
+    def test_permission_probe_errors_are_sanitized(self):
+        probes.PLUGIN_ROOT = ROOT / "does-not-exist"
+        result = probes.moodle_plugin_install_permissions()
+        self.assertEqual(result["diagnosis"], "target_missing_or_unreadable")
+        self.assertNotIn(str(ROOT), json.dumps(result))
 
 
 class TestRpc(unittest.TestCase):
@@ -81,7 +147,7 @@ class TestRpc(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(data["result"]["protocolVersion"], "2025-06-18")
         status, data = mcp_server.handle_rpc({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
-        self.assertEqual(len(data["result"]["tools"]), 4)
+        self.assertEqual(len(data["result"]["tools"]), 5)
         for tool in data["result"]["tools"]:
             self.assertTrue(tool["annotations"]["readOnlyHint"])
             self.assertFalse(tool["annotations"]["destructiveHint"])
@@ -92,6 +158,7 @@ class TestRpc(unittest.TestCase):
             ("ssh_exec", {}),
             ("upload_limits", {"path": "/etc/shadow"}),
             ("vps_system_health", {"command": "rm -rf /"}),
+            ("moodle_plugin_install_permissions", {"path": "/etc/shadow"}),
         ]:
             _, resp = mcp_server.handle_rpc({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
                                               "params": {"name": name, "arguments": args}})
@@ -103,6 +170,9 @@ class TestRpc(unittest.TestCase):
 class TestHttp(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        probes.PLUGIN_ROOT = ROOT / "site" / "public"
+        probes._php_fpm_identity = ORIGINAL_FPM_IDENTITY
+        probes._acl = ORIGINAL_ACL
         cls.httpd = ThreadingHTTPServer(("127.0.0.1", 0), mcp_server.Handler)
         cls.port = cls.httpd.server_port
         cls.worker = threading.Thread(target=cls.httpd.serve_forever, daemon=True)
@@ -138,7 +208,7 @@ class TestHttp(unittest.TestCase):
     def test_rest_routes_whitelisted(self):
         for name in ("system", "versions", "uploads", "deploy"):
             code, payload = self.request("/__asodeltol_diag/v1/" + name)
-            self.assertEqual(code, 200)
+            self.assertEqual(code, 200, name)
             self.assertIn("checked_at", payload)
         for name in ("config.php", "logs", "database", "../system", "execute"):
             self.assertEqual(self.request("/__asodeltol_diag/v1/" + name)[0], 404)
