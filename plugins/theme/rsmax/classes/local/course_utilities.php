@@ -204,6 +204,60 @@ final class course_utilities {
     }
 
     /**
+     * Resolve default/legacy single-module IDs per quick-link category for a course.
+     *
+     * @return array<string, int>
+     */
+    public static function default_cmids(\stdClass $course): array {
+        global $DB;
+        $modinfo = get_fast_modinfo($course);
+        $detected = [];
+
+        foreach ($modinfo->cms as $cm) {
+            if (empty($cm->uservisible) || empty($cm->visible) || empty($cm->url)) {
+                continue;
+            }
+            $key = null;
+            if ($cm->modname === 'forum' && $DB->get_field('forum', 'type', ['id' => $cm->instance]) === 'news') {
+                $key = 'announcements';
+            } else if ($cm->modname === 'folder') {
+                $key = 'materials';
+            } else if ($cm->modname === 'assign') {
+                $key = 'workshops';
+            } else if (in_array($cm->modname, ['bigbluebuttonbn', 'zoom'], true)
+                    || ($cm->modname === 'url' && preg_match('/sincr[oó]nic|sesiones en vivo|live/iu', $cm->name))) {
+                $key = 'live';
+            } else if ($cm->modname === 'url'
+                    && preg_match('/grabaci[oó]n|sesiones grabadas|recordings?/iu', $cm->name)) {
+                $key = 'recordings';
+            }
+            if ($key !== null && !isset($detected[$key])) {
+                $detected[$key] = (int) $cm->id;
+            }
+        }
+
+        $choices = self::choices_for_course((int) $course->id);
+        if ($choices !== null) {
+            foreach ($choices as $key => $id) {
+                if ($key === 'support') {
+                    continue;
+                }
+                if ($id === -1) {
+                    unset($detected[$key]);
+                } else if ($id > 0) {
+                    $cm = $modinfo->cms[$id] ?? null;
+                    if ($cm !== null && self::eligible_module($cm, $key) && !empty($cm->uservisible)) {
+                        $detected[$key] = (int) $cm->id;
+                    } else {
+                        unset($detected[$key]);
+                    }
+                }
+            }
+        }
+        return $detected;
+    }
+
+    /**
      * Resolve links for the current viewer; activity availability is checked per viewer.
      * A course editor cannot make a restricted activity visible to another group.
      */
@@ -224,7 +278,8 @@ final class course_utilities {
                 $key = 'materials';
             } else if ($cm->modname === 'assign') {
                 $key = 'workshops';
-            } else if (in_array($cm->modname, ['bigbluebuttonbn', 'zoom'], true)) {
+            } else if (in_array($cm->modname, ['bigbluebuttonbn', 'zoom'], true)
+                    || ($cm->modname === 'url' && preg_match('/sincr[oó]nic|sesiones en vivo|live/iu', $cm->name))) {
                 $key = 'live';
             } else if ($cm->modname === 'url'
                     && preg_match('/grabaci[oó]n|sesiones grabadas|recordings?/iu', $cm->name)) {

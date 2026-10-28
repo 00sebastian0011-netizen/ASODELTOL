@@ -32,10 +32,11 @@ $form = new \theme_rsmax\form\course_quicklinks_form($url, [
 
 $selected = \theme_rsmax\local\course_quicklink_groups::selected($courseid);
 $legacy = \theme_rsmax\local\course_utilities::choices_for_course($courseid);
+$detected = \theme_rsmax\local\course_utilities::default_cmids($course);
 $defaults = (object) ['courseid' => $courseid];
 foreach (\theme_rsmax\local\course_quicklink_groups::keys() as $key) {
-    // Existing single-target configuration remains active until this editor is saved.
-    $oldid = $legacy[$key] ?? 0;
+    // Existing single-target or auto-detected configuration remains active until this editor is saved.
+    $oldid = ($legacy[$key] ?? 0) > 0 ? $legacy[$key] : ($detected[$key] ?? 0);
     $defaults->{'ql_' . $key} = $selected[$key] ?? ($oldid > 0 ? ['cm:' . $oldid] : []);
 }
 $form->set_data($defaults);
@@ -61,9 +62,29 @@ echo $OUTPUT->heading(get_string('coursequickadmin', 'theme_rsmax'));
 echo html_writer::tag('p', get_string('coursequickintro', 'theme_rsmax'));
 
 $courseurl = new moodle_url('/course/view.php', ['id' => $courseid]);
-echo html_writer::div(html_writer::link($courseurl,
+$actionbuttons = html_writer::link($courseurl,
     get_string('coursequickcreate', 'theme_rsmax'),
-    ['class' => 'btn btn-outline-primary mb-3']), 'rsmax-quicklinks-course-action');
+    ['class' => 'btn btn-outline-primary me-2 mb-2']);
+
+$modinfo = get_fast_modinfo($course);
+$editablecms = [];
+foreach (\theme_rsmax\local\course_quicklink_groups::keys() as $key) {
+    foreach ($defaults->{'ql_' . $key} ?? [] as $token) {
+        if (preg_match('/^cm:([1-9][0-9]*)$/D', (string) $token, $m)) {
+            $cmid = (int) $m[1];
+            if (isset($modinfo->cms[$cmid])) {
+                $editablecms[$cmid] = $modinfo->cms[$cmid];
+            }
+        }
+    }
+}
+foreach ($editablecms as $cmid => $cm) {
+    $editurl = new moodle_url('/course/modedit.php', ['update' => $cmid, 'return' => 1]);
+    $actionbuttons .= html_writer::link($editurl,
+        get_string('edit') . ': ' . format_string($cm->name),
+        ['class' => 'btn btn-outline-secondary me-2 mb-2']);
+}
+echo html_writer::div($actionbuttons, 'rsmax-quicklinks-course-action mb-3');
 
 $form->display();
 echo $OUTPUT->footer();
