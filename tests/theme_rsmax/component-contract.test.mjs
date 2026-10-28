@@ -56,3 +56,11 @@ test('consent is delegated to Moodle tool_policy, not repeated by the theme', ()
   assert.doesNotMatch(notices, /policyurl|courseconsentmissing|courseconsenttitle/);
   assert.doesNotMatch(provider, /INSERT INTO|user_info_data/);
 });
+
+test('course index uses the accessible ASODELTOL green gradient', () => {
+  const preScss = read('plugins/theme/rsmax/scss/pre.scss');
+  assert.match(preScss, /\$rsmax-index-gradient-start:\s*#566a40\s*!default/);
+  assert.match(preScss, /\$rsmax-index-gradient-end:\s*#104b38\s*!default/);
+  assert.match(scss, /background-image:\s*linear-gradient\([\s\S]*?\$rsmax-index-gradient-start 0%[\s\S]*?\$rsmax-index-gradient-end 100%/);
+  assert.match(scss, /\.drawerheader\s*\{[\s\S]*?background:\s*\$rsmax-index-gradient-start/);
+});
