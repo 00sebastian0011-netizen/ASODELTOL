@@ -384,3 +384,14 @@ $string['coursequickhelplive_help'] = 'Select a BigBlueButton/Zoom video confere
 $string['coursequickhelpsupport'] = 'Support centre';
 $string['coursequickhelpsupport_help'] = 'CAU uses the same institutional form as Help and support. A site administrator must configure the ASODELTOL Staff recipient.';
 $string['coursequicksupportcentral'] = 'Managed centrally by ASODELTOL Staff. CAU remains unavailable until a recipient is configured.';
+$string['supportwidgettrigger'] = 'Need support?';
+$string['supportwidgetaria'] = 'Open ASODELTOL support and help assistant';
+$string['supportwidgettitle'] = 'ASODELTOL Support Assistant';
+$string['supportwidgetstatus'] = 'User support · Online';
+$string['supportwidgetgreeting'] = 'Hello! If you need technical or academic support, message the Administrator directly or submit a support ticket in our Support Centre (CAU).';
+$string['supportwidgetchat'] = 'Message the Admin';
+$string['supportwidgetchatdesc'] = 'Open direct internal messaging chat';
+$string['supportwidgetticket'] = 'Submit support ticket (CAU)';
+$string['supportwidgetticketdesc'] = 'Submit a formal support request';
+$string['supportwidgetguide'] = 'View platform help guide';
+
