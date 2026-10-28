@@ -358,6 +358,15 @@ if (isset($settings->footerhelp) && empty($settings->footerhelp)) {
     $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 }
 
+$supportwidget = false;
+if (isloggedin() && !isguestuser()) {
+    $supportwidget = [
+        'messageurl' => (new \core\url('/message/index.php'))->out(false),
+        'supporturl' => (new \core\url('/local/asodeltolstaff/support.php'))->out(false),
+        'helpurl' => (new \core\url('/local/asodeltolstaff/help.php'))->out(false),
+    ];
+}
+
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'coursefullname' => $coursefullname,
@@ -396,6 +405,7 @@ $templatecontext = [
     'institutionalnotice' => $institutionalnotice,
     'assistantholder' => $assistantholder,
     'homehero' => $homehero,
+    'supportwidget' => $supportwidget,
 ];
 
 echo $OUTPUT->render_from_template('theme_rsmax/drawers', $templatecontext);

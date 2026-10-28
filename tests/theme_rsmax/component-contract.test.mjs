@@ -67,3 +67,21 @@ test('course index uses the accessible ASODELTOL green gradient', () => {
   assert.match(scss, /background-image:\s*linear-gradient\([\s\S]*?\$rsmax-index-gradient-start 0%[\s\S]*?\$rsmax-index-gradient-end 100%/);
   assert.match(scss, /\.drawerheader\s*\{[\s\S]*?background:\s*\$rsmax-index-gradient-start/);
 });
+
+test('floating support assistant widget guides signed-in users to Admin chat and CAU tickets', () => {
+  const supportWidget = read('plugins/theme/rsmax/templates/support_widget.mustache');
+  assert.match(layout, /\$supportwidget\s*=\s*false;/);
+  assert.match(layout, /\/message\/index\.php/);
+  assert.match(layout, /\/local\/asodeltolstaff\/support\.php/);
+  assert.match(layout, /\/local\/asodeltolstaff\/help\.php/);
+  assert.match(drawers, /\{\{#supportwidget\}\}\{\{> theme_rsmax\/support_widget \}\}\{\{\/supportwidget\}\}/);
+  assert.match(supportWidget, /rsmax-support-widget/);
+  assert.match(supportWidget, /rsmax-support-mascot/);
+  assert.match(supportWidget, /\{\{messageurl\}\}/);
+  assert.match(supportWidget, /\{\{supporturl\}\}/);
+  assert.match(supportWidget, /\{\{helpurl\}\}/);
+  assert.match(strings, /\['supportwidgettrigger'\]\s*=\s*'¿Necesitas soporte\?'/);
+  assert.match(scss, /\.rsmax-support-widget\s*\{/);
+  assert.match(scss, /\.rsmax-support-card\s*\{/);
+});
+
