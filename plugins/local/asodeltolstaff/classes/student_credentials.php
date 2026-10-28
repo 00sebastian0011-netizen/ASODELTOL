@@ -152,7 +152,9 @@ final class student_credentials {
             } else {
                 unassign_capability('moodle/user:changeownpassword', (int) $studentroleid, $sysctx->id);
             }
-            accesslib_clear_all_caches_for_unit_testing();
+            if (defined('PHPUNIT_TEST') && PHPUNIT_TEST) {
+                accesslib_clear_all_caches_for_unit_testing();
+            }
         }
         return true;
     }
@@ -182,7 +184,9 @@ final class student_credentials {
         if ($studentroleid) {
             assign_capability('moodle/user:changeownpassword', CAP_PREVENT,
                 (int) $studentroleid, \context_system::instance()->id, true);
-            accesslib_clear_all_caches_for_unit_testing();
+            if (defined('PHPUNIT_TEST') && PHPUNIT_TEST) {
+                accesslib_clear_all_caches_for_unit_testing();
+            }
         }
 
         return [
@@ -578,3 +582,4 @@ final class student_credentials {
         return $timestamp > 0 ? gmdate('Y-m-d\TH:i:s\Z', $timestamp) : '';
     }
 }
+
