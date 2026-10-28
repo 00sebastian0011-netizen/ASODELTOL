@@ -16,4 +16,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', new admin_externalpage('asodeltolmetadata',
         get_string('metadatafields', 'local_asodeltolstaff'),
         new moodle_url('/local/asodeltolstaff/metadata.php')));
+    $ADMIN->add('localplugins', new admin_externalpage('asodeltolcredentials',
+        get_string('studentcredentials', 'local_asodeltolstaff'),
+        new moodle_url('/local/asodeltolstaff/credentials.php')));
 }

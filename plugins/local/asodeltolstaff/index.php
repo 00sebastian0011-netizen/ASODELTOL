@@ -82,6 +82,13 @@ if (has_capability('local/asodeltolstaff:export', $context)) {
         'get'
     );
 }
+if (has_capability('moodle/site:config', context_system::instance())) {
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/credentials.php', ['courseid' => $courseid]),
+        get_string('studentcredentials', 'local_asodeltolstaff'),
+        'get'
+    );
+}
 if ($buttons) {
     echo html_writer::div(implode(' ', $buttons), 'mb-3');
 }
