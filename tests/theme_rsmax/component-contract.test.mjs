@@ -28,10 +28,13 @@ test('quick links remain visible through course, activity and editing pages', ()
   assert.match(course, /\{\{#url\}\}/);
   assert.match(course, /\{\{\^url\}\}/);
   assert.match(course, /rsmax-courseutilities-disabled/);
+  assert.match(course, /coursequickmissing/);
+  assert.match(course, /rsmax-courseutilities-help/);
   assert.match(provider, /empty\(\$cm->uservisible\)/);
   assert.match(provider, /safe_local_path/);
   assert.doesNotMatch(provider, /prospectiva\.edu\.co|google\.com\/spreadsheets/);
-  assert.match(course, /coursequickaccountrequired/);
+  assert.doesNotMatch(course, /coursequickaccountrequired/);
+  assert.doesNotMatch(course, /rsmax-courseutilities-account/);
   assert.match(strings, /Requiere cuenta de ASODELTOL/);
 });
 
