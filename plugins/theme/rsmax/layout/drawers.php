@@ -188,7 +188,7 @@ $institutionalnotice = $utilitiesenabled && ($PAGE->pagelayout === 'frontpage' |
 // Activity destinations must remain within the viewer's current course.
 $courseutilities = false;
 if ($incourse && in_array($PAGE->pagelayout, ['course', 'incourse'], true)
-        && $utilitiesenabled && isloggedin() && !isguestuser() && !$PAGE->user_is_editing()) {
+        && $utilitiesenabled && isloggedin() && !isguestuser()) {
     $courseutilities = \theme_rsmax\local\course_utilities::export($PAGE->course);
 }
 

@@ -21,9 +21,10 @@ test('login preserves Boost main content without an institutional notice', () =>
   assert.doesNotMatch(css, /rsmax-login-free-notice|rsmax-login-free-3s/);
 });
 
-test('quick links follow the current user through course and activity pages', () => {
+test('quick links remain visible through course, activity and editing pages', () => {
   assert.match(layout, /\$incourse\s*&&\s*in_array\(\$PAGE->pagelayout, \['course', 'incourse'\], true\)/);
-  assert.match(layout, /!\$PAGE->user_is_editing\(\)/);
+  const utilitiesBlock = layout.match(/\$courseutilities = false;[\s\S]*?\/\/ Activity pages open/)[0];
+  assert.doesNotMatch(utilitiesBlock, /user_is_editing/);
   assert.match(course, /\{\{#url\}\}/);
   assert.match(course, /\{\{\^url\}\}/);
   assert.match(course, /rsmax-courseutilities-disabled/);
