@@ -199,5 +199,9 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2026102907, 'local', 'asodeltolstaff');
     }
 
+    if ($oldversion < 2026102908) {
+        upgrade_plugin_savepoint(true, 2026102908, 'local', 'asodeltolstaff');
+    }
+
     return true;
 }
