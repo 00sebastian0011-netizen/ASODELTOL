@@ -19,7 +19,7 @@ final class profile_privacy {
     ];
 
     public static function enforce_profile_access(): void {
-        global $DB, $PAGE, $USER;
+        global $PAGE, $USER;
 
         if ((defined('CLI_SCRIPT') && CLI_SCRIPT) || !isloggedin() || isguestuser()
                 || is_siteadmin() || empty($PAGE->url)) {
@@ -70,7 +70,15 @@ final class profile_privacy {
         // Scope this control to the institutional AF8 course only.
         $courseid = (int) $DB->get_field('course', 'id', ['idnumber' => 'ASODELTOL-AF8']);
         if (!$courseid) {
-            return;
+            // Legacy production AF8 has course id 4. Only use this fallback
+            // after verifying the course shortname, never a caller parameter.
+            $shortname = $DB->get_field('course', 'shortname', ['id' => 4]);
+            if ($shortname === 'AF8') {
+                $courseid = 4;
+            }
+        }
+        if (!$courseid) {
+            throw new \moodle_exception('nopermissions', 'error', '', get_string('profile'));
         }
         $context = \context_course::instance($courseid);
 
