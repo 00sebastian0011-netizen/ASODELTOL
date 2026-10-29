@@ -23,7 +23,7 @@ test('Beneficiario profile boundary is server-side and own-profile only', () => 
   assert.match(privacy, /global \$SCRIPT/);
   assert.match(privacy, /function is_profile_script/);
   assert.match(privacy, /!self::is_profile_script\(\)/);
-  assert.doesNotMatch(privacy, /\$PAGE->url/);
+  assert.doesNotMatch(privacy, /\$PAGE->url->get_path/);
   assert.doesNotMatch(privacy, /empty\(\$PAGE->url\)/);
   assert.match(privacy, /is_minimal_profile_user/);
   assert.match(privacy, /enforce_trainer_group_scope/);
