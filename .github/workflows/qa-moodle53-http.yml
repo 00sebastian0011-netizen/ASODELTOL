@@ -6,6 +6,9 @@ on:
       - '.github/workflows/qa-moodle53-http.yml'
       - 'scripts/qa/profile-http-fixture.php'
       - 'scripts/qa/check-profile-http.py'
+      - 'scripts/qa/af8-full-course-fixture.php'
+      - 'scripts/qa/check-af8-full-course-http.py'
+      - 'catalog/af8/catalog.json'
       - 'plugins/local/asodeltolstaff/**'
   workflow_dispatch:
 
@@ -106,6 +109,13 @@ jobs:
           set -euo pipefail
           php -d max_input_vars=5000 scripts/qa/profile-http-fixture.php
 
+      - name: Crear curso AF8 de simulación aislado (5 UT, 50 páginas, 7 grupos y evaluaciones)
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l scripts/qa/af8-full-course-fixture.php
+          php -d max_input_vars=5000 -d memory_limit=512M scripts/qa/af8-full-course-fixture.php
+
       - name: Levantar Moodle HTTP en localhost del runner
         shell: bash
         run: |
@@ -125,6 +135,22 @@ jobs:
       - name: Ejecutar matriz HTTP autenticada y controles de filtracion PII
         shell: bash
         run: python3 scripts/qa/check-profile-http.py
+
+      - name: Validar HTTP autenticado del curso completo ficticio AF8
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/qa/check-af8-full-course-http.py
+          python3 scripts/qa/check-af8-full-course-http.py
+
+      - name: Publicar resumen de QA sintético sin datos reales
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af8-5ut-synthetic-summary
+          path: qa-af8-full-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Recopilar diagnostico de errores QA (solo sintetico)
         if: failure()
