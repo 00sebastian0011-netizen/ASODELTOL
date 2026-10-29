@@ -1,5 +1,7 @@
 # Roadmap de implementación
 
+> **ACTUALIZACIÓN DE REFERENCIA (29/10/2026).** Este roadmap describe el planteamiento original y contiene estados anteriores al despliegue productivo de Staff 0.7.8 y las pruebas QA del 29/10. Para el trabajo inmediato y la secuencia aprobable de pruebas usar [seguimiento postauditoría](anexo14/SEGUIMIENTO_POSTAUDITORIA_2026-10-29.md), [matriz vigente de pendientes](anexo14/MATRIZ_PENDIENTES_68_2026-10-29.md) y [plan de pruebas](anexo14/PLAN_PRUEBAS_PENDIENTES_2026-10-29.md). La migración descrita aquí no debe repetirse por estar documentada como un pendiente antiguo.
+
 El roadmap usa criterios de salida, no fechas ficticias. Ninguna fase autoriza trabajo en producción por sí misma.
 
 Estado tras Misión 09: el catálogo AF8 sigue validado y el Moodle 5.3 local aislado ya demuestra aprovisionamiento, siete grupos, recorrido funcional, plantilla por backup/restore y exportaciones nativas de participantes, progreso y calificaciones por grupo. El curso original y la edición sintética permanecen ocultos. Esta evidencia no sustituye el inventario, respaldo, migración ni aceptación del entorno de producción.

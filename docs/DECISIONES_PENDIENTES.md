@@ -1,5 +1,7 @@
 # Decisiones pendientes
 
+> **SEGUIMIENTO VIGENTE (29/10/2026).** Las decisiones DP de este registro conservan su **estado histórico**, que no debe darse por cerrado ni abierto sin verificación. El informe del VPS reporta Staff 0.7.8 instalado y QA de privacidad PASS, mientras otras decisiones académicas, de asistencia, privacidad institucional y reporte necesitan actas propias. Ver [pendientes postauditoría](anexo14/SEGUIMIENTO_POSTAUDITORIA_2026-10-29.md) y [plan de pruebas](anexo14/PLAN_PRUEBAS_PENDIENTES_2026-10-29.md) antes de actualizar cualquier DP.
+
 No se debe convertir una suposición de esta tabla en código o contenido definitivo. Una decisión cerrada se traslada a una ADR con fecha, responsables, alternativas y consecuencias.
 
 | ID | Prioridad | Decisión necesaria | Evidencia/autoridad requerida | Bloquea | Estado vigente |

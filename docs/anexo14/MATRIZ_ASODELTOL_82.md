@@ -1,5 +1,7 @@
 # Matriz ASODELTOL AF8 — 82 criterios
 
+> **AVISO DE VIGENCIA (29/10/2026).** Este documento y sus cantidades corresponden a la **fotografía histórica del 25/10**: 34 verificados *localmente*, 2 pendientes, 46 bloqueados y 0 aceptaciones formales acreditadas. **No representan el estado actual del VPS después de instalar Staff 0.7.8.** Para pendientes actuales y siguientes pruebas consultar [Seguimiento postauditoría](SEGUIMIENTO_POSTAUDITORIA_2026-10-29.md), [matriz de 68 con acción por ID y los 14 condicionales](MATRIZ_PENDIENTES_68_2026-10-29.md) y [plan de pruebas](PLAN_PRUEBAS_PENDIENTES_2026-10-29.md). No se alteran retrospectivamente las evidencias ni la trazabilidad original.
+
 Actualización del cierre técnico del 25 de octubre de 2026 (America/Bogota). Fuentes e IDs originales conservados. ASOCODEM-AF1 es otra institución; no acredita ASODELTOL.
 
 **34 verificados locales**: 20 históricos conservados y 14 nuevos demostrados en staging. **2 pendientes, 46 bloqueados, 0 aceptaciones oficiales.** Ninguno de estos estados certifica producción.
