@@ -13,6 +13,22 @@ final class hook_callbacks {
     public static function enforce_profile_privacy(
             \core\hook\output\before_standard_head_html_generation $hook): void {
         profile_privacy::enforce_own_profile();
+
+        // If navigating to feedback print preview (e.g. from the Moodle "Vista previa" button),
+        // redirect to the official interactive complete form so beneficiaries and staff can test and submit.
+        global $PAGE;
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        if (strpos($uri, '/mod/feedback/print.php') !== false || ($PAGE->has_set_url() && strpos($PAGE->url->get_path(), '/mod/feedback/print.php') !== false)) {
+            $cmid = optional_param('id', 0, PARAM_INT);
+            if ($cmid > 0) {
+                $courseid = optional_param('courseid', 0, PARAM_INT);
+                $redirectparams = ['id' => $cmid];
+                if ($courseid > 0) {
+                    $redirectparams['courseid'] = $courseid;
+                }
+                redirect(new \moodle_url('/mod/feedback/complete.php', $redirectparams));
+            }
+        }
     }
 
     public static function extend_primary(\core\hook\navigation\primary_extend $hook): void {
