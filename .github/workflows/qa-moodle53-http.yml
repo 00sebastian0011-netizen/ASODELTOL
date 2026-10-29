@@ -1,0 +1,135 @@
+name: QA Moodle 5.3 aislado — perfiles HTTP
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/qa-moodle53-http.yml'
+      - 'scripts/qa/profile-http-fixture.php'
+      - 'scripts/qa/check-profile-http.py'
+      - 'plugins/local/asodeltolstaff/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-http-profiles:
+    name: Moodle 5.3 + MySQL 8.4 + HTTP autenticado
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: QaRootIsolatedOnly2026
+          MYSQL_DATABASE: asodeltolqa
+          MYSQL_USER: qa
+          MYSQL_PASSWORD: QaSqlIsolatedOnly2026
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+    env:
+      ASODELTOL_QA_ONLY: isolated-gh-runner
+      QA_TEST_PASSWORD: QaOnlyUsers_2026!Pass
+      QA_ADMIN_PASS: QaOnlyAdmin_2026!Pass
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Descargar ASODELTOL (sin credenciales persistentes)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Instalar PHP 8.4 y extensiones Moodle
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mysqli, intl, soap, xml, curl, gd, zip, mbstring, sodium, opcache
+          tools: composer:v2
+          ini-values: max_input_vars=5000, memory_limit=512M, post_max_size=96M, upload_max_filesize=80M
+
+      - name: Obtener Moodle 5.3 (sin copiar datos ni configuracion productiva)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch MOODLE_503_STABLE https://github.com/moodle/moodle.git qa-moodle
+          if [ ! -f qa-moodle/vendor/autoload.php ]; then
+            (cd qa-moodle && composer install --no-dev --prefer-dist --no-progress --no-interaction)
+          fi
+          test -f qa-moodle/admin/cli/install.php
+          test -f qa-moodle/public/version.php
+
+      - name: Instalar plugin institucional en el entorno aislado
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp -R plugins/local/asodeltolstaff qa-moodle/public/local/asodeltolstaff
+          php -l qa-moodle/public/local/asodeltolstaff/classes/profile_privacy.php
+          php -l scripts/qa/profile-http-fixture.php
+
+      - name: Instalar Moodle en MySQL QA exclusivo
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -d "$RUNNER_TEMP/asodeltol-qa-data"
+          php -d max_input_vars=5000 -d memory_limit=512M qa-moodle/admin/cli/install.php \
+            --wwwroot=http://127.0.0.1:8053 \
+            --dataroot="$RUNNER_TEMP/asodeltol-qa-data" \
+            --dbtype=mysqli \
+            --dbhost=127.0.0.1 \
+            --dbport=3306 \
+            --dbname=asodeltolqa \
+            --dbuser=qa \
+            --dbpass=QaSqlIsolatedOnly2026 \
+            --fullname="ASODELTOL privacy synthetic QA" \
+            --shortname=QA_ASODELTOL \
+            --adminuser=admin \
+            --adminpass="$QA_ADMIN_PASS" \
+            --adminemail=admin@example.test \
+            --lang=en \
+            --non-interactive \
+            --agree-license \
+            > "$RUNNER_TEMP/asodeltol-moodle-install.log" 2>&1 || {
+              tail -n 100 "$RUNNER_TEMP/asodeltol-moodle-install.log"
+              exit 1
+            }
+          echo "PASS: Moodle QA instalado exclusivamente en el runner GitHub."
+
+      - name: Crear roles, curso, grupos y usuarios QA sinteticos
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -d max_input_vars=5000 scripts/qa/profile-http-fixture.php
+
+      - name: Levantar Moodle HTTP en localhost del runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -d max_input_vars=5000 -S 127.0.0.1:8053 -t qa-moodle/public \
+            > "$RUNNER_TEMP/asodeltol-qa-web.log" 2>&1 &
+          for i in $(seq 1 35); do
+            if curl --silent --fail --max-time 10 http://127.0.0.1:8053/login/index.php >/dev/null; then
+              echo 'PASS: Moodle QA HTTP disponible en 127.0.0.1:8053'
+              exit 0
+            fi
+            sleep 2
+          done
+          tail -n 50 "$RUNNER_TEMP/asodeltol-qa-web.log"
+          exit 1
+
+      - name: Ejecutar matriz HTTP autenticada y controles de filtracion PII
+        shell: bash
+        run: python3 scripts/qa/check-profile-http.py
+
+      - name: Recopilar diagnostico de errores QA (solo sintetico)
+        if: failure()
+        shell: bash
+        run: |
+          echo 'QA database and accounts are ephemeral; not production.'
+          if [ -f "$RUNNER_TEMP/asodeltol-qa-web.log" ]; then
+            tail -n 70 "$RUNNER_TEMP/asodeltol-qa-web.log" | sed -E 's/(password|passwd|token)=[^ &]+/\1=[REDACTED]/gi'
+          fi
