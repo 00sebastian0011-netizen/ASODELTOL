@@ -5,6 +5,8 @@
 >
 > **Fuentes:** [MATRIZ_ASODELTOL_82.md](MATRIZ_ASODELTOL_82.md), [TRAZABILIDAD_82_2026-10-25.json](TRAZABILIDAD_82_2026-10-25.json), preauditoría ASODELTOL de 82 requisitos (24/10), matriz de seguimiento de 68 (26/10), estructura académica AF8 y formulario AF8G1 recibidos para revisión; capturas del 27/10; GitHub/QA al 29/10. **Falta el acta institucional completa de la visita del 27/10**.
 
+> **Actualización posterior del 29/10:** [Simulación técnica de curso AF8 en Moodle 5.3 aislado](SIMULACION_TECNICA_AF8_2026-10-29.md) terminó **65/65 HTTP PASS** más **24/24 QA de perfiles** en [GitHub Actions #40951051892](https://github.com/00sebastian0011-netizen/ASODELTOL/actions/runs/40951051892). El curso ficticio de 5 UT, 50 páginas, siete grupos y cinco tareas no sustituye materiales aprobados ni reetiqueta los estados históricos de los 68 requisitos. Su ejecución fue exclusivamente efímera; no modifica producción.
+
 ## 1. Estado probado y límites
 
 - **Código aprobado:** [`main` `9cda0a937cfa4e27548e519ef6571fa88dd6df4e`](https://github.com/00sebastian0011-netizen/ASODELTOL/commit/9cda0a937cfa4e27548e519ef6571fa88dd6df4e), Staff **0.7.8 / 2026102908**. Según el **informe del agente VPS** aportado, esta versión está instalada tanto en archivos como en base, Moodle actualizó y Nginx/PHP funcionan; la revisión documental no constituye una nueva conexión a Hostinger.
