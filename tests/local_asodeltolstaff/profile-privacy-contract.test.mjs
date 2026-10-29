@@ -14,6 +14,9 @@ test('Beneficiario profile boundary is server-side and own-profile only', () => 
   assert.match(access, /local\/asodeltolstaff:viewminimalprofile/);
   assert.match(access, /'student'\s*=>\s*CAP_ALLOW/);
   assert.match(hooks, /before_standard_head_html_generation/);
+  assert.match(privacy, /user\/view\.php/);
+  assert.match(privacy, /user\/profile\.php/);
+  assert.doesNotMatch(privacy, /optional_param\('course'/);
   assert.match(privacy, /targetid !== \(int\) \$USER->id/);
   assert.match(privacy, /nopermissions/);
   assert.match(privacy, /local\/asodeltolstaff\/profile\.php/);

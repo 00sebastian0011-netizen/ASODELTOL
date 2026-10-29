@@ -14,12 +14,18 @@ final class profile_privacy {
             return;
         }
         $path = trim($PAGE->url->get_path(), '/');
-        if (!in_array($path, ['user/profile.php', 'user/edit.php', 'user/editadvanced.php'], true)) {
+        if (!in_array($path, [
+            'user/view.php',
+            'user/profile.php',
+            'user/edit.php',
+            'user/editadvanced.php',
+        ], true)) {
             return;
         }
 
-        $courseid = optional_param('course', 0, PARAM_INT);
-        if (!self::is_minimal_profile_user($USER->id, $courseid)) {
+        // Never trust a caller-supplied course parameter to decide whether
+        // the viewer is a Beneficiary.
+        if (!self::is_minimal_profile_user($USER->id)) {
             return;
         }
 
@@ -33,15 +39,7 @@ final class profile_privacy {
         redirect(new \moodle_url('/local/asodeltolstaff/profile.php'));
     }
 
-    private static function is_minimal_profile_user(int $userid, int $courseid): bool {
-        global $DB;
-        if ($courseid > 0) {
-            return has_capability(
-                'local/asodeltolstaff:viewminimalprofile',
-                \context_course::instance($courseid),
-                $userid
-            );
-        }
+    private static function is_minimal_profile_user(int $userid): bool {
         $courses = enrol_get_users_courses($userid, true, 'id');
         foreach ($courses as $course) {
             if (has_capability(
