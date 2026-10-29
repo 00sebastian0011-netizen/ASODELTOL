@@ -148,7 +148,7 @@ $gradeitem = [
     'grademax' => 100,
 ];
 $graderesult = grade_update('local_asodeltolstaff', (int) $course->id, 'local',
-    'asodeltolstaff', 0, 0, [(object) [
+    'asodeltolstaff', 0, 0, [$users['benefg1'] => (object) [
         'userid' => (int) $users['benefg1'],
         'rawgrade' => 87,
     ]], $gradeitem);
