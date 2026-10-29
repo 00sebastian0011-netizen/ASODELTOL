@@ -12,7 +12,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 final class profile_privacy {
     private const PATHS = ['user/view.php', 'user/profile.php', 'user/edit.php', 'user/editadvanced.php'];
-    private const TRAINER_ROLES = ['asodeltol_capacitador', 'asodeltol_capacitador_m07'];
+    private const TRAINER_ROLES = ['asodeltol_capacitador', 'asodeltol_capacitador_m07', 'capacitador', 'asodeltol_trainer'];
     private const AUDITOR_ROLES = ['asodeltol_auditor', 'sena'];
 
     public static function control_view_profile(\stdClass $target, ?\stdClass $course = null,
