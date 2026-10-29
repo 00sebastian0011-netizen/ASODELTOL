@@ -137,11 +137,6 @@ qa_enrol($outside, $users['benefoutside'], (int)$student->id);
 qa_enrol($course, $users['trainer'], $trainerrole);
 qa_enrol($course, $users['auditor'], $auditorrole);
 qa_enrol($course, $users['sena'], $senarole);
-// Hidden profile fields are checked in the target user's context, which is a
-// sibling of the course context. The synthetic oversight assignment therefore
-// belongs at system context; course enrolment still limits the plugin scope.
-role_assign($auditorrole, $users['auditor'], context_system::instance()->id);
-role_assign($senarole, $users['sena'], context_system::instance()->id);
 groups_add_member($g1, $users['benefg1']);
 groups_add_member($g2, $users['benefg2']);
 groups_add_member($g1, $users['trainer']);

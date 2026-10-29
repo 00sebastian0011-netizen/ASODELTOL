@@ -185,5 +185,11 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // role, beneficiary status and group membership. No data migrations.
         upgrade_plugin_savepoint(true, 2026102904, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102905) {
+        // Hidden profile fields are rendered only after course-scoped role,
+        // enrolment and group checks. No global personal-data capability,
+        // role assignment or user record is changed by this upgrade.
+        upgrade_plugin_savepoint(true, 2026102905, 'local', 'asodeltolstaff');
+    }
     return true;
 }
