@@ -141,18 +141,16 @@ groups_add_member($g1, $users['trainer']);
 
 // Synthetic grade values exercise Moodle's real gradebook without asserting
 // any institutional evaluation rule or using real learner data.
-$gradeitem = [
+$gradeitem = new grade_item([
+    'courseid' => (int) $course->id,
     'itemname' => 'QA_ONLY_SYNTHETIC_GRADE',
+    'itemtype' => 'manual',
     'gradetype' => GRADE_TYPE_VALUE,
     'grademin' => 0,
     'grademax' => 100,
-];
-$graderesult = grade_update('local_asodeltolstaff', (int) $course->id, 'local',
-    'asodeltolstaff', 0, 0, [$users['benefg1'] => (object) [
-        'userid' => (int) $users['benefg1'],
-        'rawgrade' => 87,
-    ]], $gradeitem);
-if ($graderesult !== GRADE_UPDATE_OK) {
+], false);
+if (!$gradeitem->insert('local_asodeltolstaff') ||
+        !$gradeitem->update_final_grade((int) $users['benefg1'], 87, 'local_asodeltolstaff')) {
     throw new RuntimeException('Unable to seed synthetic Moodle grade');
 }
 
