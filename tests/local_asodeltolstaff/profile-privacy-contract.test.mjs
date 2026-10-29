@@ -18,7 +18,11 @@ test('Beneficiario profile boundary is server-side and own-profile only', () => 
   assert.match(callbacks, /profile_privacy::control_view_profile/);
   assert.doesNotMatch(hooks, /before_standard_head_html_generation/);
   assert.match(privacy, /control_view_profile/);
-  assert.match(privacy, /shared_courses/);
+  assert.match(privacy, /enrol_get_users_courses/);
+  assert.match(privacy, /is_enrolled/);
+  assert.match(privacy, /TRAINER_ROLES/);
+  assert.match(privacy, /AUDITOR_ROLES/);
+  assert.match(privacy, /VIEWPROFILE_PREVENT/);
   assert.match(privacy, /enforce_own_profile/);
   assert.match(privacy, /groups_get_all_groups/);
   assert.match(privacy, /array_intersect_key/);
