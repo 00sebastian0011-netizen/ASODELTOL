@@ -386,7 +386,7 @@ final class satisfaction_survey {
             ]);
 
             if ((int) $existingcm->section !== (int) $sectionrec->id) {
-                moveto_module($existingcm, $sectionrec);
+                \core_courseformat\formatactions::cm($course)->move_end_section($cmid, (int) $sectionrec->id);
             }
         }
 
