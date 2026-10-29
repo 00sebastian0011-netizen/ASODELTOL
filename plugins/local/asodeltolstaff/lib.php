@@ -107,3 +107,16 @@ function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
     // No-op: self-registration is disabled and consent is recorded by the
     // native tool_policy handler after login.
 }
+
+/**
+ * Check institutional profile access immediately after require_login().
+ *
+ * This callback runs before Moodle produces the profile page and after
+ * the native compulsory tool_policy check. It is not an HTML output hook.
+ *
+ * The site must enable forceloginforprofiles so core user/profile.php and
+ * user/view.php always call require_login() for authenticated viewers.
+ */
+function local_asodeltolstaff_after_require_login(): void {
+    \local_asodeltolstaff\profile_privacy::enforce_profile_access();
+}
