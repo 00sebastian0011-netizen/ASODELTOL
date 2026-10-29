@@ -14,27 +14,23 @@ const upgrade = read('plugins/local/asodeltolstaff/db/upgrade.php');
 test('Beneficiario profile boundary is server-side and own-profile only', () => {
   assert.match(access, /local\/asodeltolstaff:viewminimalprofile/);
   assert.match(access, /'student'\s*=>\s*CAP_ALLOW/);
-  assert.match(callbacks, /function local_asodeltolstaff_after_require_login/);
-  assert.match(callbacks, /profile_privacy::enforce_profile_access/);
+  assert.match(callbacks, /function local_asodeltolstaff_control_view_profile/);
+  assert.match(callbacks, /profile_privacy::control_view_profile/);
   assert.doesNotMatch(hooks, /before_standard_head_html_generation/);
-  assert.match(privacy, /function enforce_profile_access/);
-  // Regression: require_login callback precedes $PAGE->url initialisation.
-  // $SCRIPT is populated in Moodle bootstrap, unlike $PAGE->url.
-  assert.match(privacy, /global \$SCRIPT/);
-  assert.match(privacy, /function is_profile_script/);
-  assert.match(privacy, /!self::is_profile_script\(\)/);
-  assert.doesNotMatch(privacy, /\$PAGE->url->get_path/);
-  assert.doesNotMatch(privacy, /empty\(\$PAGE->url\)/);
-  assert.match(privacy, /is_minimal_profile_user/);
-  assert.match(privacy, /enforce_trainer_group_scope/);
+  assert.match(privacy, /control_view_profile/);
+  assert.match(privacy, /shared_courses/);
+  assert.match(privacy, /enforce_own_profile/);
   assert.match(privacy, /groups_get_all_groups/);
   assert.match(privacy, /array_intersect_key/);
-  assert.match(privacy, /moodle\/site:accessallgroups/);
   assert.match(privacy, /user\/view\.php/);
   assert.match(privacy, /user\/profile\.php/);
+  assert.match(read('plugins/local/asodeltolstaff/lib.php'), /control_view_profile/);
+  assert.match(privacy, /VIEWPROFILE_PREVENT/);
+  assert.match(privacy, /VIEWPROFILE_FORCE_ALLOW/);
   assert.doesNotMatch(privacy, /optional_param\('course'/);
-  assert.match(privacy, /targetid !== \(int\) \$USER->id/);
-  assert.match(privacy, /nopermissions/);
+  assert.match(privacy, /target->id/);
+  assert.doesNotMatch(privacy, /ASODELTOL-AF8/);
+  assert.doesNotMatch(privacy, /['"]id['"]\s*=>\s*4/);
   assert.match(privacy, /local\/asodeltolstaff\/profile\.php/);
 });
 

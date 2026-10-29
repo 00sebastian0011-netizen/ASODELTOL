@@ -175,5 +175,10 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // No database, roles or policy changes are required.
         upgrade_plugin_savepoint(true, 2026102902, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102903) {
+        // Profile visibility now uses Moodle's control_view_profile callback;
+        // no role, enrolment, grade or consent records are changed.
+        upgrade_plugin_savepoint(true, 2026102903, 'local', 'asodeltolstaff');
+    }
     return true;
 }
