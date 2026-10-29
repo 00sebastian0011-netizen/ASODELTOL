@@ -102,6 +102,11 @@ foreach ($catalog['units'] as $i => $unit) {
             'format' => FORMAT_HTML,
             'itemid' => 0,
         ];
+        // Moodle page_add_instance() copies page['text'] into content only when
+        // a mod_form object is supplied. CLI add_moduleinfo() supplies none,
+        // so set the persisted native Page fields explicitly.
+        $data->content = $data->page['text'];
+        $data->contentformat = FORMAT_HTML;
         $data->display = 0;
         $data->popupwidth = 620;
         $data->popupheight = 450;
