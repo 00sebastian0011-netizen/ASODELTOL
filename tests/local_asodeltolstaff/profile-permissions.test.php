@@ -29,7 +29,7 @@ namespace {
     $courses = [
         101 => [21], 102 => [21, 22], 103 => [21], 104 => [21], 105 => [],
         106 => [21], 107 => [4], 108 => [21, 4], 109 => [21],
-        110 => [21], 111 => [4], 201 => [21], 202 => [21],
+        110 => [21], 111 => [4], 112 => [21], 113 => [21], 201 => [21], 202 => [21],
         203 => [4], 204 => [22], 300 => [21], 401 => [21, 4],
     ];
     $courseRoles = [
@@ -37,6 +37,7 @@ namespace {
             103 => ['asodeltol_auditor'], 104 => ['sena'],
             106 => ['asodeltol_capacitador_m07'], 108 => ['asodeltol_capacitador'],
             109 => ['editingteacher'], 110 => ['asodeltol_capacitador'],
+            112 => ['capacitador'], 113 => ['asodeltol_trainer'],
             201 => ['student'], 202 => ['student'], 300 => ['editingteacher'],
             401 => ['student']],
         22 => [102 => ['asodeltol_capacitador'], 204 => ['student']],
@@ -44,7 +45,7 @@ namespace {
             111 => ['asodeltol_auditor'], 203 => ['student'], 401 => ['student']],
     ];
     $groups = [
-        21 => [102 => [1], 106 => [1], 108 => [2], 110 => [2],
+        21 => [102 => [1], 106 => [1], 108 => [2], 110 => [2], 112 => [1], 113 => [1],
             201 => [1], 202 => [2], 300 => [1], 401 => [1]],
         22 => [102 => [7], 204 => [7]],
         4 => [108 => [5], 203 => [6], 401 => [5]],
@@ -104,6 +105,8 @@ namespace {
         ['trainer target not enrolled in requested course', 102, 201, 22, -1],
         ['trainer role m07 valid group', 106, 201, 21, 1],
         ['trainer role m07 other group', 106, 202, 21, -1],
+        ['trainer role capacitador alias', 112, 201, 21, 1],
+        ['trainer role asodeltol_trainer alias', 113, 202, 21, -1],
         ['trainer alternate shared course without parameter', 108, 401, null, 1],
         ['trainer only denied scoped course', 108, 401, 21, -1],
         ['trainer authorised second course', 108, 401, 4, 1],
