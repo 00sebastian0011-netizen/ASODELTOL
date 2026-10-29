@@ -120,6 +120,13 @@ groups_add_member($g1, $users['benefg1']);
 groups_add_member($g2, $users['benefg2']);
 groups_add_member($g1, $users['trainer']);
 
+// Confirm synthetic credentials are valid before opening the HTTP session.
+$manualauth = get_auth_plugin('manual');
+if (!$manualauth->user_login('qa_benef_g1', $password)) {
+    throw new RuntimeException('QA manual-auth password validation failed for synthetic user');
+}
+echo 'PASS: synthetic manual-auth password validated locally.\\n';
+
 // Do not print email addresses, password hashes or personal records.
 // This file contains only synthetic IDs in an ephemeral GitHub runner.
 file_put_contents(dirname(__DIR__, 2) . '/qa-ids.json', json_encode([
