@@ -35,4 +35,6 @@ test('SENA is provisioned without assignments by cloning Interventoria role defi
   assert.match(upgrade, /create_role\('SENA', 'sena'/);
   assert.match(upgrade, /role_capabilities/);
   assert.doesNotMatch(upgrade, /role_assignments|role_assign\(/);
+  assert.match(upgrade, /unassign_capability/);
+  assert.doesNotMatch(upgrade, /assign_capability\([^;]*CAP_PROHIBIT/);
 });

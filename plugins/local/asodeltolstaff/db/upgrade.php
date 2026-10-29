@@ -129,27 +129,40 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
                 'moodle/grade:viewall',
                 'local/asodeltolstaff:viewevidence',
             ];
-            $readonlydenies = [
-                'moodle/user:update',
-                'moodle/user:editprofile',
-                'moodle/course:update',
-                'moodle/course:manageactivities',
-                'moodle/grade:edit',
-                'moodle/grade:export',
-                'local/asodeltolstaff:export',
-            ];
             foreach ([$auditor->id, $sena->id] as $roleid) {
                 foreach ($readonlyallows as $capability) {
                     assign_capability($capability, CAP_ALLOW, $roleid,
                         (int) context_system::instance()->id, true);
                 }
-                foreach ($readonlydenies as $capability) {
-                    assign_capability($capability, CAP_PROHIBIT, $roleid,
-                        (int) context_system::instance()->id, true);
-                }
             }
         }
         upgrade_plugin_savepoint(true, 2026102801, 'local', 'asodeltolstaff');
+    }
+    if ($oldversion < 2026102900) {
+        // Do not use CAP_PROHIBIT for supervision roles: Moodle's prohibit
+        // wins across a multi-role account and can suppress an administrator's
+        // legitimate allow. Absence of an allow is the safe read-only default.
+        $auditor = $DB->get_record('role', ['shortname' => 'asodeltol_auditor']);
+        $sena = $DB->get_record('role', ['shortname' => 'sena']);
+        $sensitive = [
+            'moodle/user:update',
+            'moodle/user:editprofile',
+            'moodle/course:update',
+            'moodle/course:manageactivities',
+            'moodle/grade:edit',
+            'moodle/grade:export',
+            'local/asodeltolstaff:export',
+        ];
+        foreach ([$auditor, $sena] as $role) {
+            if (!$role) {
+                continue;
+            }
+            foreach ($sensitive as $capability) {
+                unassign_capability($capability, $role->id,
+                    (int) context_system::instance()->id, false);
+            }
+        }
+        upgrade_plugin_savepoint(true, 2026102900, 'local', 'asodeltolstaff');
     }
     return true;
 }
