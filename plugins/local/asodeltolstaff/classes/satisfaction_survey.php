@@ -240,6 +240,10 @@ final class satisfaction_survey {
         }
 
         $sectionrec = $DB->get_record('course_sections', ['course' => $course->id, 'section' => $targetsection], '*', MUST_EXIST);
+        if ((int) $sectionrec->visible !== 1) {
+            course_update_section($course, $sectionrec, ['visible' => 1]);
+            $sectionrec->visible = 1;
+        }
         $feedbackmodule = $DB->get_record('modules', ['name' => 'feedback'], '*', MUST_EXIST);
 
         // Locate existing survey course module by canonical idnumber or exact title.
@@ -374,20 +378,21 @@ final class satisfaction_survey {
                 'timemodified' => time(),
             ]);
 
+            if ((int) $existingcm->section !== (int) $sectionrec->id) {
+                \core_courseformat\formatactions::cm($course)->move_end_section($cmid, (int) $sectionrec->id);
+            }
+
             $DB->update_record('course_modules', (object) [
                 'id' => $cmid,
                 'idnumber' => self::CM_IDNUMBER,
                 'visible' => 1,
+                'visibleold' => 1,
                 'visibleoncoursepage' => 1,
                 'showdescription' => 0,
                 'completion' => COMPLETION_TRACKING_AUTOMATIC,
                 'completionview' => 0,
                 'availability' => $availabilityjson,
             ]);
-
-            if ((int) $existingcm->section !== (int) $sectionrec->id) {
-                \core_courseformat\formatactions::cm($course)->move_end_section($cmid, (int) $sectionrec->id);
-            }
         }
 
         $itemcount = self::sync_items($feedbackid);
