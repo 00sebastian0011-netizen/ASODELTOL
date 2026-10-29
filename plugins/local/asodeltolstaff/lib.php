@@ -128,3 +128,15 @@ function local_asodeltolstaff_control_view_profile(
 function local_asodeltolstaff_after_require_login(): void {
     \local_asodeltolstaff\profile_privacy::enforce_own_profile();
 }
+
+/**
+ * Compatibility enforcement for profile scripts that skip require_login().
+ *
+ * Moodle 5.3 invokes this legacy callback from the standard-head hook before
+ * registered callbacks. Keeping it alongside db/hooks.php also covers hosts
+ * whose long-lived PHP-FPM workers retain the previous hook discovery map.
+ */
+function local_asodeltolstaff_before_standard_html_head(): string {
+    \local_asodeltolstaff\profile_privacy::enforce_own_profile();
+    return '';
+}
