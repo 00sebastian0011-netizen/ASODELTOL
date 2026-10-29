@@ -8,6 +8,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+import urllib.error
 
 ROOT = "http://127.0.0.1:8053"
 PASSWORD = os.environ["QA_TEST_PASSWORD"]
@@ -65,8 +66,13 @@ def opener_for(user):
     return opener
 
 def fetch(opener, uri):
-    resp = opener.open(ROOT + uri, timeout=60)
-    return resp.status, urllib.parse.urlparse(resp.url).path, text_of(resp)
+    try:
+        resp = opener.open(ROOT + uri, timeout=60)
+        return resp.status, urllib.parse.urlparse(resp.url).path, text_of(resp)
+    except urllib.error.HTTPError as exc:
+        # Moodle deliberately uses 4xx responses for some permission failures;
+        # the response body is required to distinguish denial from a bad route.
+        return exc.code, urllib.parse.urlparse(exc.url).path, text_of(exc)
 
 def check(label, condition, detail):
     global failed
@@ -161,8 +167,9 @@ for role in ["auditor", "sena"]:
     for action, uri in negative_cases:
         try:
             code, path, body = fetch(clients[role], uri)
-            denied = ("nopermissions" in body.lower() or "permission" in body.lower()
-                      or "permis" in body.lower() or "accessdenied" in body.lower())
+            denied = (code in (403, 404) or "nopermissions" in body.lower()
+                      or "permission" in body.lower() or "permis" in body.lower()
+                      or "accessdenied" in body.lower())
             is_download = "QA_EVIDENCE_G01" in body or "sessioncode" in body.lower() and "," in body
             check(f"{role} denied {action}", denied and not is_download,
                   f"HTTP {code} | {path} | denied={denied} download={is_download}")

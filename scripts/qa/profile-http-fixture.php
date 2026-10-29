@@ -53,13 +53,15 @@ function qa_role(string $shortname): int {
     }
     if (in_array($shortname, ['asodeltol_auditor', 'sena'], true)) {
         foreach (['moodle/user:viewhiddendetails', 'moodle/site:accessallgroups',
-                  'moodle/grade:viewall', 'local/asodeltolstaff:viewsessions',
+                  'moodle/grade:viewall', 'gradereport/user:view',
+                  'local/asodeltolstaff:viewsessions',
                   'local/asodeltolstaff:viewall', 'local/asodeltolstaff:viewevidence'] as $capability) {
             assign_capability($capability, CAP_ALLOW, $roleid, $system->id, true);
         }
     }
     if ($shortname === 'asodeltol_capacitador') {
         foreach (['moodle/grade:viewall', 'moodle/grade:manage',
+                  'gradereport/user:view',
                   'local/asodeltolstaff:viewsessions', 'local/asodeltolstaff:manageown',
                   'local/asodeltolstaff:viewevidence'] as $capability) {
             assign_capability($capability, CAP_ALLOW, $roleid, $system->id, true);
@@ -135,6 +137,11 @@ qa_enrol($outside, $users['benefoutside'], (int)$student->id);
 qa_enrol($course, $users['trainer'], $trainerrole);
 qa_enrol($course, $users['auditor'], $auditorrole);
 qa_enrol($course, $users['sena'], $senarole);
+// Hidden profile fields are checked in the target user's context, which is a
+// sibling of the course context. The synthetic oversight assignment therefore
+// belongs at system context; course enrolment still limits the plugin scope.
+role_assign($auditorrole, $users['auditor'], context_system::instance()->id);
+role_assign($senarole, $users['sena'], context_system::instance()->id);
 groups_add_member($g1, $users['benefg1']);
 groups_add_member($g2, $users['benefg2']);
 groups_add_member($g1, $users['trainer']);
@@ -161,7 +168,7 @@ $sessionids = [];
 foreach ([[$g1, 'QA_EVIDENCE_G01'], [$g2, 'QA_EVIDENCE_G02']] as [$groupid, $marker]) {
     $sessionids[] = $DB->insert_record('local_asstaff_session', (object) [
         'courseid' => (int) $course->id,
-        'sectionnum' => 1,
+        'sectionnum' => 0,
         'groupid' => (int) $groupid,
         'trainerid' => (int) $users['trainer'],
         'sessioncode' => $marker,
