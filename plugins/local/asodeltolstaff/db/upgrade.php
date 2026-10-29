@@ -169,5 +169,11 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // No schema or user data is changed in this hotfix.
         upgrade_plugin_savepoint(true, 2026102901, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102902) {
+        // Route detection now uses Moodle's bootstrap $SCRIPT, available
+        // during after_require_login before $PAGE->url is initialised.
+        // No database, roles or policy changes are required.
+        upgrade_plugin_savepoint(true, 2026102902, 'local', 'asodeltolstaff');
+    }
     return true;
 }

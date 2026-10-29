@@ -19,15 +19,10 @@ final class profile_privacy {
     ];
 
     public static function enforce_profile_access(): void {
-        global $PAGE, $USER;
+        global $USER;
 
         if ((defined('CLI_SCRIPT') && CLI_SCRIPT) || !isloggedin() || isguestuser()
-                || is_siteadmin() || empty($PAGE->url)) {
-            return;
-        }
-
-        $path = trim($PAGE->url->get_path(), '/');
-        if (!in_array($path, self::PROFILE_PATHS, true)) {
+                || is_siteadmin() || !self::is_profile_script()) {
             return;
         }
 
@@ -44,6 +39,18 @@ final class profile_privacy {
 
         // Trainers only inspect beneficiaries belonging to their authorised AF8 groups.
         self::enforce_trainer_group_scope((int) $USER->id, $targetid);
+    }
+
+    /**
+     * Identify the executing PHP script before Moodle establishes $PAGE->url.
+     *
+     * Moodle sets $SCRIPT in initialise_fullme() during bootstrap, before
+     * require_login() invokes local plugin callbacks. Never use the caller's
+     * course parameter, REQUEST_URI, or a late output hook for authorisation.
+     */
+    private static function is_profile_script(): bool {
+        global $SCRIPT;
+        return is_string($SCRIPT) && in_array(ltrim($SCRIPT, '/'), self::PROFILE_PATHS, true);
     }
 
     private static function is_minimal_profile_user(int $userid): bool {
