@@ -17,7 +17,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_asodeltolstaff';
-$plugin->version = 2026102906;
+$plugin->version = 2026102907;
 $plugin->requires = 2026100500;
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.7.6';
+$plugin->release = '0.7.7';
