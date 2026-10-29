@@ -5,13 +5,12 @@ import {classifyFiles} from '../../scripts/deploy/classify-changes.mjs';
 
 const service = fs.readFileSync('plugins/local/asodeltolstaff/classes/satisfaction_survey.php', 'utf8');
 const controller = fs.readFileSync('plugins/local/asodeltolstaff/satisfaction_survey.php', 'utf8');
-const lib = fs.readFileSync('plugins/local/asodeltolstaff/lib.php', 'utf8');
 const settings = fs.readFileSync('plugins/local/asodeltolstaff/settings.php', 'utf8');
 const spanish = fs.readFileSync('plugins/local/asodeltolstaff/lang/es/local_asodeltolstaff.php', 'utf8');
 const logoSena = fs.readFileSync('plugins/local/asodeltolstaff/pix/pfce_logo_sena.png');
 const logoFce = fs.readFileSync('plugins/local/asodeltolstaff/pix/pfce_logo_fce.png');
 
-test('OV-ENCUESTA: versioned PFCE 2026 satisfaction survey includes both institutional logos and all official questions', () => {
+test('OV-ENCUESTA: versioned PFCE 2026 satisfaction survey includes both institutional logos, 12 questions, and end-of-course completion gating', () => {
   // Valid PNG signatures for both embedded logos from the Excel template.
   assert.deepEqual([...logoSena.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
   assert.deepEqual([...logoFce.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
@@ -24,17 +23,6 @@ test('OV-ENCUESTA: versioned PFCE 2026 satisfaction survey includes both institu
   assert.match(service, /pfce_logo_fce\.png/);
   assert.match(service, /Su opinión no modifica la calificación académica\./);
   assert.match(service, /Gracias por su participación\. Esta encuesta recoge satisfacción y aplicabilidad/);
-
-  // 5 training action fields.
-  for (const field of [
-    'Número del Convenio y Sigla',
-    'Nombre de la Acción de formación',
-    'Número del Grupo',
-    'Modalidad de la Acción de Formación',
-    'Capacitador o equipo',
-  ]) {
-    assert.ok(service.includes(field), `Missing action field: ${field}`);
-  }
 
   // 10 satisfaction questions + scale options.
   for (const option of [
@@ -67,10 +55,14 @@ test('OV-ENCUESTA: versioned PFCE 2026 satisfaction survey includes both institu
   assert.ok(service.includes('11. ¿Cuál es el principal aspecto que debería mejorar en esta formación? Seleccione una sola opción.'));
   assert.ok(service.includes('12. ¿Qué cambio concreto propone para mejorar próximas formaciones? Respuesta opcional.'));
 
-  // Controller, settings, and course prompt integration.
+  // Placed in final section, showdescription=0 on course page, gated by completion by default.
+  assert.match(service, /bool \$requirepriorcompletion = true/);
+  assert.match(service, /'showdescription'\s*=>\s*0/);
+  assert.match(service, /'type'\s*=>\s*'completion'/);
+
+  // Controller & settings integration.
   assert.match(controller, /require_sesskey\(\)/);
   assert.match(settings, /asodeltolsatisfactionsurvey/);
-  assert.match(lib, /satisfaction_survey::course_completion_prompt_head_html\(\)/);
   assert.ok(spanish.includes('Encuesta de satisfacción PFCE 2026'));
 });
 

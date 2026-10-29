@@ -19,7 +19,7 @@ require_once('../../config.php');
 $courseid = optional_param('courseid', 4, PARAM_INT);
 $action = optional_param('action', '', PARAM_ALPHA);
 $sectionnum = optional_param('sectionnum', -1, PARAM_INT);
-$gated = optional_param('gated', 0, PARAM_BOOL);
+$gated = optional_param('gated', 1, PARAM_BOOL);
 
 require_login();
 $sysctx = context_system::instance();
@@ -74,7 +74,7 @@ $select = new single_select(new moodle_url('/local/asodeltolstaff/satisfaction_s
 $select->set_label(get_string('course') . ': ');
 echo html_writer::div($OUTPUT->render($select), 'mb-3');
 
-echo \local_asodeltolstaff\satisfaction_survey::build_header_html($course, true);
+echo \local_asodeltolstaff\satisfaction_survey::build_header_html($course);
 
 if ($status) {
     $summary = new html_table();
@@ -118,3 +118,4 @@ $formhtml .= html_writer::empty_tag('input', [
 echo html_writer::tag('form', $formhtml, ['method' => 'post', 'action' => $formurl->out(false), 'class' => 'card card-body mb-4']);
 
 echo $OUTPUT->footer();
+
