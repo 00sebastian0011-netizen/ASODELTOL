@@ -59,7 +59,7 @@ function qa_role(string $shortname): int {
 }
 
 function qa_user(string $username, string $firstname, string $city): int {
-    global $password;
+    global $password, $CFG;
     return \core\user::create_user((object)[
         'username' => $username,
         'password' => $password,
@@ -68,6 +68,7 @@ function qa_user(string $username, string $firstname, string $city): int {
         'email' => $username . '@example.test',
         'auth' => 'manual',
         'confirmed' => 1,
+        'mnethostid' => $CFG->mnet_localhost_id,
         'city' => $city,
         'country' => 'CO',
         'maildisplay' => 1,
