@@ -16,7 +16,12 @@ test('Beneficiario profile boundary is server-side and own-profile only', () => 
   assert.match(access, /'student'\s*=>\s*CAP_ALLOW/);
   assert.match(callbacks, /function local_asodeltolstaff_control_view_profile/);
   assert.match(callbacks, /profile_privacy::control_view_profile/);
-  assert.doesNotMatch(hooks, /before_standard_head_html_generation/);
+  // user/profile.php skips require_login() when public profiles are enabled,
+  // so the route-scoped enforcement also has to run before page output.
+  assert.match(hooks, /before_standard_head_html_generation/);
+  assert.match(hooks, /enforce_profile_privacy/);
+  assert.match(read('plugins/local/asodeltolstaff/classes/hook_callbacks.php'),
+    /enforce_profile_privacy[\s\S]*profile_privacy::enforce_own_profile/);
   assert.match(privacy, /control_view_profile/);
   assert.match(privacy, /enrol_get_users_courses/);
   assert.match(privacy, /is_enrolled/);
