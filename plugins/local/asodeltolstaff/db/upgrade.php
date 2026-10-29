@@ -104,5 +104,52 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         set_config('registerauth', '');
         upgrade_plugin_savepoint(true, 2026102700, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102801) {
+        // Create SENA without assignments and clone Interventoria's effective
+        // role definition. No users, enrolments, grades or exports are changed.
+        $auditor = $DB->get_record('role', ['shortname' => 'asodeltol_auditor']);
+        $sena = $DB->get_record('role', ['shortname' => 'sena']);
+        if ($auditor && !$sena) {
+            $senaid = create_role('SENA', 'sena', 'Supervision institucional de solo lectura');
+            $caps = $DB->get_records('role_capabilities', ['roleid' => $auditor->id]);
+            foreach ($caps as $cap) {
+                assign_capability($cap->capability, (int) $cap->permission, $senaid,
+                    (int) $cap->contextid, true);
+            }
+            $sena = $DB->get_record('role', ['id' => $senaid], '*', MUST_EXIST);
+        }
+        if ($auditor && $sena) {
+            // Both supervision roles need the same read-only profile boundary.
+            // These are role definitions only; neither role is assigned here.
+            $readonlyallows = [
+                'moodle/user:viewdetails',
+                'moodle/user:viewhiddendetails',
+                'moodle/course:viewparticipants',
+                'moodle/site:accessallgroups',
+                'moodle/grade:viewall',
+                'local/asodeltolstaff:viewevidence',
+            ];
+            $readonlydenies = [
+                'moodle/user:update',
+                'moodle/user:editprofile',
+                'moodle/course:update',
+                'moodle/course:manageactivities',
+                'moodle/grade:edit',
+                'moodle/grade:export',
+                'local/asodeltolstaff:export',
+            ];
+            foreach ([$auditor->id, $sena->id] as $roleid) {
+                foreach ($readonlyallows as $capability) {
+                    assign_capability($capability, CAP_ALLOW, $roleid,
+                        (int) context_system::instance()->id, true);
+                }
+                foreach ($readonlydenies as $capability) {
+                    assign_capability($capability, CAP_PROHIBIT, $roleid,
+                        (int) context_system::instance()->id, true);
+                }
+            }
+        }
+        upgrade_plugin_savepoint(true, 2026102801, 'local', 'asodeltolstaff');
+    }
     return true;
 }

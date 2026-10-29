@@ -87,4 +87,12 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+    'local/asodeltolstaff:viewminimalprofile' => [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'student' => CAP_ALLOW,
+        ],
+    ],
 ];
