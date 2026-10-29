@@ -1,4 +1,4 @@
-name: QA Moodle 5.3 aislado — perfiles HTTP
+name: QA Moodle 5.3 aislado — Staff 0.7.4 HTTP
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   synthetic-http-profiles:
-    name: Moodle 5.3 + MySQL 8.4 + HTTP autenticado
+    name: Moodle 5.3 + MySQL 8.4 + Staff 0.7.4 HTTP
     runs-on: ubuntu-latest
     timeout-minutes: 35
     services:
@@ -70,6 +70,7 @@ jobs:
           cp -R plugins/local/asodeltolstaff qa-moodle/public/local/asodeltolstaff
           php -l qa-moodle/public/local/asodeltolstaff/classes/profile_privacy.php
           php -l scripts/qa/profile-http-fixture.php
+          grep -Fq "\$plugin->release = '0.7.4';" plugins/local/asodeltolstaff/version.php
 
       - name: Instalar Moodle en MySQL QA exclusivo
         shell: bash

@@ -12,6 +12,7 @@ require_once $CFG->dirroot . '/course/lib.php';
 require_once $CFG->dirroot . '/group/lib.php';
 require_once $CFG->libdir . '/enrollib.php';
 require_once $CFG->libdir . '/accesslib.php';
+require_once $CFG->libdir . '/gradelib.php';
 
 if (getenv('ASODELTOL_QA_ONLY') !== 'isolated-gh-runner' ||
         $CFG->wwwroot !== 'http://127.0.0.1:8053' ||
@@ -51,8 +52,27 @@ function qa_role(string $shortname): int {
         assign_capability($capability, CAP_ALLOW, $roleid, $system->id, true);
     }
     if (in_array($shortname, ['asodeltol_auditor', 'sena'], true)) {
-        foreach (['moodle/user:viewhiddendetails', 'moodle/site:accessallgroups'] as $capability) {
+        foreach (['moodle/user:viewhiddendetails', 'moodle/site:accessallgroups',
+                  'moodle/grade:viewall', 'gradereport/user:view',
+                  'local/asodeltolstaff:viewsessions',
+                  'local/asodeltolstaff:viewall', 'local/asodeltolstaff:viewevidence'] as $capability) {
             assign_capability($capability, CAP_ALLOW, $roleid, $system->id, true);
+        }
+    }
+    if ($shortname === 'asodeltol_capacitador') {
+        foreach (['moodle/grade:viewall', 'moodle/grade:manage',
+                  'gradereport/user:view',
+                  'local/asodeltolstaff:viewsessions', 'local/asodeltolstaff:manageown',
+                  'local/asodeltolstaff:viewevidence'] as $capability) {
+            assign_capability($capability, CAP_ALLOW, $roleid, $system->id, true);
+        }
+    }
+    // Supervisory roles are read-only in this QA contract. Explicit prohibitions
+    // make the negative HTTP cases independent of Moodle archetype defaults.
+    if (in_array($shortname, ['asodeltol_auditor', 'sena'], true)) {
+        foreach (['moodle/grade:manage', 'moodle/grade:edit',
+                  'local/asodeltolstaff:manageown', 'local/asodeltolstaff:export'] as $capability) {
+            assign_capability($capability, CAP_PROHIBIT, $roleid, $system->id, true);
         }
     }
     return $roleid;
@@ -117,9 +137,52 @@ qa_enrol($outside, $users['benefoutside'], (int)$student->id);
 qa_enrol($course, $users['trainer'], $trainerrole);
 qa_enrol($course, $users['auditor'], $auditorrole);
 qa_enrol($course, $users['sena'], $senarole);
+// Hidden profile fields are checked in the target user's context, which is a
+// sibling of the course context. The synthetic oversight assignment therefore
+// belongs at system context; course enrolment still limits the plugin scope.
+role_assign($auditorrole, $users['auditor'], context_system::instance()->id);
+role_assign($senarole, $users['sena'], context_system::instance()->id);
 groups_add_member($g1, $users['benefg1']);
 groups_add_member($g2, $users['benefg2']);
 groups_add_member($g1, $users['trainer']);
+
+// Synthetic grade values exercise Moodle's real gradebook without asserting
+// any institutional evaluation rule or using real learner data.
+$gradeitem = new grade_item([
+    'courseid' => (int) $course->id,
+    'itemname' => 'QA_ONLY_SYNTHETIC_GRADE',
+    'itemtype' => 'manual',
+    'gradetype' => GRADE_TYPE_VALUE,
+    'grademin' => 0,
+    'grademax' => 100,
+], false);
+if (!$gradeitem->insert('local_asodeltolstaff') ||
+        !$gradeitem->update_final_grade((int) $users['benefg1'], 87, 'local_asodeltolstaff')) {
+    throw new RuntimeException('Unable to seed synthetic Moodle grade');
+}
+
+// A plugin session with a harmless example.test reference is the synthetic
+// evidence. Capacitador can only see G01; oversight roles can read all groups.
+$now = time();
+$sessionids = [];
+foreach ([[$g1, 'QA_EVIDENCE_G01'], [$g2, 'QA_EVIDENCE_G02']] as [$groupid, $marker]) {
+    $sessionids[] = $DB->insert_record('local_asstaff_session', (object) [
+        'courseid' => (int) $course->id,
+        'sectionnum' => 0,
+        'groupid' => (int) $groupid,
+        'trainerid' => (int) $users['trainer'],
+        'sessioncode' => $marker,
+        'scheduledstart' => $now + 3600,
+        'scheduledend' => $now + 7200,
+        'reportedstart' => $now + 3600,
+        'reportedend' => $now + 6900,
+        'validationstatus' => 'pending',
+        'evidenceref' => 'https://example.test/' . strtolower($marker),
+        'createdby' => (int) $users['trainer'],
+        'timecreated' => $now,
+        'timemodified' => $now,
+    ]);
+}
 
 // Confirm synthetic credentials are valid before opening the HTTP session.
 $manualauth = get_auth_plugin('manual');
@@ -132,6 +195,6 @@ echo 'PASS: synthetic manual-auth password validated locally.\\n';
 // This file contains only synthetic IDs in an ephemeral GitHub runner.
 file_put_contents(dirname(__DIR__, 2) . '/qa-ids.json', json_encode([
     'course' => $course->id, 'outsidecourse' => $outside->id,
-    'users' => $users,
+    'users' => $users, 'sessions' => $sessionids,
 ], JSON_PRETTY_PRINT));
 echo 'PASS: isolated synthetic Moodle roles, enrolments and groups created.\n';
