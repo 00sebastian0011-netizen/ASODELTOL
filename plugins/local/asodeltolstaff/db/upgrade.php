@@ -180,5 +180,10 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // no role, enrolment, grade or consent records are changed.
         upgrade_plugin_savepoint(true, 2026102903, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102904) {
+        // Institutional profile authorization validates active course enrolment,
+        // role, beneficiary status and group membership. No data migrations.
+        upgrade_plugin_savepoint(true, 2026102904, 'local', 'asodeltolstaff');
+    }
     return true;
 }

@@ -11,6 +11,27 @@ permissions:
   contents: read
 
 jobs:
+  profile-privacy:
+    name: Permisos de perfiles (PHP sin producción)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verificar version PHP
+        run: php --version
+      - name: Sintaxis PHP de privacidad y callbacks
+        run: |
+          php -l plugins/local/asodeltolstaff/classes/profile_privacy.php
+          php -l plugins/local/asodeltolstaff/lib.php
+          php -l plugins/local/asodeltolstaff/version.php
+          php -l plugins/local/asodeltolstaff/db/upgrade.php
+          php -l tests/local_asodeltolstaff/profile-permissions.test.php
+      - name: Probar decisiones reales de autorizacion con dobles de Moodle
+        run: php tests/local_asodeltolstaff/profile-permissions.test.php
+
   catalog-and-repository:
     name: Catalogo y seguridad del repositorio
     runs-on: windows-latest
