@@ -236,3 +236,168 @@
         padding: 1rem;
     }
 }
+
+/* ==========================================================================
+   SENA PFCE 2026 Satisfaction Survey & mod_feedback Modern Visual Experience
+   ========================================================================== */
+
+/* Main survey container */
+.path-mod-feedback #page-content,
+#page-mod-feedback-view #page-content,
+#page-mod-feedback-complete #page-content,
+#page-mod-feedback-print #page-content {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* Institutional banner styling */
+.asodeltol-pfce-survey-header {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Form styling */
+.path-mod-feedback #feedback_complete_form,
+.path-mod-feedback #feedback_print_form {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Question card */
+.path-mod-feedback .feedback_itemlist,
+.path-mod-feedback .fitem.feedback-item-multichoice,
+.path-mod-feedback .fitem.feedback-item-textarea {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 22px 24px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease-in-out;
+}
+
+.path-mod-feedback .feedback_itemlist:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Make question title full width across top of card */
+.path-mod-feedback .feedback_itemlist > .col-md-3 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 0 14px 0 !important;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 12px;
+}
+
+.path-mod-feedback .feedback_itemlist > .col-md-3 p {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: #0f291e !important;
+    line-height: 1.45 !important;
+}
+
+/* Felement full width inside card */
+.path-mod-feedback .feedback_itemlist > .col-md-9 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Radio button option rows */
+.path-mod-feedback .form-check-label {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 6px 0 !important;
+    padding: 12px 18px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background-color: #fafafa !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease-in-out !important;
+    font-size: 0.96rem !important;
+    color: #1e293b !important;
+    line-height: 1.4 !important;
+}
+
+.path-mod-feedback .form-check-label:hover {
+    background-color: #f0fdf4 !important;
+    border-color: #86efac !important;
+    color: #14532d !important;
+}
+
+/* The actual radio input */
+.path-mod-feedback .form-check-label input[type="radio"],
+.path-mod-feedback input[type="radio"].form-check-input {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    margin: 0 14px 0 0 !important;
+    accent-color: #16a34a !important;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+}
+
+/* Highlight card when radio is selected */
+.path-mod-feedback .form-check-label:has(input[type="radio"]:checked) {
+    background-color: #ecfdf5 !important;
+    border-color: #16a34a !important;
+    color: #065f46 !important;
+    font-weight: 600 !important;
+    box-shadow: 0 0 0 1px #16a34a, 0 2px 4px rgba(22, 163, 74, 0.1) !important;
+}
+
+/* Question 12 - Open feedback textarea */
+.path-mod-feedback textarea.form-control,
+.path-mod-feedback .fitem.feedback-item-textarea textarea {
+    width: 100% !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    padding: 14px 16px !important;
+    font-size: 0.95rem !important;
+    min-height: 120px !important;
+    transition: all 0.2s ease !important;
+}
+
+.path-mod-feedback textarea.form-control:focus,
+.path-mod-feedback .fitem.feedback-item-textarea textarea:focus {
+    border-color: #16a34a !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2) !important;
+    outline: none !important;
+}
+
+/* Submit and Action Buttons */
+.path-mod-feedback #id_savevalues {
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    padding: 12px 36px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+.path-mod-feedback #id_savevalues:hover,
+.path-mod-feedback #id_savevalues:focus {
+    background-color: #15803d !important;
+    border-color: #15803d !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 12px -2px rgba(22, 163, 74, 0.35) !important;
+}
+
+.path-mod-feedback #id_cancel {
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
+}

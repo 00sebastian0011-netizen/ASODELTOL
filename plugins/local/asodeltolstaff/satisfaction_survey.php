@@ -14,12 +14,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
+require_once(__DIR__ . '/../../config.php');
 
 $courseid = optional_param('courseid', 4, PARAM_INT);
 $action = optional_param('action', '', PARAM_ALPHA);
 $sectionnum = optional_param('sectionnum', -1, PARAM_INT);
-$gated = optional_param('gated', 1, PARAM_BOOL);
+$gated = optional_param('gated', 0, PARAM_BOOL);
 
 require_login();
 $sysctx = context_system::instance();
