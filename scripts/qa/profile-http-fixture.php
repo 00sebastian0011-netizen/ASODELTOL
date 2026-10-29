@@ -148,7 +148,10 @@ $gradeitem = [
     'grademax' => 100,
 ];
 $graderesult = grade_update('local_asodeltolstaff', (int) $course->id, 'local',
-    'asodeltolstaff', 0, 0, [$users['benefg1'] => ['rawgrade' => 87]], $gradeitem);
+    'asodeltolstaff', 0, 0, [(object) [
+        'userid' => (int) $users['benefg1'],
+        'rawgrade' => 87,
+    ]], $gradeitem);
 if ($graderesult !== GRADE_UPDATE_OK) {
     throw new RuntimeException('Unable to seed synthetic Moodle grade');
 }
