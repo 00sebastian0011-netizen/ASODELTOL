@@ -3,6 +3,18 @@ namespace local_asodeltolstaff;
 
 /** Add a discoverable, native navigation link for authenticated learners. */
 final class hook_callbacks {
+    /**
+     * Enforce the scoped Staff profile before Moodle emits any page output.
+     *
+     * Moodle's user/profile.php does not call require_login() when neither
+     * forceloginforprofiles nor forcelogin is enabled, so after_require_login
+     * alone cannot protect that route.
+     */
+    public static function enforce_profile_privacy(
+            \core\hook\output\before_standard_head_html_generation $hook): void {
+        profile_privacy::enforce_own_profile();
+    }
+
     public static function extend_primary(\core\hook\navigation\primary_extend $hook): void {
         if (!isloggedin() || isguestuser()) {
             return;

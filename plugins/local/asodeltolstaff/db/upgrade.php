@@ -191,5 +191,9 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // role assignment or user record is changed by this upgrade.
         upgrade_plugin_savepoint(true, 2026102905, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102906) {
+        upgrade_plugin_savepoint(true, 2026102906, 'local', 'asodeltolstaff');
+    }
+
     return true;
 }
