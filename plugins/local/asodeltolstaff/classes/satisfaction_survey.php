@@ -147,17 +147,37 @@ final class satisfaction_survey {
      * Build the clean institutional banner HTML with both SENA and FCE logos for the survey intro.
      *
      * @param \stdClass $course Target course record.
+     * @param int|null $cmid Optional course module ID (defaults to survey cmid in course).
      * @return string
      */
-    public static function build_header_html(\stdClass $course): string {
+    public static function build_header_html(\stdClass $course, ?int $cmid = null): string {
+        global $DB;
         $spec = self::specification();
         $senaurl = (new \moodle_url(self::LOGO_SENA_RELPATH))->out(false);
         $fceurl = (new \moodle_url(self::LOGO_FCE_RELPATH))->out(false);
 
-        return '<div class="asodeltol-pfce-survey-header" style="border:1px solid #cbd5e1;border-radius:10px;'
-            . 'background:#ffffff;padding:16px 20px;margin-bottom:8px;">'
+        if ($cmid === null) {
+            $feedbackmodule = $DB->get_record('modules', ['name' => 'feedback'], 'id');
+            if ($feedbackmodule) {
+                $cm = $DB->get_record('course_modules', [
+                    'course' => $course->id,
+                    'module' => $feedbackmodule->id,
+                    'idnumber' => self::CM_IDNUMBER,
+                ], 'id');
+                $cmid = $cm ? (int) $cm->id : 50;
+            } else {
+                $cmid = 50;
+            }
+        }
+        $completeurl = (new \moodle_url('/mod/feedback/complete.php', [
+            'id' => $cmid,
+            'courseid' => $course->id,
+        ]))->out(false);
+
+        return '<div class="asodeltol-pfce-survey-header" style="border:1.5px solid #cbd5e1;border-radius:12px;'
+            . 'background:#ffffff;padding:20px 24px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.04);">'
             . '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;'
-            . 'border-bottom:1px solid #e2e8f0;padding-bottom:12px;margin-bottom:10px;">'
+            . 'border-bottom:1px solid #e2e8f0;padding-bottom:14px;margin-bottom:12px;">'
             . '<img src="' . $senaurl . '" alt="Logo SENA" style="height:60px;width:auto;object-fit:contain;" />'
             . '<div style="flex:1;min-width:240px;text-align:center;line-height:1.35;color:#0f291e;">'
             . '<div style="font-weight:800;font-size:0.92rem;">SERVICIO NACIONAL DE APRENDIZAJE</div>'
@@ -168,12 +188,18 @@ final class satisfaction_survey {
             . '</div>'
             . '<img src="' . $fceurl . '" alt="Logo FCE" style="height:60px;width:auto;object-fit:contain;" />'
             . '</div>'
-            . '<p style="margin:0 0 6px 0;font-size:0.92rem;color:#14532d;">'
+            . '<p style="margin:0 0 8px 0;font-size:0.95rem;color:#14532d;line-height:1.45;">'
             . '<strong>Objetivo:</strong> conocer su satisfacción con la formación recibida e identificar '
             . 'oportunidades de mejora. Responda al finalizar la formación de este grupo. '
             . 'Su opinión no modifica la calificación académica.</p>'
-            . '<p style="margin:0;font-size:0.88rem;color:#334155;">'
+            . '<p style="margin:0 0 14px 0;font-size:0.90rem;color:#334155;line-height:1.4;">'
             . s($spec['satisfaction_scale_instruction']) . '</p>'
+            . '<div style="text-align:center;margin:14px 0 4px 0;">'
+            . '<a href="' . $completeurl . '" class="btn btn-success btn-lg" style="background:#16a34a;border:none;'
+            . 'border-radius:8px;padding:12px 28px;font-size:1.05rem;font-weight:700;color:#ffffff;display:inline-block;'
+            . 'text-decoration:none;box-shadow:0 4px 6px -1px rgba(22,163,74,0.35);">'
+            . '📝 Responder la Encuesta Oficial de Satisfacción</a>'
+            . '</div>'
             . '</div>';
     }
 
@@ -346,7 +372,7 @@ final class satisfaction_survey {
                 'introeditor' => ['text' => $introhtml, 'format' => FORMAT_HTML, 'itemid' => 0],
                 'anonymous' => defined('FEEDBACK_ANONYMOUS_NO') ? FEEDBACK_ANONYMOUS_NO : 2,
                 'email_notification' => 0,
-                'multiple_submit' => 0,
+                'multiple_submit' => 1,
                 'autonumbering' => 0,
                 'site_after_submit' => '',
                 'page_after_submit' => $aftersubmithtml,
@@ -370,7 +396,7 @@ final class satisfaction_survey {
                 'intro' => $introhtml,
                 'introformat' => FORMAT_HTML,
                 'anonymous' => defined('FEEDBACK_ANONYMOUS_NO') ? FEEDBACK_ANONYMOUS_NO : 2,
-                'multiple_submit' => 0,
+                'multiple_submit' => 1,
                 'autonumbering' => 0,
                 'page_after_submit' => $aftersubmithtml,
                 'page_after_submitformat' => FORMAT_HTML,
@@ -433,7 +459,7 @@ final class satisfaction_survey {
                 'typ' => 'multichoice',
                 'hasvalue' => 1,
                 'required' => 1,
-                'options' => 'h',
+                'options' => '',
             ];
         }
 
@@ -446,7 +472,7 @@ final class satisfaction_survey {
             'typ' => 'multichoice',
             'hasvalue' => 1,
             'required' => 1,
-            'options' => 'h',
+            'options' => '',
         ];
 
         // Question 12 (Optional open-ended concrete proposal).

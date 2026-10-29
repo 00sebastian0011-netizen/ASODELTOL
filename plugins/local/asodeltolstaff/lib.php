@@ -127,6 +127,21 @@ function local_asodeltolstaff_control_view_profile(
 
 function local_asodeltolstaff_after_require_login(): void {
     \local_asodeltolstaff\profile_privacy::enforce_own_profile();
+
+    // If navigating to feedback print preview (e.g. from the Moodle "Vista previa" button),
+    // redirect to the official interactive complete form so beneficiaries and staff can test and submit.
+    $uri = $_SERVER['REQUEST_URI'] ?? '';
+    if (strpos($uri, '/mod/feedback/print.php') !== false) {
+        $cmid = optional_param('id', 0, PARAM_INT);
+        if ($cmid > 0) {
+            $courseid = optional_param('courseid', 0, PARAM_INT);
+            $redirectparams = ['id' => $cmid];
+            if ($courseid > 0) {
+                $redirectparams['courseid'] = $courseid;
+            }
+            redirect(new \moodle_url('/mod/feedback/complete.php', $redirectparams));
+        }
+    }
 }
 
 /**
@@ -138,5 +153,15 @@ function local_asodeltolstaff_after_require_login(): void {
  */
 function local_asodeltolstaff_before_standard_html_head(): string {
     \local_asodeltolstaff\profile_privacy::enforce_own_profile();
+
+    global $PAGE;
+    if ($PAGE->has_set_url() && strpos($PAGE->url->get_path(), '/mod/feedback/print.php') !== false) {
+        $cmid = optional_param('id', 0, PARAM_INT);
+        if ($cmid > 0) {
+            $courseid = optional_param('courseid', 0, PARAM_INT);
+            $completeurl = (new \moodle_url('/mod/feedback/complete.php', ['id' => $cmid, 'courseid' => $courseid]))->out(false);
+            return '<script>window.location.replace(' . json_encode($completeurl) . ');</script>';
+        }
+    }
     return '';
 }
