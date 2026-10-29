@@ -117,6 +117,14 @@ function local_asodeltolstaff_post_signup_requests(stdClass $data): void {
  * The site must enable forceloginforprofiles so core user/profile.php and
  * user/view.php always call require_login() for authenticated viewers.
  */
+function local_asodeltolstaff_control_view_profile(
+    stdClass $user,
+    ?stdClass $course = null,
+    ?context $usercontext = null
+): int {
+    return \local_asodeltolstaff\profile_privacy::control_view_profile($user, $course, $usercontext);
+}
+
 function local_asodeltolstaff_after_require_login(): void {
-    \local_asodeltolstaff\profile_privacy::enforce_profile_access();
+    \local_asodeltolstaff\profile_privacy::enforce_own_profile();
 }
