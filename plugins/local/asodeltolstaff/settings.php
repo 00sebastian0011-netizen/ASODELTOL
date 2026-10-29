@@ -19,4 +19,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', new admin_externalpage('asodeltolcredentials',
         get_string('studentcredentials', 'local_asodeltolstaff'),
         new moodle_url('/local/asodeltolstaff/credentials.php')));
+    $ADMIN->add('localplugins', new admin_externalpage('asodeltolsatisfactionsurvey',
+        get_string('satisfactionsurvey', 'local_asodeltolstaff'),
+        new moodle_url('/local/asodeltolstaff/satisfaction_survey.php')));
 }

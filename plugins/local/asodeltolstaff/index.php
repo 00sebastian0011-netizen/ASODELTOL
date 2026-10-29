@@ -88,6 +88,11 @@ if (has_capability('moodle/site:config', context_system::instance())) {
         get_string('studentcredentials', 'local_asodeltolstaff'),
         'get'
     );
+    $buttons[] = $OUTPUT->single_button(
+        new moodle_url('/local/asodeltolstaff/satisfaction_survey.php', ['courseid' => $courseid]),
+        get_string('satisfactionsurvey', 'local_asodeltolstaff'),
+        'get'
+    );
 }
 if ($buttons) {
     echo html_writer::div(implode(' ', $buttons), 'mb-3');
