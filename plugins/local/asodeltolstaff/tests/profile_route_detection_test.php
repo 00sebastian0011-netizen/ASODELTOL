@@ -21,6 +21,7 @@ final class profile_route_detection_test extends \basic_testcase {
                 '/user/profile.php',
                 '/user/edit.php',
                 '/user/editadvanced.php',
+                '/public/user/profile.php',
             ] as $script) {
                 $SCRIPT = $script;
                 $this->assertTrue($method->invoke(null), $script . ' must be guarded');

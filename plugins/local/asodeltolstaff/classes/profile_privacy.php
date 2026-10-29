@@ -144,6 +144,12 @@ final class profile_privacy {
     private static function is_profile_script(): bool {
         global $SCRIPT;
         $script = $SCRIPT ?? ($_SERVER['SCRIPT_NAME'] ?? '');
-        return in_array(trim(parse_url((string) $script, PHP_URL_PATH), '/'), self::PATHS, true);
+        $path = trim((string) parse_url((string) $script, PHP_URL_PATH), '/');
+        foreach (self::PATHS as $profilepath) {
+            if ($path === $profilepath || str_ends_with($path, '/' . $profilepath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
