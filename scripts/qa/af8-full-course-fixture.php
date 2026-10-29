@@ -266,7 +266,7 @@ if (!$grade->insert('local_asodeltolstaff') ||
         !$grade->update_final_grade($users['G01'], 87, 'local_asodeltolstaff')) {
     throw new RuntimeException('Synthetic grade could not be stored.');
 }
-rebuild_course_cache($course->id, true);
+rebuild_course_cache((int)$course->id, true);
 
 $sections = $DB->get_records('course_sections', ['course' => $course->id]);
 if (count($sections) !== 6) {
