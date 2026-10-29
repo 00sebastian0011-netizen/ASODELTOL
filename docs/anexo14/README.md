@@ -6,6 +6,8 @@
 2. **[Matriz de pendientes por ID (68 + 14 condicionales)](MATRIZ_PENDIENTES_68_2026-10-29.md):** cada criterio, estado histórico 25/10, evidencia parcial reciente, siguiente comprobación y alcance real.
 3. **[Plan de pruebas por escenarios](PLAN_PRUEBAS_PENDIENTES_2026-10-29.md):** 16 escenarios, puertas de seguridad, casos positivos/negativos, evidencias requeridas y primer lote a ejecutar.
 
+4. **[Simulación técnica AF8 5 UT: 65/65 HTTP PASS](SIMULACION_TECNICA_AF8_2026-10-29.md):** curso ficticio, 50 páginas renderizadas, siete grupos y cinco evaluaciones; sumadas 24/24 pruebas de privacidad preexistentes. Solo demuestra QA aislada, no aprobación institucional ni sincronización del VPS.
+
 ### Fuentes históricas (NO sustituir ni reetiquetar)
 
 - [Matriz histórica de 82 criterios del 25/10](MATRIZ_ASODELTOL_82.md) y [JSON trazable](TRAZABILIDAD_82_2026-10-25.json): **34 verificados locales, 2 pendientes, 46 bloqueados; 0 aceptaciones formales al corte**.
