@@ -180,5 +180,9 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         // no role, enrolment, grade or consent records are changed.
         upgrade_plugin_savepoint(true, 2026102903, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102904) {
+        // Tighten profile authorization: enrolled target and institutional role scope.
+        upgrade_plugin_savepoint(true, 2026102904, 'local', 'asodeltolstaff');
+    }
     return true;
 }

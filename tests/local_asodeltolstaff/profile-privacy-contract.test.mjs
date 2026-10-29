@@ -50,3 +50,24 @@ test('SENA is provisioned without assignments by cloning Interventoria role defi
   assert.match(upgrade, /unassign_capability/);
   assert.doesNotMatch(upgrade, /assign_capability\([^;]*CAP_PROHIBIT/);
 });
+
+test('profile decision matrix blocks beneficiaries and scopes institutional roles', () => {
+  const decide = ({own = false, minimal, enrolled, role, sameGroup = false}) => {
+    if (own) return 'ALLOW';
+    if (minimal) return 'PREVENT';
+    if (!enrolled) return 'DO_NOT_PREVENT';
+    if (role === 'auditor' || role === 'sena') return 'ALLOW';
+    if (role === 'capacitador') return sameGroup ? 'ALLOW' : 'PREVENT';
+    return 'DO_NOT_PREVENT';
+  };
+  assert.equal(decide({minimal: true, enrolled: false}), 'PREVENT');
+  assert.equal(decide({minimal: true, enrolled: true}), 'PREVENT');
+  assert.equal(decide({role: 'capacitador', enrolled: true, sameGroup: true}), 'ALLOW');
+  assert.equal(decide({role: 'capacitador', enrolled: true, sameGroup: false}), 'PREVENT');
+  assert.equal(decide({role: 'auditor', enrolled: true}), 'ALLOW');
+  assert.equal(decide({role: 'sena', enrolled: true}), 'ALLOW');
+  assert.equal(decide({role: 'auditor', enrolled: false}), 'DO_NOT_PREVENT');
+  assert.match(privacy, /is_minimal_viewer/);
+  assert.match(privacy, /is_enrolled/);
+  assert.match(privacy, /asodeltol_trainer/);
+});

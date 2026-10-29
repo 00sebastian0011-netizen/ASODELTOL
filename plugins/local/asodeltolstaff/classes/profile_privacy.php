@@ -15,27 +15,30 @@ final class profile_privacy {
             return \core\user::VIEWPROFILE_FORCE_ALLOW;
         }
         $courses = $course ? [$course] : self::shared_courses((int)$USER->id, (int)$target->id);
-        $sawbeneficiary = false;
+        if (self::is_minimal_viewer((int)$USER->id)) {
+            return \core\user::VIEWPROFILE_PREVENT;
+        }
         foreach ($courses as $candidate) {
+            if (!self::is_enrolled((int)$target->id, (int)$candidate->id)) {
+                continue;
+            }
             $context = \context_course::instance((int)$candidate->id);
             if (has_capability('local/asodeltolstaff:viewminimalprofile', $context, $USER->id)) {
-                $sawbeneficiary = true;
-                continue;
+                return \core\user::VIEWPROFILE_PREVENT;
             }
             $roles = get_user_roles($context, $USER->id, true);
             $shortnames = array_map(static fn($role) => $role->shortname, $roles);
             if (array_intersect($shortnames, ['asodeltol_auditor', 'sena'])) {
                 return \core\user::VIEWPROFILE_FORCE_ALLOW;
             }
-            if (in_array('asodeltol_capacitador', $shortnames, true)) {
+            if (array_intersect($shortnames, ['asodeltol_capacitador', 'capacitador', 'asodeltol_trainer'])) {
                 $viewer = groups_get_all_groups($candidate->id, $USER->id);
                 $subject = groups_get_all_groups($candidate->id, $target->id);
                 return ($viewer && $subject && array_intersect_key($viewer, $subject))
                     ? \core\user::VIEWPROFILE_FORCE_ALLOW : \core\user::VIEWPROFILE_PREVENT;
             }
         }
-        return $sawbeneficiary ? \core\user::VIEWPROFILE_PREVENT
-            : \core\user::VIEWPROFILE_DO_NOT_PREVENT;
+        return \core\user::VIEWPROFILE_DO_NOT_PREVENT;
     }
 
     public static function enforce_own_profile(): void {
@@ -62,5 +65,24 @@ final class profile_privacy {
             enrol_get_users_courses($viewerid, true, 'id'));
         return array_values(array_filter(enrol_get_users_courses($targetid, true, 'id'),
             static fn($course) => in_array((int)$course->id, $viewer, true)));
+    }
+
+    private static function is_minimal_viewer(int $userid): bool {
+        foreach (enrol_get_users_courses($userid, true, 'id') as $course) {
+            if (has_capability('local/asodeltolstaff:viewminimalprofile',
+                    \context_course::instance($course->id), $userid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static function is_enrolled(int $userid, int $courseid): bool {
+        foreach (enrol_get_users_courses($userid, true, 'id') as $course) {
+            if ((int)$course->id === $courseid) {
+                return true;
+            }
+        }
+        return false;
     }
 }
