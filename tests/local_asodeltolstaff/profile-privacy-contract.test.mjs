@@ -31,18 +31,24 @@ test('Beneficiario profile boundary is server-side and own-profile only', () => 
   assert.match(read('plugins/local/asodeltolstaff/lib.php'), /control_view_profile/);
   assert.match(privacy, /VIEWPROFILE_PREVENT/);
   assert.match(privacy, /VIEWPROFILE_FORCE_ALLOW/);
-  assert.doesNotMatch(privacy, /optional_param\('course'/);
+  assert.match(privacy, /optional_param\('course'/);
+  assert.match(privacy, /requestedcourseid/);
   assert.match(privacy, /target->id/);
   assert.doesNotMatch(privacy, /ASODELTOL-AF8/);
   assert.doesNotMatch(privacy, /['"]id['"]\s*=>\s*4/);
   assert.match(privacy, /local\/asodeltolstaff\/profile\.php/);
 });
 
-test('minimal endpoint emits only approved fields', () => {
+test('scoped endpoint emits own minimal fields and course-authorised hidden fields', () => {
   assert.match(endpoint, /numero_documento/);
-  assert.match(endpoint, /fullname\(\$USER\)/);
+  assert.match(endpoint, /fullname\(\$target\)/);
   assert.match(endpoint, /\$USER->email/);
-  assert.doesNotMatch(endpoint, /city|address|fecha_nacimiento|empresa_institucion|direccion_completa/);
+  assert.match(endpoint, /moodle\/user:viewhiddendetails/);
+  assert.match(endpoint, /context_course::instance/);
+  assert.match(endpoint, /profile_privacy::control_view_profile/);
+  assert.match(endpoint, /get_string\('city'\)/);
+  assert.doesNotMatch(endpoint, /address|fecha_nacimiento|empresa_institucion|direccion_completa/);
+  assert.doesNotMatch(upgrade, /role_assign\(/);
 });
 
 test('SENA is provisioned without assignments by cloning Interventoria role definition', () => {

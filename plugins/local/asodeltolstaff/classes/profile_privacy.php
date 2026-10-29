@@ -107,11 +107,36 @@ final class profile_privacy {
                 || is_siteadmin() || !self::is_profile_script()) {
             return;
         }
-        foreach (enrol_get_users_courses($USER->id, true, 'id') as $course) {
+        $courses = enrol_get_users_courses($USER->id, true, 'id');
+        $isbeneficiary = false;
+        $requestedid = optional_param('id', $USER->id, PARAM_INT);
+        foreach ($courses as $course) {
             if (has_capability('local/asodeltolstaff:viewminimalprofile',
-                    \context_course::instance($course->id), $USER->id)
-                    && optional_param('id', $USER->id, PARAM_INT) === (int) $USER->id) {
+                    \context_course::instance($course->id), $USER->id)) {
+                $isbeneficiary = true;
+            }
+            if ($isbeneficiary && $requestedid === (int) $USER->id) {
                 redirect(new \moodle_url('/local/asodeltolstaff/profile.php'));
+            }
+        }
+        if ($isbeneficiary || $requestedid === (int) $USER->id) {
+            return;
+        }
+
+        $target = \core_user::get_user($requestedid, '*', IGNORE_MISSING);
+        if (!$target || !empty($target->deleted)) {
+            return;
+        }
+        $requestedcourseid = optional_param('course', 0, PARAM_INT);
+        $candidates = $requestedcourseid && isset($courses[$requestedcourseid])
+            ? [$courses[$requestedcourseid]] : ($requestedcourseid ? [] : $courses);
+        foreach ($candidates as $course) {
+            if (self::control_view_profile($target, $course,
+                    \context_user::instance((int) $target->id)) === \core\user::VIEWPROFILE_FORCE_ALLOW) {
+                redirect(new \moodle_url('/local/asodeltolstaff/profile.php', [
+                    'id' => (int) $target->id,
+                    'course' => (int) $course->id,
+                ]));
             }
         }
     }
