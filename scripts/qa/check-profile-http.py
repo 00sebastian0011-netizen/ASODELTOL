@@ -54,7 +54,14 @@ def opener_for(user):
     resp = opener.open(ROOT + "/login/index.php", data, timeout=60)
     after = text_of(resp)
     if "name=\"username\"" in after and "name=\"password\"" in after:
-        raise AssertionError(f"{user}: login did not authenticate")
+        cookies = [c.name for c in opener.handlers if hasattr(c, 'cookiejar') for c in c.cookiejar]
+        marker_names = ["invalidlogin", "cookiesnotenabled", "loginerrors", "loginerror",
+                        "forcepasswordchange", "passwordexpired", "notconfirmed", "policy"]
+        flags = {m: m in after.lower() for m in marker_names if m in after.lower()}
+        raise AssertionError(f"{user}: Moodle returned login form after POST; "
+                             f"final_path={urllib.parse.urlparse(resp.url).path} "
+                             f"query={urllib.parse.urlparse(resp.url).query[:40]} "
+                             f"cookies={cookies} flags={flags}")
     return opener
 
 def fetch(opener, uri):
