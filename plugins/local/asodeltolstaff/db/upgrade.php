@@ -164,5 +164,10 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         }
         upgrade_plugin_savepoint(true, 2026102900, 'local', 'asodeltolstaff');
     }
+    if ($oldversion < 2026102901) {
+        // Move the profile gate from a late output hook to after_require_login.
+        // No schema or user data is changed in this hotfix.
+        upgrade_plugin_savepoint(true, 2026102901, 'local', 'asodeltolstaff');
+    }
     return true;
 }
