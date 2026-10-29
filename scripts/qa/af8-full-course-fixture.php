@@ -282,8 +282,10 @@ if (count($cmids) !== 50 || count($groups) !== 7 || count($users) !== 10 || coun
     throw new RuntimeException('Fixture count mismatch.');
 }
 $modules = $DB->count_records('course_modules', ['course' => $course->id]);
-if ($modules !== 56) {
-    throw new RuntimeException('Expected 50 pages, 1 forum, 5 native assignments; got ' . $modules);
+// Moodle creates the standard announcements forum in its general section.
+// Expect 50 Pages + 5 Assignments + 1 QA Forum + 1 Moodle Announcements.
+if ($modules !== 57) {
+    throw new RuntimeException('Expected 57 modules including the default announcements forum; got ' . $modules);
 }
 file_put_contents(dirname(__DIR__, 2) . '/qa-af8-full-ids.json', json_encode([
     'course' => (int)$course->id,
