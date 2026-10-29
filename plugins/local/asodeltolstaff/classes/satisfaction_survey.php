@@ -11,11 +11,13 @@ namespace local_asodeltolstaff;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Institutional provisioning and completion prompt for the SENA PFCE 2026 satisfaction survey (OV-ENCUESTA).
+ * Institutional provisioning for the SENA PFCE 2026 satisfaction survey (OV-ENCUESTA).
  *
  * Implements the official instrument "Modelo_Encuesta_de_Satisfacción_PFCE_-_2026_vf"
- * as a native Moodle mod_feedback activity with both institutional logos (SENA and FCE),
- * non-graded completion upon submission, and optional completion-gated availability.
+ * as a native Moodle mod_feedback activity located in the final section of the course,
+ * gated by prior activity completion so it is only available upon finishing the diplomado,
+ * with both institutional logos (SENA and FCE) in the survey header and ONLY the 12
+ * official survey questions inside the questionnaire form.
  *
  * @package    local_asodeltolstaff
  * @copyright  2026 ASODELTOL
@@ -83,13 +85,6 @@ final class satisfaction_survey {
                 'sena' => self::LOGO_SENA_RELPATH,
                 'fce' => self::LOGO_FCE_RELPATH,
             ],
-            'action_info_fields' => [
-                ['label' => 'info_convenio', 'name' => 'Número del Convenio y Sigla'],
-                ['label' => 'info_accion', 'name' => 'Nombre de la Acción de formación'],
-                ['label' => 'info_grupo', 'name' => 'Número del Grupo'],
-                ['label' => 'info_modalidad', 'name' => 'Modalidad de la Acción de Formación'],
-                ['label' => 'info_capacitador', 'name' => 'Capacitador o equipo'],
-            ],
             'satisfaction_scale_instruction' => 'Seleccione una respuesta por pregunta: 1 = Muy insatisfecho; '
                 . '2 = Insatisfecho; 3 = Ni satisfecho ni insatisfecho; 4 = Satisfecho; 5 = Muy satisfecho. '
                 . 'Si no puede valorarlo, seleccione No aplica / No puedo valorar.',
@@ -149,60 +144,37 @@ final class satisfaction_survey {
     }
 
     /**
-     * Build the institutional banner HTML with both SENA and FCE logos.
+     * Build the clean institutional banner HTML with both SENA and FCE logos for the survey intro.
      *
      * @param \stdClass $course Target course record.
-     * @param bool $includeactionguide Whether to include the section heading for training action fields.
      * @return string
      */
-    public static function build_header_html(\stdClass $course, bool $includeactionguide = false): string {
-        global $CFG, $DB;
+    public static function build_header_html(\stdClass $course): string {
+        $spec = self::specification();
         $senaurl = (new \moodle_url(self::LOGO_SENA_RELPATH))->out(false);
         $fceurl = (new \moodle_url(self::LOGO_FCE_RELPATH))->out(false);
-        $coursename = s(format_string($course->fullname));
 
-        $groups = $DB->get_records('groups', ['courseid' => $course->id], 'id ASC', 'id,name');
-        $groupnames = [];
-        foreach ($groups as $g) {
-            $groupnames[] = s($g->name);
-        }
-        $groupshint = $groupnames ? implode(' · ', $groupnames) : 'Grupo asignado en la plataforma';
-
-        $html = '<div class="asodeltol-pfce-survey-header" style="border:2px solid #14532d;border-radius:12px;'
-            . 'background:#ffffff;padding:18px 20px;margin-bottom:14px;box-shadow:0 4px 14px rgba(20,83,45,0.08);">'
+        return '<div class="asodeltol-pfce-survey-header" style="border:1px solid #cbd5e1;border-radius:10px;'
+            . 'background:#ffffff;padding:16px 20px;margin-bottom:8px;">'
             . '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;'
-            . 'border-bottom:2px solid #dcfce7;padding-bottom:12px;margin-bottom:12px;">'
-            . '<img src="' . $senaurl . '" alt="Logo SENA" style="height:68px;width:auto;object-fit:contain;" />'
+            . 'border-bottom:1px solid #e2e8f0;padding-bottom:12px;margin-bottom:10px;">'
+            . '<img src="' . $senaurl . '" alt="Logo SENA" style="height:60px;width:auto;object-fit:contain;" />'
             . '<div style="flex:1;min-width:240px;text-align:center;line-height:1.35;color:#0f291e;">'
-            . '<div style="font-weight:800;font-size:0.95rem;letter-spacing:0.02em;">SERVICIO NACIONAL DE APRENDIZAJE</div>'
-            . '<div style="font-weight:700;font-size:0.88rem;color:#14532d;">DIRECCIÓN DEL SISTEMA NACIONAL DE FORMACIÓN PARA EL TRABAJO</div>'
-            . '<div style="font-weight:700;font-size:0.84rem;color:#166534;">PROGRAMA DE FORMACIÓN CONTINUA ESPECIALIZADA - CONVOCATORIA DSNFT - 0001 - FCE - 2026</div>'
-            . '<div style="margin-top:6px;font-weight:800;font-size:1.12rem;color:#0b3b24;">'
+            . '<div style="font-weight:800;font-size:0.92rem;">SERVICIO NACIONAL DE APRENDIZAJE</div>'
+            . '<div style="font-weight:700;font-size:0.85rem;color:#14532d;">DIRECCIÓN DEL SISTEMA NACIONAL DE FORMACIÓN PARA EL TRABAJO</div>'
+            . '<div style="font-weight:700;font-size:0.82rem;color:#166534;">PROGRAMA DE FORMACIÓN CONTINUA ESPECIALIZADA - CONVOCATORIA DSNFT - 0001 - FCE - 2026</div>'
+            . '<div style="margin-top:4px;font-weight:800;font-size:1.05rem;color:#0b3b24;">'
             . s(self::SURVEY_NAME) . '</div>'
             . '</div>'
-            . '<img src="' . $fceurl . '" alt="Logo FCE" style="height:68px;width:auto;object-fit:contain;" />'
+            . '<img src="' . $fceurl . '" alt="Logo FCE" style="height:60px;width:auto;object-fit:contain;" />'
             . '</div>'
-            . '<div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:10px 14px;border-radius:6px;'
-            . 'font-size:0.93rem;color:#14532d;">'
+            . '<p style="margin:0 0 6px 0;font-size:0.92rem;color:#14532d;">'
             . '<strong>Objetivo:</strong> conocer su satisfacción con la formación recibida e identificar '
             . 'oportunidades de mejora. Responda al finalizar la formación de este grupo. '
-            . 'Su opinión no modifica la calificación académica.'
+            . 'Su opinión no modifica la calificación académica.</p>'
+            . '<p style="margin:0;font-size:0.88rem;color:#334155;">'
+            . s($spec['satisfaction_scale_instruction']) . '</p>'
             . '</div>';
-
-        if ($includeactionguide) {
-            $html .= '<div style="margin-top:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:12px 14px;">'
-                . '<div style="font-weight:700;color:#0f172a;margin-bottom:4px;">'
-                . 'Información de la acción de formación: Incluir los siguientes aspectos</div>'
-                . '<div style="font-size:0.86rem;color:#334155;line-height:1.45;">'
-                . '<strong>Referencia del programa:</strong> Convenio FCE 2026 — ASODELTOL · '
-                . '<strong>Acción de formación:</strong> ' . $coursename . ' · '
-                . '<strong>Modalidad:</strong> Virtual · '
-                . '<strong>Grupos activos:</strong> ' . $groupshint
-                . '</div></div>';
-        }
-
-        $html .= '</div>';
-        return $html;
     }
 
     /**
@@ -215,31 +187,33 @@ final class satisfaction_survey {
         $senaurl = (new \moodle_url(self::LOGO_SENA_RELPATH))->out(false);
         $fceurl = (new \moodle_url(self::LOGO_FCE_RELPATH))->out(false);
 
-        return '<div class="asodeltol-pfce-survey-thanks" style="border:2px solid #16a34a;border-radius:12px;'
-            . 'background:#f0fdf4;padding:20px;margin:12px 0;text-align:center;">'
-            . '<div style="display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:12px;">'
-            . '<img src="' . $senaurl . '" alt="Logo SENA" style="height:56px;width:auto;object-fit:contain;" />'
-            . '<img src="' . $fceurl . '" alt="Logo FCE" style="height:56px;width:auto;object-fit:contain;" />'
+        return '<div class="asodeltol-pfce-survey-thanks" style="border:1px solid #16a34a;border-radius:10px;'
+            . 'background:#f0fdf4;padding:18px;margin:10px 0;text-align:center;">'
+            . '<div style="display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:10px;">'
+            . '<img src="' . $senaurl . '" alt="Logo SENA" style="height:52px;width:auto;object-fit:contain;" />'
+            . '<img src="' . $fceurl . '" alt="Logo FCE" style="height:52px;width:auto;object-fit:contain;" />'
             . '</div>'
-            . '<h4 style="color:#14532d;font-weight:800;margin-bottom:8px;">'
-            . s(self::SURVEY_NAME) . '</h4>'
-            . '<p style="color:#0f291e;font-size:0.98rem;margin:0 auto;max-width:680px;">'
+            . '<p style="color:#0f291e;font-size:0.95rem;margin:0 auto;max-width:680px;">'
             . s(self::CLOSING_TEXT) . '</p>'
             . '</div>';
     }
 
     /**
-     * Provision or update the official PFCE 2026 satisfaction survey in the given course.
+     * Provision or update the official PFCE 2026 satisfaction survey at the end of the course.
+     *
+     * By default ($sectionnum = null) places the survey in the final section of the course
+     * (MAX(section), e.g. Unidad Temática 5 in Diplomado AF8) and restricts its availability
+     * ($requirepriorcompletion = true) until the learner finishes the course's tracked activities.
      *
      * @param int $courseid Target course ID (e.g. 4 for Diplomado AF8).
-     * @param int|null $sectionnum Target section number (null = last visible section of the course).
+     * @param int|null $sectionnum Target section number (null = final section of the course).
      * @param bool $requirepriorcompletion Whether to gate availability on prior tracked activities.
      * @return array{cmid:int,feedbackid:int,sectionnum:int,items:int,gated:bool,requiredcmids:array<int>}
      */
     public static function provision(
         int $courseid,
         ?int $sectionnum = null,
-        bool $requirepriorcompletion = false
+        bool $requirepriorcompletion = true
     ): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/course/lib.php');
@@ -252,10 +226,15 @@ final class satisfaction_survey {
             $DB->set_field('course', 'enablecompletion', 1, ['id' => $course->id]);
             $course->enablecompletion = 1;
         }
+        if (empty($CFG->enableavailability)) {
+            set_config('enableavailability', 1);
+            $CFG->enableavailability = 1;
+        }
 
+        // Always target the very last section of the course (e.g. Section 5 in AF8) when $sectionnum is null.
         if ($sectionnum === null) {
-            $visible = $DB->get_records('course_sections', ['course' => $course->id, 'visible' => 1], 'section DESC', 'id,section');
-            $targetsection = $visible ? (int) reset($visible)->section : 0;
+            $allsections = $DB->get_records('course_sections', ['course' => $course->id], 'section DESC', 'id,section');
+            $targetsection = $allsections ? (int) reset($allsections)->section : 0;
         } else {
             $targetsection = max(0, $sectionnum);
         }
@@ -285,25 +264,55 @@ final class satisfaction_survey {
             $existingcm = $matches ? reset($matches) : null;
         }
 
-        $introhtml = self::build_header_html($course, false);
+        $introhtml = self::build_header_html($course);
         $aftersubmithtml = self::build_after_submit_html($course);
 
         $requiredcmids = [];
         $availabilityjson = null;
-        if ($requirepriorcompletion && !empty($CFG->enableavailability)) {
+        if ($requirepriorcompletion) {
+            // Ensure the last active academic module in the course (if only the intro video was tracked)
+            // also has view-completion enabled so completing the course unlocks the survey at the end.
+            $existingid = $existingcm ? (int) $existingcm->id : 0;
             $tracked = $DB->get_records_select(
                 'course_modules',
-                'course = :courseid AND visible = 1 AND deletioninprogress = 0 AND completion > 0 AND idnumber <> :idnum',
-                ['courseid' => $course->id, 'idnum' => self::CM_IDNUMBER],
+                'course = :courseid AND visible = 1 AND deletioninprogress = 0 AND completion > 0 AND id <> :selfid',
+                ['courseid' => $course->id, 'selfid' => $existingid],
                 'id ASC',
-                'id'
+                'id,section,completion'
             );
+            if (count($tracked) <= 1) {
+                $sql = "SELECT cm.id, cm.module, m.name AS modname
+                          FROM {course_modules} cm
+                          JOIN {course_sections} cs ON cs.id = cm.section
+                          JOIN {modules} m ON m.id = cm.module
+                         WHERE cm.course = :courseid
+                           AND cm.visible = 1
+                           AND cm.deletioninprogress = 0
+                           AND cm.id <> :selfid
+                           AND cs.section > 0
+                           AND m.name IN ('page', 'glossary', 'resource', 'assign', 'quiz')
+                      ORDER BY cs.section DESC, cm.id DESC";
+                $candidates = $DB->get_records_sql($sql, ['courseid' => $course->id, 'selfid' => $existingid], 0, 1);
+                if ($candidates) {
+                    $lastacademic = reset($candidates);
+                    $DB->update_record('course_modules', (object) [
+                        'id' => (int) $lastacademic->id,
+                        'completion' => COMPLETION_TRACKING_AUTOMATIC,
+                        'completionview' => 1,
+                    ]);
+                }
+                $tracked = $DB->get_records_select(
+                    'course_modules',
+                    'course = :courseid AND visible = 1 AND deletioninprogress = 0 AND completion > 0 AND id <> :selfid',
+                    ['courseid' => $course->id, 'selfid' => $existingid],
+                    'id ASC',
+                    'id,section,completion'
+                );
+            }
+
             $conditions = [];
             $showc = [];
             foreach ($tracked as $tcm) {
-                if ($existingcm && (int) $tcm->id === (int) $existingcm->id) {
-                    continue;
-                }
                 $requiredcmids[] = (int) $tcm->id;
                 $conditions[] = ['type' => 'completion', 'cm' => (int) $tcm->id, 'e' => 1];
                 $showc[] = true;
@@ -323,7 +332,7 @@ final class satisfaction_survey {
                 'visibleoncoursepage' => 1,
                 'groupingid' => 0,
                 'groupmode' => (int) $course->groupmode,
-                'showdescription' => 1,
+                'showdescription' => 0,
                 'completion' => COMPLETION_TRACKING_AUTOMATIC,
                 'completionview' => 0,
                 'completionsubmit' => 1,
@@ -370,7 +379,7 @@ final class satisfaction_survey {
                 'idnumber' => self::CM_IDNUMBER,
                 'visible' => 1,
                 'visibleoncoursepage' => 1,
-                'showdescription' => 1,
+                'showdescription' => 0,
                 'completion' => COMPLETION_TRACKING_AUTOMATIC,
                 'completionview' => 0,
                 'availability' => $availabilityjson,
@@ -381,7 +390,7 @@ final class satisfaction_survey {
             }
         }
 
-        $itemcount = self::sync_items($feedbackid, $course);
+        $itemcount = self::sync_items($feedbackid);
         rebuild_course_cache($course->id, true);
 
         return [
@@ -395,62 +404,21 @@ final class satisfaction_survey {
     }
 
     /**
-     * Synchronize the exact feedback_item rows from the PFCE 2026 specification.
+     * Synchronize ONLY the 12 official survey questions (p1..p12) in feedback_item.
      *
-     * If the feedback instance already has completed responses, updates items in-place by position
-     * so existing feedback_value answers remain linked to their item IDs.
+     * Moodle 5.3 renders feedback->intro (with both SENA and FCE logos and the objective)
+     * in the native activity header, so feedback_item contains strictly the 12 questions.
      *
      * @param int $feedbackid Feedback instance ID.
-     * @param \stdClass $course Course record.
-     * @return int Total number of feedback_item records.
+     * @return int Total number of feedback_item question records (12).
      */
-    private static function sync_items(int $feedbackid, \stdClass $course): int {
+    private static function sync_items(int $feedbackid): int {
         global $DB;
         $spec = self::specification();
 
         $desired = [];
 
-        // 1. Top institutional banner + action info guide.
-        $desired[] = [
-            'name' => '',
-            'label' => '',
-            'presentation' => self::build_header_html($course, true),
-            'typ' => 'label',
-            'hasvalue' => 0,
-            'required' => 0,
-            'options' => '',
-        ];
-
-        // 2..6. Información de la acción de formación (5 fields).
-        foreach ($spec['action_info_fields'] as $field) {
-            $desired[] = [
-                'name' => $field['name'],
-                'label' => $field['label'],
-                'presentation' => '60|255',
-                'typ' => 'textfield',
-                'hasvalue' => 1,
-                'required' => 1,
-                'options' => '',
-            ];
-        }
-
-        // 7. Satisfaction section heading and scale instruction.
-        $desired[] = [
-            'name' => '',
-            'label' => '',
-            'presentation' => '<div style="margin-top:10px;padding:10px 14px;background:#f0fdf4;'
-                . 'border-left:4px solid #15803d;border-radius:6px;">'
-                . '<div style="font-weight:800;color:#14532d;font-size:1rem;">'
-                . 'Satisfacción — preguntas 1 a 10 (Modelo PFCE 2026: Satisfacción — preguntas 1 a 7 y aplicabilidad)</div>'
-                . '<div style="font-size:0.9rem;color:#166534;margin-top:4px;">'
-                . s($spec['satisfaction_scale_instruction']) . '</div></div>',
-            'typ' => 'label',
-            'hasvalue' => 0,
-            'required' => 0,
-            'options' => '',
-        ];
-
-        // 8..17. Questions 1 to 10 (Satisfaction scale).
+        // Questions 1 to 10 (Satisfaction scale).
         $scalepresentation = 'r>>>>>' . implode("\r|", $spec['satisfaction_scale']);
         foreach ($spec['satisfaction_questions'] as $question) {
             $desired[] = [
@@ -464,20 +432,7 @@ final class satisfaction_survey {
             ];
         }
 
-        // 18. Improvement opportunities heading.
-        $desired[] = [
-            'name' => '',
-            'label' => '',
-            'presentation' => '<div style="margin-top:10px;padding:10px 14px;background:#f8fafc;'
-                . 'border-left:4px solid #0f766e;border-radius:6px;">'
-                . '<div style="font-weight:800;color:#0f172a;font-size:1rem;">Oportunidades de mejora</div></div>',
-            'typ' => 'label',
-            'hasvalue' => 0,
-            'required' => 0,
-            'options' => '',
-        ];
-
-        // 19. Question 11 (Single-choice improvement aspect).
+        // Question 11 (Single-choice improvement aspect).
         $improvementpresentation = 'r>>>>>' . implode("\r|", $spec['improvement_choice']['options']);
         $desired[] = [
             'name' => $spec['improvement_choice']['name'],
@@ -489,7 +444,7 @@ final class satisfaction_survey {
             'options' => 'h',
         ];
 
-        // 20. Question 12 (Optional open-ended concrete proposal).
+        // Question 12 (Optional open-ended concrete proposal).
         $desired[] = [
             'name' => $spec['improvement_open']['name'],
             'label' => $spec['improvement_open']['label'],
@@ -500,26 +455,11 @@ final class satisfaction_survey {
             'options' => '',
         ];
 
-        // 21. Closing statement.
-        $desired[] = [
-            'name' => '',
-            'label' => '',
-            'presentation' => '<div style="margin-top:8px;padding:10px 14px;background:#f0fdf4;'
-                . 'border:1px solid #bbf7d0;border-radius:8px;color:#14532d;font-size:0.9rem;">'
-                . s(self::CLOSING_TEXT) . '</div>',
-            'typ' => 'label',
-            'hasvalue' => 0,
-            'required' => 0,
-            'options' => '',
-        ];
-
-        $existing = array_values($DB->get_records('feedback_item', ['feedback' => $feedbackid], 'position ASC, id ASC'));
         $hasresponses = $DB->record_exists('feedback_completed', ['feedback' => $feedbackid]);
-
         if (!$hasresponses) {
             $DB->delete_records('feedback_item', ['feedback' => $feedbackid]);
-            $existing = [];
         }
+        $existing = array_values($DB->get_records('feedback_item', ['feedback' => $feedbackid], 'position ASC, id ASC'));
 
         $position = 1;
         foreach ($desired as $idx => $row) {
@@ -583,81 +523,10 @@ final class satisfaction_survey {
             'items' => (int) $DB->count_records('feedback_item', ['feedback' => $feedback->id]),
             'responses' => (int) $DB->count_records('feedback_completed', ['feedback' => $feedback->id]),
             'gated' => !empty($cm->availability),
+            'availability' => $cm->availability,
             'viewurl' => (new \moodle_url('/mod/feedback/view.php', ['id' => $cm->id]))->out(false),
             'completeurl' => (new \moodle_url('/mod/feedback/complete.php', ['id' => $cm->id]))->out(false),
             'entriesurl' => (new \moodle_url('/mod/feedback/show_entries.php', ['id' => $cm->id]))->out(false),
         ];
-    }
-
-    /**
-     * Render a lightweight, non-intrusive emergent prompt on course view pages
-     * so learners see and can open the PFCE 2026 satisfaction survey upon finishing the course.
-     *
-     * @return string HTML/JS snippet for <head> or empty string when not applicable.
-     */
-    public static function course_completion_prompt_head_html(): string {
-        global $DB, $PAGE, $USER;
-        if (!isloggedin() || isguestuser() || empty($PAGE->course->id) || (int) $PAGE->course->id === SITEID) {
-            return '';
-        }
-        $script = $PAGE->url->get_path();
-        if (!str_ends_with($script, '/course/view.php')) {
-            return '';
-        }
-        $status = self::status((int) $PAGE->course->id);
-        if (!$status) {
-            return '';
-        }
-        $completed = $DB->record_exists('feedback_completed', [
-            'feedback' => $status['feedbackid'],
-            'userid' => (int) $USER->id,
-        ]);
-
-        $payload = [
-            'courseid' => (int) $PAGE->course->id,
-            'cmid' => $status['cmid'],
-            'title' => self::SURVEY_NAME,
-            'objective' => self::OBJECTIVE_TEXT,
-            'viewurl' => $status['viewurl'],
-            'completeurl' => $status['completeurl'],
-            'senaurl' => (new \moodle_url(self::LOGO_SENA_RELPATH))->out(false),
-            'fceurl' => (new \moodle_url(self::LOGO_FCE_RELPATH))->out(false),
-            'completed' => $completed,
-        ];
-        $json = json_encode($payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-
-        return <<<HTML
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var data = {$json};
-    if (!data || !data.cmid || document.getElementById('asodeltol-pfce-survey-callout')) {
-        return;
-    }
-    var main = document.querySelector('#region-main .course-content') || document.getElementById('region-main');
-    if (!main) {
-        return;
-    }
-    var card = document.createElement('section');
-    card.id = 'asodeltol-pfce-survey-callout';
-    card.setAttribute('aria-label', data.title);
-    card.style.cssText = 'border:2px solid #15803d;border-radius:14px;background:linear-gradient(135deg,#f0fdf4 0%,#ffffff 100%);'
-        + 'padding:16px 20px;margin:18px 0;box-shadow:0 8px 22px rgba(20,83,45,0.10);display:flex;align-items:center;'
-        + 'justify-content:space-between;gap:16px;flex-wrap:wrap;';
-    var badge = data.completed
-        ? '<span style="display:inline-block;background:#dcfce7;color:#14532d;font-weight:700;padding:6px 12px;border-radius:999px;font-size:0.86rem;">✓ Encuesta diligenciada</span>'
-        : '<a href="' + data.completeurl + '" class="btn btn-success" style="font-weight:700;border-radius:999px;padding:8px 18px;background:#15803d;border-color:#15803d;">Diligenciar encuesta al finalizar</a>';
-    card.innerHTML = '<div style="display:flex;align-items:center;gap:14px;flex:1;min-width:260px;">'
-        + '<img src="' + data.senaurl + '" alt="Logo SENA" style="height:48px;width:auto;object-fit:contain;" />'
-        + '<img src="' + data.fceurl + '" alt="Logo FCE" style="height:48px;width:auto;object-fit:contain;" />'
-        + '<div style="line-height:1.35;">'
-        + '<div style="font-size:0.78rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:0.04em;">Cierre de la acción de formación · SENA PFCE 2026</div>'
-        + '<div style="font-size:1.02rem;font-weight:800;color:#0f291e;"><a href="' + data.viewurl + '" style="color:#0f291e;text-decoration:none;">' + data.title + '</a></div>'
-        + '<div style="font-size:0.86rem;color:#334155;margin-top:2px;">' + data.objective + '</div>'
-        + '</div></div>'
-        + '<div style="display:flex;align-items:center;gap:10px;">' + badge + '</div>';
-    main.appendChild(card);
-});
-</script>
-HTML;
     }
 }

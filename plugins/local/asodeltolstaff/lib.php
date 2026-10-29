@@ -138,5 +138,5 @@ function local_asodeltolstaff_after_require_login(): void {
  */
 function local_asodeltolstaff_before_standard_html_head(): string {
     \local_asodeltolstaff\profile_privacy::enforce_own_profile();
-    return \local_asodeltolstaff\satisfaction_survey::course_completion_prompt_head_html();
+    return '';
 }
