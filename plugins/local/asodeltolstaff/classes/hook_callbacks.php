@@ -29,6 +29,38 @@ final class hook_callbacks {
                 redirect(new \moodle_url('/mod/feedback/complete.php', $redirectparams));
             }
         }
+
+        // Inject course schedule and caducidad toast for AF8 (course 4).
+        if (!empty($PAGE->course) && (int) $PAGE->course->id === 4 && isloggedin() && !isguestuser()) {
+            $toastscript = <<<'JS'
+(function() {
+    if (sessionStorage.getItem('asodeltol_caducidad_toast_shown')) {
+        return;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var toast = document.createElement('div');
+        toast.className = 'asodeltol-floating-toast';
+        toast.innerHTML = '<span class="asodeltol-toast-icon">📅</span>' +
+            '<span class="asodeltol-toast-text"><strong>Cronograma Oficial AF8:</strong> Inicio <strong>03 Nov</strong> &middot; Cierre / Caducidad: <strong>28 Nov 2026</strong></span>' +
+            '<a href="/calendar/view.php?view=month&course=4" class="asodeltol-toast-link">Ver Calendario &rarr;</a>' +
+            '<button type="button" class="asodeltol-toast-close" aria-label="Cerrar">&times;</button>';
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.classList.add('show'); }, 150);
+        function dismiss() {
+            toast.classList.remove('show');
+            setTimeout(function() { toast.remove(); }, 400);
+        }
+        var closeBtn = toast.querySelector('.asodeltol-toast-close');
+        if (closeBtn) { closeBtn.addEventListener('click', dismiss); }
+        var timer = setTimeout(dismiss, 5000);
+        toast.addEventListener('mouseenter', function() { clearTimeout(timer); });
+        toast.addEventListener('mouseleave', function() { timer = setTimeout(dismiss, 2500); });
+        sessionStorage.setItem('asodeltol_caducidad_toast_shown', '1');
+    });
+})();
+JS;
+            $PAGE->requires->js_amd_inline($toastscript);
+        }
     }
 
     public static function extend_primary(\core\hook\navigation\primary_extend $hook): void {

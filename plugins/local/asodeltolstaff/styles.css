@@ -796,3 +796,243 @@
     cursor: pointer !important;
     vertical-align: middle !important;
 }
+
+/* ==========================================================================
+   Course Schedule & Caducidad Banner (Course 4 AF8)
+   ========================================================================== */
+
+.asodeltol-course-schedule-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border: 1.5px solid #86efac;
+    border-radius: 14px;
+    padding: 1.25rem 1.75rem;
+    margin: 1.5rem 0 2rem 0;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+}
+
+.asodeltol-schedule-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.asodeltol-schedule-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+}
+
+.asodeltol-schedule-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.15rem 1.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.asodeltol-schedule-col {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 260px;
+}
+
+.asodeltol-schedule-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.asodeltol-icon-start {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.asodeltol-icon-end {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.asodeltol-schedule-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.asodeltol-schedule-type {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #15803d;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.asodeltol-type-danger {
+    color: #b91c1c !important;
+}
+
+.asodeltol-schedule-val {
+    font-size: 1.05rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0.15rem 0;
+}
+
+.asodeltol-val-danger {
+    color: #991b1b !important;
+}
+
+.asodeltol-schedule-desc {
+    font-size: 0.825rem;
+    color: #64748b;
+}
+
+.asodeltol-schedule-arrow {
+    color: #cbd5e1;
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .asodeltol-schedule-arrow {
+        display: none;
+    }
+}
+
+.asodeltol-schedule-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.asodeltol-schedule-btn {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    color: #16a34a !important;
+    border-color: #16a34a !important;
+}
+
+.asodeltol-schedule-btn:hover {
+    background-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+/* Section 1 Specific Alert */
+.asodeltol-section-schedule-alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 10px;
+    padding: 1rem 1.35rem;
+    margin: 1rem 0 1.5rem 0;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.05);
+}
+
+.asodeltol-section-schedule-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.asodeltol-section-schedule-text {
+    flex: 1;
+    font-size: 0.925rem;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+.asodeltol-section-schedule-text strong {
+    color: #14532d;
+}
+
+.asodeltol-section-schedule-link {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #15803d !important;
+    text-decoration: underline !important;
+    white-space: nowrap;
+}
+
+/* Floating Toast Reminder */
+.asodeltol-floating-toast {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 10050;
+    background: #ffffff;
+    border: 2px solid #16a34a;
+    border-radius: 50px;
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90vw;
+}
+
+.asodeltol-floating-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.asodeltol-toast-icon {
+    font-size: 1.25rem;
+}
+
+.asodeltol-toast-text {
+    font-size: 0.925rem;
+    color: #1e293b;
+}
+
+.asodeltol-toast-link {
+    color: #15803d !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+.asodeltol-toast-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    margin-left: 4px;
+}
+
+.asodeltol-toast-close:hover {
+    color: #334155;
+}
+
