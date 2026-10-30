@@ -1,4 +1,4 @@
-name: QA Moodle 5.3 aislado — Staff 0.7.8 HTTP
+name: QA Moodle 5.3 aislado — Staff HTTP
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   synthetic-http-profiles:
-    name: Moodle 5.3 + MySQL 8.4 + Staff 0.7.8 HTTP
+    name: Moodle 5.3 + MySQL 8.4 + Staff HTTP
     runs-on: ubuntu-latest
     timeout-minutes: 35
     services:
@@ -73,7 +73,19 @@ jobs:
           cp -R plugins/local/asodeltolstaff qa-moodle/public/local/asodeltolstaff
           php -l qa-moodle/public/local/asodeltolstaff/classes/profile_privacy.php
           php -l scripts/qa/profile-http-fixture.php
-          grep -Fq "\$plugin->release = '0.7.8';" plugins/local/asodeltolstaff/version.php
+          php -r '
+            define("MOODLE_INTERNAL", true);
+            define("MATURITY_ALPHA", 50);
+            $plugin = new stdClass();
+            require "plugins/local/asodeltolstaff/version.php";
+            if (($plugin->component ?? null) !== "local_asodeltolstaff"
+                || !is_int($plugin->version ?? null)
+                || !preg_match("/^[0-9]+\\.[0-9]+\\.[0-9]+$/", $plugin->release ?? "")) {
+                fwrite(STDERR, "Invalid local_asodeltolstaff version metadata\n");
+                exit(1);
+            }
+            echo "PASS: Staff {$plugin->release} / {$plugin->version}\n";
+          '
 
       - name: Instalar Moodle en MySQL QA exclusivo
         shell: bash
