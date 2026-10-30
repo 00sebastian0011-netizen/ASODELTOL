@@ -61,6 +61,7 @@ function qa_role(string $shortname): int {
     }
     if ($shortname === 'asodeltol_capacitador') {
         foreach (['moodle/grade:viewall', 'moodle/grade:manage',
+                  'moodle/calendar:managegroupentries',
                   'gradereport/user:view',
                   'local/asodeltolstaff:viewsessions', 'local/asodeltolstaff:manageown',
                   'local/asodeltolstaff:viewevidence'] as $capability) {
