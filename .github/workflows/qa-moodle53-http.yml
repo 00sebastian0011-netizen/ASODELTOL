@@ -6,6 +6,10 @@ on:
       - '.github/workflows/qa-moodle53-http.yml'
       - 'scripts/qa/profile-http-fixture.php'
       - 'scripts/qa/check-profile-http.py'
+      - 'scripts/qa/staff-functional-fixture.php'
+      - 'scripts/qa/identity-race-worker.php'
+      - 'scripts/qa/assert-identity-race.php'
+      - 'scripts/qa/check-staff-functional-http.py'
       - 'scripts/qa/af8-full-course-fixture.php'
       - 'scripts/qa/check-af8-full-course-http.py'
       - 'catalog/af8/catalog.json'
@@ -121,6 +125,22 @@ jobs:
           set -euo pipefail
           php -d max_input_vars=5000 scripts/qa/profile-http-fixture.php
 
+      - name: Validar hora sincrónica, unicidad y rollback con datos ficticios
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l scripts/qa/staff-functional-fixture.php
+          php -l scripts/qa/identity-race-worker.php
+          php -l scripts/qa/assert-identity-race.php
+          php -d max_input_vars=5000 scripts/qa/staff-functional-fixture.php
+          user_a="$(php -r '$i=json_decode(file_get_contents("qa-ids.json"),true); echo $i["raceusers"][0];')"
+          user_b="$(php -r '$i=json_decode(file_get_contents("qa-ids.json"),true); echo $i["raceusers"][1];')"
+          php scripts/qa/identity-race-worker.php "$user_a" > "$RUNNER_TEMP/race-a.txt" & pid_a=$!
+          php scripts/qa/identity-race-worker.php "$user_b" > "$RUNNER_TEMP/race-b.txt" & pid_b=$!
+          wait "$pid_a" || true
+          wait "$pid_b" || true
+          php scripts/qa/assert-identity-race.php "$RUNNER_TEMP/race-a.txt" "$RUNNER_TEMP/race-b.txt"
+
       - name: Crear curso AF8 de simulación aislado (5 UT, 50 páginas, 7 grupos y evaluaciones)
         shell: bash
         run: |
@@ -147,6 +167,13 @@ jobs:
       - name: Ejecutar matriz HTTP autenticada y controles de filtracion PII
         shell: bash
         run: python3 scripts/qa/check-profile-http.py
+
+      - name: Guardar y recargar los nueve campos en la UI autenticada
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/qa/check-staff-functional-http.py
+          python3 scripts/qa/check-staff-functional-http.py
 
       - name: Validar HTTP autenticado del curso completo ficticio AF8
         shell: bash

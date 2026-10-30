@@ -65,13 +65,17 @@ final class identity_registry {
     }
 
     /** Create an account and reserve its document in the same application transaction. */
-    public static function create_user_with_document(array $userdata, string $type, string $number): \stdClass {
+    public static function create_user_with_document(array $userdata, string $type, string $number,
+            string $source = 'create'): \stdClass {
         global $DB;
+        if (!in_array($source, ['create', 'import'], true)) {
+            throw new \invalid_parameter_exception('Invalid account identity source');
+        }
         self::preflight($type, $number);
         $transaction = $DB->start_delegated_transaction();
         try {
             $user = user_create((object)$userdata, false, false);
-            self::bind((int)$user, $type, $number, 'create');
+            self::bind((int)$user, $type, $number, $source);
             $transaction->allow_commit();
             return get_user((int)$user);
         } catch (\Throwable $e) {
@@ -92,7 +96,9 @@ final class identity_registry {
         $users = [];
         try {
             foreach ($rows as $row) {
-                $users[] = self::create_user_with_document($row['user'], $row['doctype'], $row['document']);
+                $users[] = self::create_user_with_document(
+                    $row['user'], $row['doctype'], $row['document'], 'import'
+                );
             }
             $transaction->allow_commit();
             return $users;

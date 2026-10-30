@@ -217,7 +217,7 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         $table->add_field('source', XMLDB_TYPE_CHAR, '12', null, XMLDB_NOTNULL);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_key('userfk', XMLDB_KEY_UNIQUE, ['userid']);
+        $table->add_key('userfk', XMLDB_KEY_FOREIGN_UNIQUE, ['userid'], 'user', ['id']);
         $table->add_index('documentuniq', XMLDB_INDEX_UNIQUE, ['doctype', 'dochash']);
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
@@ -231,7 +231,7 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         $table->add_field('createdby', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_key('eventuniq', XMLDB_KEY_UNIQUE, ['eventid']);
+        $table->add_key('eventuniq', XMLDB_KEY_FOREIGN_UNIQUE, ['eventid'], 'event', ['id']);
         $table->add_index('coursegroupidx', XMLDB_INDEX_NOTUNIQUE, ['courseid', 'groupid']);
         if (!$dbman->table_exists($table)) { $dbman->create_table($table); }
         upgrade_plugin_savepoint(true, 2026103001, 'local', 'asodeltolstaff');

@@ -191,5 +191,7 @@ echo 'PASS: synthetic manual-auth password validated locally.\\n';
 file_put_contents(dirname(__DIR__, 2) . '/qa-ids.json', json_encode([
     'course' => $course->id, 'outsidecourse' => $outside->id,
     'users' => $users, 'sessions' => $sessionids,
+    'groups' => ['g1' => $g1, 'g2' => $g2],
+    'roles' => ['trainer' => $trainerrole, 'auditor' => $auditorrole, 'sena' => $senarole],
 ], JSON_PRETTY_PRINT));
 echo 'PASS: isolated synthetic Moodle roles, enrolments and groups created.\n';
