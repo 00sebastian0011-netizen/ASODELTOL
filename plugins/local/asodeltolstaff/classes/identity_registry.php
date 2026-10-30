@@ -67,14 +67,15 @@ final class identity_registry {
     /** Create an account and reserve its document in the same application transaction. */
     public static function create_user_with_document(array $userdata, string $type, string $number,
             string $source = 'create'): \stdClass {
-        global $DB;
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/user/lib.php');
         if (!in_array($source, ['create', 'import'], true)) {
             throw new \invalid_parameter_exception('Invalid account identity source');
         }
         self::preflight($type, $number);
         $transaction = $DB->start_delegated_transaction();
         try {
-            $user = user_create((object)$userdata, false, false);
+            $user = user_create_user((object)$userdata, false, false);
             self::bind((int)$user, $type, $number, $source);
             $transaction->allow_commit();
             return get_user((int)$user);
