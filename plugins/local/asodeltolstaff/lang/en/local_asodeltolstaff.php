@@ -186,6 +186,7 @@ $string['supportfailed'] = 'The native notification could not be delivered.';
 $string['metadatafields'] = 'ASODELTOL administrative fields';
 $string['adminroleid'] = 'Administrator role identifier';
 $string['auditorroleid'] = 'Oversight role identifier';
+$string['trainingactionform'] = 'Training action details';
 $string['groupavailability'] = 'Group administrative availability';
 $string['groupavailableoption'] = 'Available';
 $string['groupunavailableoption'] = 'Unavailable';

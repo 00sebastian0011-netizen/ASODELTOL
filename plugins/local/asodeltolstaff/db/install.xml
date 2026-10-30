@@ -111,5 +111,33 @@
       </KEYS>
       <INDEXES><INDEX NAME="actoridx" UNIQUE="false" FIELDS="actorid"/></INDEXES>
     </TABLE>
+    <TABLE NAME="local_asstaff_identity" COMMENT="Non-PII document uniqueness registry">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="doctype" TYPE="char" LENGTH="8" NOTNULL="true"/>
+        <FIELD NAME="dochash" TYPE="char" LENGTH="64" NOTNULL="true"/>
+        <FIELD NAME="source" TYPE="char" LENGTH="12" NOTNULL="true"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userfk" TYPE="foreign-unique" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES><INDEX NAME="documentuniq" UNIQUE="true" FIELDS="doctype,dochash"/></INDEXES>
+    </TABLE>
+    <TABLE NAME="local_asstaff_officehour" COMMENT="Evidence metadata for group-scoped consultation events">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="eventid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="evidenceref" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="createdby" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS><KEY NAME="primary" TYPE="primary" FIELDS="id"/><KEY NAME="eventuniq" TYPE="foreign-unique" FIELDS="eventid" REFTABLE="event" REFFIELDS="id"/></KEYS>
+      <INDEXES><INDEX NAME="coursegroupidx" UNIQUE="false" FIELDS="courseid,groupid"/></INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>

@@ -21,14 +21,14 @@ final class office_hours_test extends \advanced_testcase {
         global $DB;
         [$course, $a, $b, $trainer] = $this->fixture();
         $start = time() + HOURSECS;
-        $id = office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://meeting.example.invalid/test');
+        $id = office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://meeting.example.invalid/test', 'https://evidence.example.invalid/action');
         $event = $DB->get_record('event', ['id' => $id], '*', MUST_EXIST);
         $this->assertSame('local_asodeltolstaff', $event->component);
         $this->assertSame('group', $event->eventtype);
         $this->assertEquals($a->id, $event->groupid);
         $this->assertEquals($trainer->id, $event->userid);
         $this->assertEquals(HOURSECS, $event->timeduration);
-        $this->assertSame($id, office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://meeting.example.invalid/test'));
+        $this->assertSame($id, office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://meeting.example.invalid/test', 'https://evidence.example.invalid/action'));
         $this->assertEquals(1, $DB->count_records('event', ['component' => 'local_asodeltolstaff']));
     }
 
@@ -36,13 +36,13 @@ final class office_hours_test extends \advanced_testcase {
         [$course, $a, $b, $trainer] = $this->fixture();
         $this->setUser($trainer);
         $this->expectException(\moodle_exception::class);
-        office_hours::create($course->id, $b->id, $trainer->id, time(), time() + HOURSECS);
+        office_hours::create($course->id, $b->id, $trainer->id, time(), time() + HOURSECS, '', 'https://evidence.example.invalid/action');
     }
 
     public function test_short_consultation_is_rejected_without_writing(): void {
         [$course, $a, $b, $trainer] = $this->fixture();
         $this->expectException(\invalid_parameter_exception::class);
-        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + 30 * MINSECS);
+        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + 30 * MINSECS, '', 'https://evidence.example.invalid/action');
     }
 
     public function test_student_cannot_schedule(): void {
@@ -50,7 +50,7 @@ final class office_hours_test extends \advanced_testcase {
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
         $this->setUser($student);
         $this->expectException(\required_capability_exception::class);
-        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + HOURSECS);
+        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + HOURSECS, '', 'https://evidence.example.invalid/action');
     }
 
     public function test_inactive_trainer_cannot_be_scheduled(): void {
@@ -58,14 +58,14 @@ final class office_hours_test extends \advanced_testcase {
         [$course, $a, $b, $trainer] = $this->fixture();
         $DB->set_field('user', 'suspended', 1, ['id' => $trainer->id]);
         $this->expectException(\moodle_exception::class);
-        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + HOURSECS);
+        office_hours::create($course->id, $a->id, $trainer->id, time(), time() + HOURSECS, '', 'https://evidence.example.invalid/action');
     }
 
     public function test_duplicate_never_silently_overwrites_meeting_details(): void {
         [$course, $a, $b, $trainer] = $this->fixture();
         $start = time();
-        office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS);
+        office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, '', 'https://evidence.example.invalid/action');
         $this->expectException(\invalid_parameter_exception::class);
-        office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://different.example.invalid');
+        office_hours::create($course->id, $a->id, $trainer->id, $start, $start + HOURSECS, 'https://different.example.invalid', 'https://evidence.example.invalid/action');
     }
 }

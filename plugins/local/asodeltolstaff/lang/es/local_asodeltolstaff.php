@@ -190,6 +190,7 @@ $string['supportfailed'] = 'No fue posible entregar la notificación nativa.';
 $string['metadatafields'] = 'Campos administrativos ASODELTOL';
 $string['adminroleid'] = 'Identificador del rol administrador';
 $string['auditorroleid'] = 'Identificador del rol de Interventoría';
+$string['trainingactionform'] = 'Datos de la acción de formación';
 $string['groupavailability'] = 'Disponibilidad administrativa del grupo';
 $string['groupavailableoption'] = 'Disponible';
 $string['groupunavailableoption'] = 'No disponible';

@@ -27,7 +27,7 @@ final class access_report_test extends \advanced_testcase {
                 'userid' => $user->id, 'courseid' => 0, 'timecreated' => 1700000100 + $index,
             ]);
         }
-        office_hours::create($course->id, $a->id, $first->id, 1700000200, 1700000200 + HOURSECS);
+        office_hours::create($course->id, $a->id, $first->id, 1700000200, 1700000200 + HOURSECS, '', 'https://evidence.example.invalid/action');
         return [$course, $a, $b, $first, $second];
     }
 

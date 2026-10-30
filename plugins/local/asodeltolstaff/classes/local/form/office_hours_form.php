@@ -21,6 +21,9 @@ final class office_hours_form extends \moodleform {
             ['defaulttime' => $start + HOURSECS]);
         $form->addElement('url', 'meetingurl', get_string('meetingurl', 'local_asodeltolstaff'));
         $form->setType('meetingurl', PARAM_URL);
+        $form->addElement('url', 'evidenceref', get_string('evidence', 'local_asodeltolstaff'));
+        $form->setType('evidenceref', PARAM_URL);
+        $form->addRule('evidenceref', get_string('required'), 'required');
         $this->add_action_buttons(true, get_string('savechanges'));
     }
 
@@ -28,6 +31,9 @@ final class office_hours_form extends \moodleform {
         $errors = parent::validation($data, $files);
         if ((int) $data['end'] - (int) $data['start'] < HOURSECS) {
             $errors['end'] = get_string('officehoursminimum', 'local_asodeltolstaff');
+        }
+        if (!empty($data['evidenceref']) && parse_url($data['evidenceref'], PHP_URL_SCHEME) !== 'https') {
+            $errors['evidenceref'] = get_string('invalidevidence', 'local_asodeltolstaff');
         }
         return $errors;
     }

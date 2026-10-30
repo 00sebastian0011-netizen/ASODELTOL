@@ -28,7 +28,7 @@ if ($form->is_cancelled()) {
 if ($data = $form->get_data()) {
     require_sesskey();
     \local_asodeltolstaff\office_hours::create($courseid, (int) $data->groupid, (int) $data->trainerid,
-        (int) $data->start, (int) $data->end, (string) $data->meetingurl);
+        (int) $data->start, (int) $data->end, (string) $data->meetingurl, (string)$data->evidenceref);
     redirect(new moodle_url('/calendar/view.php', ['view' => 'month', 'course' => $courseid]));
 }
 echo $OUTPUT->header();

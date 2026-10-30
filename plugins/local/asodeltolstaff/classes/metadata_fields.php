@@ -5,6 +5,16 @@ namespace local_asodeltolstaff;
 final class metadata_fields {
     public static function configure(): array {
         require_capability('moodle/site:config', \context_system::instance());
+        return self::configure_fields();
+    }
+
+    /** Course editors may lazily provision the fixed fields, without site configuration access. */
+    public static function configure_for_context(\context_course $context): array {
+        require_capability('moodle/course:update', $context);
+        return self::configure_fields();
+    }
+
+    private static function configure_fields(): array {
         $result = [];
         foreach (['core_course' => ['course', [
                 'asodeltol_adminroleid' => 'adminroleid', 'asodeltol_auditorroleid' => 'auditorroleid']],
