@@ -203,5 +203,11 @@ function xmldb_local_asodeltolstaff_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2026102908, 'local', 'asodeltolstaff');
     }
 
+    if ($oldversion < 2026103000) {
+        // Register a native message provider and completion observer. This does
+        // not define completion criteria, pass grades, roles or course data.
+        upgrade_plugin_savepoint(true, 2026103000, 'local', 'asodeltolstaff');
+    }
+
     return true;
 }
