@@ -4,7 +4,8 @@ namespace local_asodeltolstaff;
 /** Read-only course/unit progress using native Moodle completion semantics. */
 final class progress_report {
     public static function summary(int $courseid, int $userid): array {
-        global $DB, $USER;
+        global $CFG, $DB, $USER;
+        require_once($CFG->libdir . '/completionlib.php');
         $context = \context_course::instance($courseid);
         require_capability('local/asodeltolstaff:viewsessions', $context);
         if (!is_enrolled($context, $userid)) {

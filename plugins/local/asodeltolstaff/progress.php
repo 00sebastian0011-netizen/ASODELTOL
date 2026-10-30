@@ -1,5 +1,6 @@
 <?php
 require_once('../../config.php');
+require_once($CFG->libdir . '/completionlib.php');
 $courseid = required_param('courseid', PARAM_INT);
 $course = get_course($courseid);
 $context = context_course::instance($courseid);
