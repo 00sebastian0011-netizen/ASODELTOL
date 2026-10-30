@@ -38,6 +38,13 @@ function local_asodeltolstaff_extend_navigation_course(
         null,
         'local_asodeltolstaff'
     );
+    $navigation->add(
+        get_string('gradesandprogress', 'local_asodeltolstaff'),
+        new moodle_url('/local/asodeltolstaff/progress.php', ['courseid' => $course->id]),
+        navigation_node::TYPE_CUSTOM,
+        null,
+        'local_asodeltolstaff_progress'
+    );
 }
 
 /**

@@ -46,6 +46,12 @@ foreach ($data['units'] as $unit) {
     $table->data[] = [s($unit['name']), $unit['completed'] . ' / ' . $unit['total'], $percent($unit['percentage'])];
 }
 echo html_writer::table($table);
+echo html_writer::start_div('mt-3 d-flex gap-2 flex-wrap');
 echo html_writer::link(new moodle_url('/grade/report/user/index.php', ['id' => $courseid, 'userid' => $userid]),
-    get_string('grades'), ['class' => 'btn btn-outline-primary']);
+    get_string('grades'), ['class' => 'btn btn-primary']);
+if (\local_asodeltolstaff\support::recipient() !== null) {
+    echo html_writer::link(new moodle_url('/local/asodeltolstaff/support.php'),
+        get_string('supportchannel', 'local_asodeltolstaff'), ['class' => 'btn btn-outline-secondary']);
+}
+echo html_writer::end_div();
 echo $OUTPUT->footer();
