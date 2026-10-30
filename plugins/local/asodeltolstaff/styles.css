@@ -401,3 +401,398 @@
     padding: 12px 24px !important;
     font-size: 0.95rem !important;
 }
+
+/* ==========================================================================
+   Tool Policy & Data Protection Styling - ASODELTOL Institutional Theme
+   ========================================================================== */
+
+/* Page background and general layout for policy pages */
+#page-admin-tool-policy-view,
+#page-admin-tool-policy-index,
+.path-admin-tool-policy {
+    background-color: #f8fafc !important;
+}
+
+#page-admin-tool-policy-view #page,
+#page-admin-tool-policy-index #page,
+.path-admin-tool-policy #page {
+    background-color: transparent !important;
+}
+
+#page-admin-tool-policy-view #page-content,
+#page-admin-tool-policy-index #page-content,
+.path-admin-tool-policy #page-content {
+    max-width: 980px !important;
+    margin: 2rem auto !important;
+    padding: 0 1rem !important;
+}
+
+#page-admin-tool-policy-view #region-main,
+#page-admin-tool-policy-index #region-main,
+.path-admin-tool-policy #region-main {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03) !important;
+    padding: 2.5rem 3rem !important;
+}
+
+@media (max-width: 768px) {
+    #page-admin-tool-policy-view #page-content,
+    #page-admin-tool-policy-index #page-content,
+    .path-admin-tool-policy #page-content {
+        margin: 1rem auto !important;
+        padding: 0 0.5rem !important;
+    }
+
+    #page-admin-tool-policy-view #region-main,
+    #page-admin-tool-policy-index #region-main,
+    .path-admin-tool-policy #region-main {
+        padding: 1.5rem 1.25rem !important;
+        border-radius: 12px !important;
+    }
+}
+
+/* Page headers */
+.path-admin-tool-policy h2 {
+    color: #14532d !important;
+    font-size: 1.65rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.path-admin-tool-policy h3 {
+    color: #334155 !important;
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+}
+
+.path-admin-tool-policy hr {
+    border: 0 !important;
+    border-top: 1px solid #e2e8f0 !important;
+    margin: 1.75rem 0 !important;
+}
+
+/* Institutional banner */
+.asodeltol-policy-banner {
+    text-align: center;
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.05);
+}
+
+.asodeltol-policy-banner-logos {
+    margin-bottom: 1.25rem;
+}
+
+.asodeltol-policy-logo-img {
+    max-height: 60px;
+    width: auto;
+    object-fit: contain;
+}
+
+.asodeltol-policy-banner-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+}
+
+.asodeltol-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+}
+
+.asodeltol-badge-green {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+.asodeltol-badge-blue {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #7dd3fc;
+}
+
+.asodeltol-badge-amber {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.asodeltol-policy-lead {
+    font-size: 1.05rem;
+    color: #1e293b;
+    font-weight: 600;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Normative Alert */
+.asodeltol-policy-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid #0284c7;
+    border-radius: 10px;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 2rem;
+    color: #334155;
+    font-size: 0.925rem;
+    line-height: 1.55;
+}
+
+.asodeltol-alert-icon {
+    font-size: 1.4rem;
+    color: #0284c7;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+}
+
+.asodeltol-policy-alert strong {
+    display: block;
+    color: #0f172a;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.asodeltol-policy-alert p {
+    margin: 0;
+    color: #475569;
+}
+
+/* Content Section Cards */
+.asodeltol-policy-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.35rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.asodeltol-policy-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+}
+
+.asodeltol-policy-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.asodeltol-policy-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #ecfdf5;
+    color: #16a34a;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.asodeltol-policy-card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #14532d;
+    margin: 0;
+}
+
+.asodeltol-policy-card-body {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #334155;
+}
+
+.asodeltol-policy-card-body p:last-child {
+    margin-bottom: 0;
+}
+
+.asodeltol-policy-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.75rem 0 0 0;
+}
+
+.asodeltol-policy-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.935rem;
+    color: #334155;
+}
+
+.asodeltol-policy-list li i {
+    color: #16a34a;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+/* Contact Support Card */
+.asodeltol-contact-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 10px;
+    padding: 1.15rem 1.4rem;
+    margin-top: 1rem;
+}
+
+.asodeltol-contact-card i {
+    font-size: 1.6rem;
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.asodeltol-contact-email {
+    display: inline-block;
+    color: #15803d !important;
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    text-decoration: underline !important;
+    margin: 0.15rem 0;
+}
+
+.asodeltol-contact-email:hover {
+    color: #166534 !important;
+}
+
+.asodeltol-contact-sub {
+    display: block;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+/* Authorization Card Highlight */
+.asodeltol-policy-card-auth {
+    border: 2px solid #bbf7d0;
+    background: #fcfdfd;
+}
+
+.asodeltol-policy-card-auth .asodeltol-policy-card-icon {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* Action Buttons & Navigation */
+.path-admin-tool-policy .policy_buttons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    margin-top: 2rem !important;
+    padding-top: 1rem !important;
+}
+
+.path-admin-tool-policy .policy_buttons .btn-primary,
+.path-admin-tool-policy #agreedocsform input[type="submit"].btn-primary {
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    padding: 12px 36px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.path-admin-tool-policy .policy_buttons .btn-primary:hover,
+.path-admin-tool-policy .policy_buttons .btn-primary:focus,
+.path-admin-tool-policy #agreedocsform input[type="submit"].btn-primary:hover,
+.path-admin-tool-policy #agreedocsform input[type="submit"].btn-primary:focus {
+    background-color: #15803d !important;
+    border-color: #15803d !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 12px -2px rgba(22, 163, 74, 0.35) !important;
+}
+
+.path-admin-tool-policy .policy_buttons .btn-link {
+    color: #64748b !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+}
+
+.path-admin-tool-policy .policy_buttons .btn-link:hover {
+    color: #1e293b !important;
+    text-decoration: underline !important;
+}
+
+/* Agreement page form elements */
+#page-admin-tool-policy-index .agreedoc-policy {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+#page-admin-tool-policy-index .agreedoc-content .agreedoc-checkbox label,
+#page-admin-tool-policy-index .agreedoc-content .agreedoc-radios label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.85rem !important;
+    padding: 1rem 1.25rem !important;
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    margin-bottom: 0.5rem !important;
+}
+
+#page-admin-tool-policy-index .agreedoc-content .agreedoc-checkbox label:hover,
+#page-admin-tool-policy-index .agreedoc-content .agreedoc-radios label:hover {
+    background: #f0fdf4 !important;
+    border-color: #86efac !important;
+    color: #14532d !important;
+}
+
+#page-admin-tool-policy-index .agreedoc-content input[type="checkbox"],
+#page-admin-tool-policy-index .agreedoc-content input[type="radio"] {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    accent-color: #16a34a !important;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+}

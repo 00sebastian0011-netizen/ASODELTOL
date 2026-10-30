@@ -67,3 +67,15 @@ test('SENA is provisioned without assignments by cloning Interventoria role defi
   assert.match(upgrade, /unassign_capability/);
   assert.doesNotMatch(upgrade, /assign_capability\([^;]*CAP_PROHIBIT/);
 });
+
+test('tool_policy presentation includes institutional cards, badges and responsive container', () => {
+  const styles = read('plugins/local/asodeltolstaff/styles.css');
+  assert.match(styles, /\.path-admin-tool-policy/);
+  assert.match(styles, /\.asodeltol-policy-banner/);
+  assert.match(styles, /\.asodeltol-policy-alert/);
+  assert.match(styles, /\.asodeltol-policy-card/);
+  assert.match(styles, /\.asodeltol-contact-card/);
+  assert.match(styles, /#page-admin-tool-policy-view/);
+  assert.match(styles, /#page-admin-tool-policy-index/);
+});
+
