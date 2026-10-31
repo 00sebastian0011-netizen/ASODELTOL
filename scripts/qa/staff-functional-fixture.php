@@ -9,6 +9,7 @@ require dirname(__DIR__, 2) . '/qa-moodle/config.php';
 global $CFG, $DB;
 require_once $CFG->dirroot . '/group/lib.php';
 require_once $CFG->dirroot . '/user/lib.php';
+require_once $CFG->libdir . '/enrollib.php';
 
 if (getenv('ASODELTOL_QA_ONLY') !== 'isolated-gh-runner' ||
         $CFG->wwwroot !== 'http://127.0.0.1:8053' || $CFG->dbname !== 'asodeltolqa') {
@@ -80,6 +81,19 @@ qa_assert(count($imported) === 1 && $DB->record_exists('local_asstaff_identity',
     ['userid' => $imported[0]->id, 'source' => 'import']), 'REQ-16-03 import path persists one identity');
 
 $assignuserid = \core\user::create_user((object)qa_synthetic_user('qa_identity_assign'), true, true);
+$manual = enrol_get_plugin('manual');
+$instance = null;
+foreach (enrol_get_instances($courseid, true) as $item) {
+    if ($item->enrol === 'manual') {
+        $instance = $item;
+        break;
+    }
+}
+if (!$instance) {
+    throw new RuntimeException('Manual enrolment instance is unavailable for the synthetic assignment user');
+}
+$studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
+$manual->enrol_user($instance, (int)$assignuserid, (int)$studentrole->id);
 \local_asodeltolstaff\identity_registry::assign_group(
     (int)$assignuserid, (int)$groups['g2'], 'TI', 'QA-ASSIGN-0001'
 );
