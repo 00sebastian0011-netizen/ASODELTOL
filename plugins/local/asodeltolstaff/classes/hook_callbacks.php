@@ -16,22 +16,36 @@ final class hook_callbacks {
 
         // If navigating to feedback print preview (e.g. from the Moodle "Vista previa" button),
         // redirect to the official interactive complete form so beneficiaries and staff can test and submit.
-        global $PAGE;
+        global $COURSE, $PAGE;
+        $courseid = (int) ($COURSE->id ?? ($PAGE->course->id ?? 0));
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         if (strpos($uri, '/mod/feedback/print.php') !== false || ($PAGE->has_set_url() && strpos($PAGE->url->get_path(), '/mod/feedback/print.php') !== false)) {
             $cmid = optional_param('id', 0, PARAM_INT);
             if ($cmid > 0) {
-                $courseid = optional_param('courseid', 0, PARAM_INT);
+                $printcourseid = optional_param('courseid', 0, PARAM_INT);
                 $redirectparams = ['id' => $cmid];
-                if ($courseid > 0) {
-                    $redirectparams['courseid'] = $courseid;
+                if ($printcourseid > 0) {
+                    $redirectparams['courseid'] = $printcourseid;
                 }
                 redirect(new \moodle_url('/mod/feedback/complete.php', $redirectparams));
             }
         }
 
+        // When switched to a non-editing role (e.g. Student) in the course, ensure the simulated
+        // preview hides calendar event management actions (edit and delete) to faithfully match real student permissions.
+        if ($courseid > 0 && is_role_switched($courseid)) {
+            $hook->add_html('<style>
+.modal [data-action="edit"],
+.modal [data-action="delete"],
+.event [data-action="edit"],
+.event [data-action="delete"] {
+    display: none !important;
+}
+</style>');
+        }
+
         // Inject course schedule and caducidad toast for AF8 (course 4).
-        if (!empty($PAGE->course) && (int) $PAGE->course->id === 4 && isloggedin() && !isguestuser()) {
+        if ($courseid === 4 && isloggedin() && !isguestuser()) {
             $toastscript = <<<'JS'
 (function() {
     if (sessionStorage.getItem('asodeltol_caducidad_toast_shown')) {
