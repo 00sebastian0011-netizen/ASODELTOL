@@ -5,6 +5,7 @@ import html.parser
 import http.cookiejar
 import json
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -32,8 +33,11 @@ class Form(html.parser.HTMLParser):
                 self.values[a["name"]] = a.get("value", "")
         elif tag == "select" and a.get("name"):
             self._select = a["name"]
-        elif tag == "option" and self._select and "selected" in a:
-            self.values[self._select] = a.get("value", "")
+        elif tag == "option" and self._select:
+            # Browsers submit the first option when no option has an explicit
+            # selected attribute. Mirror that behaviour in the QA client.
+            if self._select not in self.values or "selected" in a:
+                self.values[self._select] = a.get("value", "")
         elif tag == "textarea" and a.get("name"):
             self._textarea = a["name"]
             self._text = []
@@ -88,7 +92,8 @@ expected_fields = ["idnumber", "fullname", "summary_editor[text]", "visible", "s
                    "enddate[day]", "lang", "adminroleid", "auditorroleid"]
 check("REQ-13-02 authenticated form renders nine fields",
       code == 200 and all(field in form.values for field in expected_fields),
-      f"HTTP {code} | {final} | fields={sum(field in form.values for field in expected_fields)}/9")
+      f"HTTP {code} | {final} | fields={sum(field in form.values for field in expected_fields)}/9"
+      f" | missing={','.join(field for field in expected_fields if field not in form.values) or 'none'}")
 
 values = dict(form.values)
 values.update({
@@ -105,8 +110,16 @@ for prefix, value in (("startdate", start), ("enddate", end)):
     values[f"{prefix}[year]"] = str(value.year)
     values[f"{prefix}[hour]"] = "10"
     values[f"{prefix}[minute]"] = "0"
-response = admin.open(ROOT + path, urllib.parse.urlencode(values).encode(), timeout=60)
-posted = response.read().decode(errors="replace")
+try:
+    response = admin.open(ROOT + path, urllib.parse.urlencode(values).encode(), timeout=60)
+    posted = response.read().decode(errors="replace")
+except urllib.error.HTTPError as exc:
+    posted = exc.read().decode(errors="replace")
+    error_text = html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", posted)))
+    raise AssertionError(
+        f"REQ-13-02 POST failed: HTTP {exc.code} | "
+        f"{urllib.parse.urlparse(exc.url).path} | body={error_text[:4000]!r}"
+    ) from exc
 code2, final2, reloaded = get(admin, path)
 persisted = all(marker in reloaded for marker in [
     "QA-REQ-13-02", "QA Synthetic Training Action", "QA_ONLY_REQ_13_02_DESCRIPTION",

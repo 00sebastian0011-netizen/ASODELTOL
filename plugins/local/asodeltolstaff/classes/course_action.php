@@ -19,7 +19,7 @@ final class course_action {
         }
         $transaction = $DB->start_delegated_transaction();
         try {
-            $course = update_course((object)[
+            update_course((object)[
                 'id' => $course->id, 'idnumber' => trim($data->idnumber),
                 'fullname' => trim($data->fullname), 'summary' => $data->summary,
                 'summaryformat' => FORMAT_HTML, 'visible' => (int)$data->visible,
