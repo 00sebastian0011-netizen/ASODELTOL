@@ -5,6 +5,7 @@ import html.parser
 import http.cookiejar
 import json
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -114,9 +115,10 @@ try:
     posted = response.read().decode(errors="replace")
 except urllib.error.HTTPError as exc:
     posted = exc.read().decode(errors="replace")
+    error_text = html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", posted)))
     raise AssertionError(
         f"REQ-13-02 POST failed: HTTP {exc.code} | "
-        f"{urllib.parse.urlparse(exc.url).path} | body={posted[:1000]!r}"
+        f"{urllib.parse.urlparse(exc.url).path} | body={error_text[:4000]!r}"
     ) from exc
 code2, final2, reloaded = get(admin, path)
 persisted = all(marker in reloaded for marker in [
