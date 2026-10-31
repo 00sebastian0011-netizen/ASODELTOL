@@ -75,6 +75,86 @@ final class hook_callbacks {
 JS;
             $PAGE->requires->js_amd_inline($toastscript);
         }
+
+        // Inject inline PDF preview on folder views (mod_folder) in course 4 so learners
+        // can view training materials and CVs directly in the platform without forced downloading.
+        if ($courseid === 4 && (strpos($uri, '/mod/folder/view.php') !== false || ($PAGE->has_set_url() && strpos($PAGE->url->get_path(), '/mod/folder/view.php') !== false))) {
+            $pdfscript = <<<'JS'
+(function() {
+    function initPdfPreview() {
+        var fileList = document.querySelector('.filemanager');
+        if (!fileList || document.querySelector('.asodeltol-pdf-viewer-card')) {
+            return;
+        }
+        var pdfLinks = fileList.querySelectorAll('a[href*=".pdf"]');
+        if (!pdfLinks || pdfLinks.length === 0) {
+            return;
+        }
+        var firstPdf = pdfLinks[0];
+        var pdfUrl = firstPdf.getAttribute('href');
+        if (!pdfUrl) {
+            return;
+        }
+        pdfUrl = pdfUrl.replace(/[\?&]forcedownload=1/, '');
+
+        var previewCard = document.createElement('div');
+        previewCard.className = 'asodeltol-pdf-viewer-card my-4 p-3 bg-white border rounded shadow-sm';
+        previewCard.innerHTML = 
+            '<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom gap-2">' +
+                '<div class="d-flex align-items-center gap-2">' +
+                    '<span style="font-size: 1.5rem;">📄</span>' +
+                    '<div>' +
+                        '<strong class="d-block text-dark asodeltol-preview-title">Previsualización de Material: ' + (firstPdf.textContent || 'Documento PDF') + '</strong>' +
+                        '<small class="text-muted">Lectura interactiva en plataforma sin necesidad de descarga previa</small>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="d-flex gap-2">' +
+                    '<a href="' + pdfUrl + '" target="_blank" class="btn btn-sm btn-outline-primary asodeltol-preview-open-link">' +
+                        '🔍 Abrir en pantalla completa' +
+                    '</a>' +
+                '</div>' +
+            '</div>' +
+            '<div class="ratio ratio-16x9" style="min-height: 820px;">' +
+                '<iframe src="' + pdfUrl + '#toolbar=1&navpanes=1&scrollbar=1" width="100%" height="820" style="border: 1px solid #ced4da; border-radius: 6px;" title="Previsualización de Documento PDF"></iframe>' +
+            '</div>';
+
+        fileList.parentNode.insertBefore(previewCard, fileList.nextSibling);
+
+        pdfLinks.forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (href) {
+                var cleanHref = href.replace(/[\?&]forcedownload=1/, '');
+                link.setAttribute('href', cleanHref);
+            }
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var targetUrl = link.getAttribute('href');
+                var iframe = previewCard.querySelector('iframe');
+                if (iframe) {
+                    iframe.src = targetUrl + '#toolbar=1&navpanes=1&scrollbar=1';
+                }
+                var title = previewCard.querySelector('.asodeltol-preview-title');
+                if (title) {
+                    title.textContent = 'Previsualización de Material: ' + (link.textContent || 'Documento PDF');
+                }
+                var openLink = previewCard.querySelector('.asodeltol-preview-open-link');
+                if (openLink) {
+                    openLink.setAttribute('href', targetUrl);
+                }
+                previewCard.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPdfPreview);
+    } else {
+        initPdfPreview();
+    }
+})();
+JS;
+            $PAGE->requires->js_amd_inline($pdfscript);
+        }
     }
 
     public static function extend_primary(\core\hook\navigation\primary_extend $hook): void {
